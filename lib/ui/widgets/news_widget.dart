@@ -19,23 +19,13 @@ class NewsWidget extends StatelessWidget {
     return GestureDetector(
       onTap: callback,
       child: Padding(
-        padding: EdgeInsets.all(5.0 * screenWidth / 360),
+        padding: EdgeInsets.symmetric(
+            horizontal: 2 * screenWidth / 360, vertical: 1),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
+            borderRadius: BorderRadius.all(Radius.circular(3)),
             border: Border.all(color: Colors.black54, width: 0.5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black54,
-                blurRadius: 3.0, // has the effect of softening the shadow
-                spreadRadius: 2.0, // has the effect of extending the shadow
-                offset: Offset(
-                  0.0, // horizontal, move right 10
-                  2.0, // vertical, move down 10
-                ),
-              )
-            ],
           ),
           width: width == 0 ? screenWidth : width,
           height: 130 * screenHeight / 780,
@@ -62,20 +52,20 @@ class NewsWidget extends StatelessWidget {
                   child: Container(
                     width: 125 * screenWidth / 360,
                     height: 130 * screenHeight / 780,
-                    decoration: article.imagePath != null
+                    decoration: article.image != null
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(article.imagePath),
+                              image: NetworkImage(article.image),
                               fit: BoxFit.cover,
                             ),
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                bottomLeft: Radius.circular(5)),
+                                topLeft: Radius.circular(3),
+                                bottomLeft: Radius.circular(3)),
                           )
                         : BoxDecoration(
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                bottomLeft: Radius.circular(5)),
+                                topLeft: Radius.circular(3),
+                                bottomLeft: Radius.circular(3)),
                           ),
                   ),
                   tag: tag == '' ? article.id : tag,
@@ -128,7 +118,7 @@ class NewsWidget extends StatelessWidget {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              article.date.toString(),
+                              article.time.toString(),
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 10 * screenWidth / 360,

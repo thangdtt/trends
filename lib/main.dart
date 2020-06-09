@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trends/ui/screens/article_content_screen.dart';
 
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (ctx) => BottomTabScreen(),
+        ArticleContentScreen.routeName: (ctx)=>ArticleContentScreen(),
+        //'/': (ctx)=>ArticleContentScreen(),
       },
     );
   }

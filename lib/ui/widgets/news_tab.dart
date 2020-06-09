@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/article/article_bloc.dart';
 import 'package:trends/data/models/article.dart';
+import 'package:trends/ui/screens/article_content_screen.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 
 class NewsTab extends StatefulWidget {
@@ -13,9 +16,12 @@ class NewsTab extends StatefulWidget {
 }
 
 class _NewsTabState extends State<NewsTab> {
+  ArticleBloc articleBloc;
+
+  @override
   void initState() {
     super.initState();
-    fetchData(widget.tabIndex.toString());
+    articleBloc = BlocProvider.of<ArticleBloc>(context);
   }
 
   @override
@@ -42,8 +48,15 @@ class _NewsTabState extends State<NewsTab> {
   }
 
   Widget buildLoadingInput() {
-    return Container(
-      color: Colors.purple,
+    return Center(
+      child: Container(
+        width: 30,
+        height: 30,
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.cyan,
+          strokeWidth: 5,
+        ),
+      ),
     );
   }
 
@@ -53,22 +66,18 @@ class _NewsTabState extends State<NewsTab> {
     );
   }
 
-  Widget buildLoadedInput(List<Article> article) {
+  Widget buildLoadedInput(List<Article> articles) {
     return ListView.builder(
       itemBuilder: (ctx, i) {
         return NewsWidget(
-          article: article[i],
+          article: articles[i],
           callback: () {
-            Navigator.of(context).pushNamed('/article', arguments: article);
+            Navigator.of(context).pushNamed(ArticleContentScreen.routeName,
+                arguments: articles[i]);
           },
         );
       },
-      itemCount: article.length,
+      itemCount: articles.length,
     );
-  }
-
-  void fetchData(String categoryId) {
-    final articleBloc = BlocProvider.of<ArticleBloc>(context);
-    articleBloc.add(GetRealTimeArticle(categoryId));
   }
 }

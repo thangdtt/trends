@@ -4,9 +4,12 @@ abstract class ArticleEvent extends Equatable {
   const ArticleEvent();
 }
 
-class GetDailyArticle extends ArticleEvent {
+class FetchArticles extends ArticleEvent {
+  final int categoryIndex;
+  const FetchArticles(this.categoryIndex);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [categoryIndex];
 }
 
 class GetRealTimeArticle extends ArticleEvent {

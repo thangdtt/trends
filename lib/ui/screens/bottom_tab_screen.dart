@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trends/blocs/article/article_bloc.dart';
+import 'package:trends/data/article_repository.dart';
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
 
@@ -33,30 +36,37 @@ class _BottomTabScreenState extends State<BottomTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Trends"),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ArticleBloc(),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Trends"),
+        ),
+        drawer: MainDrawer(),
+        body: _pages[tabPageIndex],
+        bottomNavigationBar: BottomNavigationBar(
+            onTap: selectTab,
+            backgroundColor: Theme.of(context).primaryColor,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Colors.black87,
+            currentIndex: tabPageIndex,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(CustomIcons.newspaper),
+                  title: Text(
+                    "Trends",
+                  )),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.star),
+                  title: Text(
+                    "Favorite",
+                  )),
+            ]),
       ),
-      drawer: MainDrawer(),
-      body: _pages[tabPageIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: selectTab,
-          backgroundColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.white,
-          selectedItemColor: Colors.black87,
-          currentIndex: tabPageIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(CustomIcons.newspaper),
-                title: Text(
-                  "Trends",
-                )),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                title: Text(
-                  "Favorite",
-                )),
-          ]),
     );
   }
 }

@@ -9,8 +9,10 @@ part 'article_event.dart';
 part 'article_state.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
-  final ArticleRepository article_repo;
-  ArticleBloc(this.article_repo);
+   ArticleRepository articleRepo;
+  ArticleBloc(){
+    articleRepo = new ArticleRepository();
+  }
 
   @override
   ArticleState get initialState => ArticleInitial();
@@ -20,19 +22,19 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     ArticleEvent event,
   ) async* {
     yield ArticleLoading();
-    if (event is GetRealTimeArticle) {
+    if (event is FetchArticles) {
       try {
-        final articles = await article_repo.fetchRealtimeArticle(event.categoryId);
+        final articles = await articleRepo.fetchArticles(event.categoryIndex);
         yield ArticleLoaded(articles);
       } on Error {
         yield ArticleError("Error !!!");
       }
-    } else if (event is GetDailyArticle) {
-      try {
-        final articles = await article_repo.fetchDailyArticle();
-      } on Error {
-        yield ArticleError("Error !!!");
-      }
+      // } else if (event is FetchArticles) {
+      //   try {
+      //     final articles = await article_repo.fetchArticles(index);
+      //   } on Error {
+      //     yield ArticleError("Error !!!");
+      //   }
     }
   }
 }

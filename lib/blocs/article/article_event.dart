@@ -12,10 +12,18 @@ class FetchArticles extends ArticleEvent {
   List<Object> get props => [categoryIndex];
 }
 
-class GetRealTimeArticle extends ArticleEvent {
-  final String categoryId;
-  const GetRealTimeArticle(this.categoryId);
+class RefreshArticles extends ArticleEvent {
+  final int categoryIndex;
+  const RefreshArticles(this.categoryIndex);
 
   @override
-  List<Object> get props => [categoryId];
+  List<Object> get props => [categoryIndex];
+}
+
+class LoadMoreArticles extends ArticleEvent {
+  final int categoryIndex;
+  const LoadMoreArticles(this.categoryIndex);
+
+  @override
+  List<Object> get props => [categoryIndex];
 }

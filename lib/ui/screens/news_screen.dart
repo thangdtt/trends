@@ -10,7 +10,7 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   ArticleBloc articleBloc;
   final List<Tab> newsTabs = <Tab>[
     Tab(
@@ -38,7 +38,6 @@ class _NewsScreenState extends State<NewsScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    articleBloc.close();
     super.dispose();
   }
 
@@ -55,6 +54,7 @@ class _NewsScreenState extends State<NewsScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: 6,
       child: SafeArea(
@@ -71,12 +71,12 @@ class _NewsScreenState extends State<NewsScreen>
           ),
           body: TabBarView(
             children: [
-              NewsTab(0),
-              NewsTab(1),
-              NewsTab(2),
-              NewsTab(3),
-              NewsTab(4),
-              NewsTab(5),
+              NewsTab(tabIndex: 0, key: UniqueKey()),
+              NewsTab(tabIndex: 1, key: UniqueKey()),
+              NewsTab(tabIndex: 2, key: UniqueKey()),
+              NewsTab(tabIndex: 3, key: UniqueKey()),
+              NewsTab(tabIndex: 4, key: UniqueKey()),
+              NewsTab(tabIndex: 5, key: UniqueKey()),
             ],
             controller: _tabController,
           ),
@@ -84,4 +84,7 @@ class _NewsScreenState extends State<NewsScreen>
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -38,9 +38,13 @@ class MainDrawer extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20),
-        buildListTile("Saved", Icons.bookmark, (){
-          Navigator.of(context).pushReplacementNamed('/');
-        },),
+        buildListTile(
+          "Saved",
+          Icons.bookmark,
+          () {
+            Navigator.of(context).pushNamed('/');
+          },
+        ),
         buildListTile("Filter", Icons.settings, () {
           //Navigator.of(context).pushReplacementNamed(FilterScreen.routeName);
         }),

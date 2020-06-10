@@ -42,7 +42,6 @@ class NewsApi {
       Map<String, dynamic> decoded = json.decode(result);
       List<String> ids = [];
       for (int i = 0; i < decoded['trendingStoryIds'].length; i++) {
-
         ids.add(decoded['trendingStoryIds'][i]);
       }
       return ids;

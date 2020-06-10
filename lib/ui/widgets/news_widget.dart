@@ -68,7 +68,8 @@ class NewsWidget extends StatelessWidget {
                                 bottomLeft: Radius.circular(3)),
                           ),
                   ),
-                  tag: tag == '' ? article.id : tag,
+                  //+ DateTime.now to make all tag different from each others
+                  tag: tag == '' ? article.id + DateTime.now().toString() : tag,
                 ),
               ),
               Expanded(flex: 1, child: SizedBox(width: 5 * screenWidth / 360)),
@@ -82,7 +83,7 @@ class NewsWidget extends StatelessWidget {
                     Expanded(
                       flex: 33,
                       child: Container(
-                        //height: 100 * screenHeight / 780,
+                        height: 100 * screenHeight / 780,
                         child: Text(
                           article.title,
                           overflow: TextOverflow.ellipsis,

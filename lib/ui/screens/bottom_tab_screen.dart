@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/article/article_bloc.dart';
-import 'package:trends/data/article_repository.dart';
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
 
 import 'package:trends/ui/widgets/main_drawer.dart';
 
-import 'package:trends/ui/utils/custom_icons.dart';
+import 'package:trends/utils/custom_icons.dart';
 
 class BottomTabScreen extends StatefulWidget {
   @override
@@ -21,11 +20,17 @@ class _BottomTabScreenState extends State<BottomTabScreen> {
 
   @override
   void initState() {
+    super.initState();
     _pages = [
       NewsScreen(),
       MusicScreen(),
     ];
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    BlocProvider.of<ArticleBloc>(context).close();
+    super.dispose();
   }
 
   void selectTab(int index) {

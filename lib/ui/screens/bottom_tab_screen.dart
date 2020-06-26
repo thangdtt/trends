@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/article/article_bloc.dart';
+
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
-
 import 'package:trends/ui/widgets/main_drawer.dart';
-
 import 'package:trends/utils/custom_icons.dart';
 
 class BottomTabScreen extends StatefulWidget {
@@ -13,65 +10,81 @@ class BottomTabScreen extends StatefulWidget {
   _BottomTabScreenState createState() => _BottomTabScreenState();
 }
 
-class _BottomTabScreenState extends State<BottomTabScreen> {
-  List<Widget> _pages;
+class _BottomTabScreenState extends State<BottomTabScreen> with AutomaticKeepAliveClientMixin{
+  final List<IconData> icons = <IconData>[
+    CustomIcons.newspaper,
+    Icons.music_note
+  ];
+  final List<String> tabDescriptions = ["News", "Music"];
+  List<BottomNavigationBarItem> bottomBarItems;
 
-  int tabPageIndex = 0;
+  PageController _pageController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pages = [
-      NewsScreen(),
-      MusicScreen(),
-    ];
+    bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
+    _pageController = PageController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    BlocProvider.of<ArticleBloc>(context).close();
+    _pageController.dispose();
     super.dispose();
   }
 
-  void selectTab(int index) {
-    setState(() {
-      tabPageIndex = index;
-    });
+  List<BottomNavigationBarItem> _buildBottomBarItem(
+      List<IconData> icons, List<String> descriptions) {
+    List<BottomNavigationBarItem> listWidget = new List();
+    for (var i = 0; i < icons.length; i++) {
+      listWidget.add(BottomNavigationBarItem(
+        icon: Icon(icons[i]),
+        title: Text(descriptions[i]),
+      ));
+    }
+    return listWidget;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => ArticleBloc(),
-        ),
-      ],
-      child: Scaffold(
+    super.build(context);
+    return SafeArea(
+          child: Scaffold(
         appBar: AppBar(
           title: Text("Trends"),
         ),
         drawer: MainDrawer(),
-        body: _pages[tabPageIndex],
+        body: PageView(
+          controller: _pageController,
+          children: <Widget>[
+            NewsScreen(),
+            MusicScreen(),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
-            onTap: selectTab,
-            backgroundColor: Theme.of(context).primaryColor,
-            unselectedItemColor: Colors.white,
-            selectedItemColor: Colors.black87,
-            currentIndex: tabPageIndex,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(CustomIcons.newspaper),
-                  title: Text(
-                    "Trends",
-                  )),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.star),
-                  title: Text(
-                    "Favorite",
-                  )),
-            ]),
+          onTap: (index) {
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          currentIndex: _currentIndex,
+          backgroundColor: Theme.of(context).primaryColor,
+          selectedItemColor: Colors.black54,
+          unselectedItemColor: Colors.white54,
+          items: bottomBarItems,
+        ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

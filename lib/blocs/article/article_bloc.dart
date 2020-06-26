@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:rxdart/rxdart.dart';
+
 import 'package:trends/data/models/article.dart';
 import 'package:trends/data/article_repository.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'article_event.dart';
 part 'article_state.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
+  bool loading = false;
   ArticleRepository articleRepo;
   ArticleBloc() {
     articleRepo = new ArticleRepository();
@@ -35,28 +37,29 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     ArticleEvent event,
   ) async* {
     if (event is RefreshArticles) {
+      yield ArticleRefreshing();
       try {
-        final listArticles =
-            await articleRepo.refreshArticles(event.categoryIndex);
+        final listArticles = await articleRepo.getNewArticles();
         yield ArticleRefreshed(listArticles);
       } on Error {
-        yield ArticleError("Error !!!");
+        //yield ArticleError("Error !!!");
+        yield state;
       }
     } else if (event is LoadMoreArticles) {
+      yield ArticleLoadingMore();
       try {
-        final listArticles =
-            await articleRepo.fetchNextArticles(event.categoryIndex);
+        final listArticles = await articleRepo.loadMoreArticles();
         yield ArticleLoadMore(listArticles);
       } on Error {
-        yield ArticleError("Error !!!");
+        //yield ArticleError("Error !!!");
+        yield state;
       }
     } else {
       yield ArticleLoading();
       if (event is FetchArticles) {
         try {
-          final listArticles =
-              await articleRepo.fetchArticles(event.categoryIndex);
-          yield ArticleLoaded(listArticles, event.categoryIndex);
+          final listArticles = await articleRepo.getNewArticles();
+          yield ArticleLoaded(listArticles);
         } on Error {
           yield ArticleError("Error !!!");
         }

@@ -1,99 +1,66 @@
-import 'package:trends/api/api.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 
+//String articleUrl = ('http://127.0.0.1:5000/article/');
+String articleUrl = ('https://server294.herokuapp.com/article/');
+
 class ArticleRepository {
-  List<List<Article>> _listArticles;
+  List<Article> _articles = [];
 
-  Map<String, List<String>> _mapArticleId;
+  List<Article> get articles => _articles;
 
-  Map<String, List<Article>> _mapArticleInfo;
+  Future<List<Article>> getNewArticles() async {
+    String url = articleUrl + "0";
 
-  Map<String, int> _mapCurrentArticlesIndex;
-
-  List<String> tabNames;
-
-  final int numberFetch = 15;
-
-  ArticleRepository() {
-    tabNames = List<String>();
-    tabNames.add('b');
-    tabNames.add('e');
-    tabNames.add('m');
-    tabNames.add('t');
-    tabNames.add('s');
-    tabNames.add('h');
-
-    _mapArticleId = Map<String, List<String>>();
-    _mapArticleInfo = Map<String, List<Article>>();
-    _mapCurrentArticlesIndex = Map<String, int>();
-    _listArticles = new List<List<Article>>();
-
-    for (int i = 0; i < tabNames.length; i++) {
-      _mapArticleInfo.putIfAbsent(tabNames[i], () => List());
-      _mapArticleId.putIfAbsent(tabNames[i], () => List());
-      _mapCurrentArticlesIndex.putIfAbsent(tabNames[i], () => 0);
-      _listArticles.add(new List());
+    http.Response response;
+    try {
+      response = await http.get(url);
+    } on SocketException catch (_) {
+      return [];
     }
-  }
 
-  Future<List<List<Article>>> fetchArticles(int indexCategory) async {
-    String category = tabNames[indexCategory];
+    _articles.clear();
 
-    if (_mapArticleId[category].length == 0) {
-      _mapArticleId[category] = await NewsApi.getArticlesId(category);
-      int endIndex = _mapCurrentArticlesIndex[category] + numberFetch;
-      int startIndex = 0;
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
 
-      if (endIndex > _mapArticleId[category].length - 1) {
-        endIndex = _mapArticleId[category].length - 1;
+      for (int i = 0; i < decoded.length; i++) {
+        _articles.add(Article.fromJson(decoded[i]));
       }
-      if (startIndex == endIndex) {
-        return [[]];
+
+      return _articles;
+    } else {
+      throw Exception('Failed to connect to server');
+    }
+  }
+
+  Future<List<Article>> loadMoreArticles() async {
+    String url = articleUrl +
+        (_articles.last.id - 10).toString(); //cleardb -10 to get next id
+
+    http.Response response;
+
+    try {
+      response = await http.get(url);
+    } on SocketException catch (_) {
+      return _articles;
+    }
+
+    if (response.statusCode == 200) {
+      List<dynamic> decoded = json.decode(response.body);
+
+      for (int i = 0; i < decoded.length; i++) {
+        _articles.add(Article.fromJson(decoded[i]));
+        print(Article.fromJson(decoded[i]).title);
       }
-      _mapArticleInfo[category] = await NewsApi.getTrendArticles(
-          _mapArticleId[category].sublist(startIndex, endIndex), category);
 
-      _mapCurrentArticlesIndex[category] = endIndex;
-
-      _listArticles[indexCategory] = _mapArticleInfo[category];
+      return _articles;
+    } else {
+      throw Exception('Failed to connect to server');
     }
-    return _listArticles;
-  }
-
-  Future<List<List<Article>>> refreshArticles(int indexCategory) {
-    String category = tabNames[indexCategory];
-    _mapArticleId[category].clear();
-    _mapCurrentArticlesIndex[category] = 0;
-    return fetchArticles(indexCategory);
-  }
-
-   Future<List<List<Article>>> fetchNextArticles(int indexCategory) async {
-    String category = tabNames[indexCategory];
-    int startIndex = _mapCurrentArticlesIndex[category];
-    int endIndex = _mapCurrentArticlesIndex[category] + numberFetch;
-    if (startIndex >= _mapArticleId[category].length - 1) {
-      return _listArticles;
-    }
-
-    startIndex += 1;
-
-    //fix endIdex when end of articles list
-    if (endIndex > _mapArticleId[category].length - 1) {
-      endIndex = _mapArticleId[category].length - 1;
-    }
-
-    if (startIndex == endIndex) {
-      return _listArticles;
-    }
-
-    List<Article> articles = await NewsApi.getTrendArticles(
-        _mapArticleId[category].sublist(startIndex, endIndex), category);
-
-    _mapArticleInfo[category].addAll(articles);
-    _listArticles[indexCategory].addAll(articles);
-
-    _mapCurrentArticlesIndex[category] = endIndex;
-    
-    return _listArticles;
   }
 }

@@ -5,25 +5,22 @@ abstract class ArticleEvent extends Equatable {
 }
 
 class FetchArticles extends ArticleEvent {
-  final int categoryIndex;
-  const FetchArticles(this.categoryIndex);
+  const FetchArticles();
 
   @override
-  List<Object> get props => [categoryIndex];
+  List<Object> get props => [];
 }
 
 class RefreshArticles extends ArticleEvent {
-  final int categoryIndex;
-  const RefreshArticles(this.categoryIndex);
+  const RefreshArticles();
 
   @override
-  List<Object> get props => [categoryIndex];
+  List<Object> get props => [];
 }
 
 class LoadMoreArticles extends ArticleEvent {
-  final int categoryIndex;
-  const LoadMoreArticles(this.categoryIndex);
+  const LoadMoreArticles();
 
   @override
-  List<Object> get props => [categoryIndex];
+  List<Object> get props => [];
 }

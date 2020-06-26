@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:trends/data/models/article.dart';
 
 class NewsWidget extends StatelessWidget {
@@ -50,26 +51,32 @@ class NewsWidget extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    width: 125 * screenWidth / 360,
-                    height: 130 * screenHeight / 780,
-                    decoration: article.image != null
-                        ? BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(article.image),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                bottomLeft: Radius.circular(3)),
-                          )
-                        : BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(3),
-                                bottomLeft: Radius.circular(3)),
-                          ),
-                  ),
+                      width: 125 * screenWidth / 360,
+                      height: 130 * screenHeight / 780,
+                      decoration: article.firstImage.isNotEmpty
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(article.firstImage),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(3),
+                                  bottomLeft: Radius.circular(3)),
+                            )
+                          : BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://gstwar.com/theme/img/no-image.jpg'),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(3),
+                                  bottomLeft: Radius.circular(3)),
+                            )),
                   //+ DateTime.now to make all tag different from each others
-                  tag: tag == '' ? article.id + DateTime.now().toString() : tag,
+                  tag: tag == ''
+                      ? article.id.toString() + DateTime.now().toString()
+                      : tag,
                 ),
               ),
               Expanded(flex: 1, child: SizedBox(width: 5 * screenWidth / 360)),
@@ -83,17 +90,34 @@ class NewsWidget extends StatelessWidget {
                     Expanded(
                       flex: 33,
                       child: Container(
+                        margin: const EdgeInsets.fromLTRB(0,0,10,0),
                         height: 100 * screenHeight / 780,
-                        child: Text(
-                          article.title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 5,
-                          style: TextStyle(
-                            fontSize: 14 * screenWidth / 360,
-                            color: Colors.black,
-                            decoration: TextDecoration.none,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                          Text(
+                            article.title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                              fontSize: 15 * screenWidth / 360,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 3),
+                          Text(
+                            article.description,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                            style: TextStyle(
+                              fontSize: 13 * screenWidth / 360,
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                     Expanded(
@@ -102,11 +126,11 @@ class NewsWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Expanded(
-                            flex: 5,
+                            flex: 3,
                             child: Container(
                               width: 140 * screenWidth / 360,
                               child: Text(
-                                article.source,
+                                article.category,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 11 * screenWidth / 360,
@@ -117,14 +141,18 @@ class NewsWidget extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            flex: 2,
-                            child: Text(
-                              article.time.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 10 * screenWidth / 360,
-                                color: Colors.black54,
-                                decoration: TextDecoration.none,
+                            flex: 7,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                article.time.toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 10 * screenWidth / 360,
+                                  color: Colors.black54,
+                                  decoration: TextDecoration.none,
+                                ),
                               ),
                             ),
                           ),

@@ -16,12 +16,11 @@ class ArticleLoading extends ArticleState {
 }
 
 class ArticleLoaded extends ArticleState {
-  final List<List<Article>> articles;
-  final int tabIndex;
-  const ArticleLoaded(this.articles, this.tabIndex);
+  final List<Article> articles;
+  const ArticleLoaded(this.articles);
 
   @override
-  List<Object> get props => [articles, tabIndex];
+  List<Object> get props => [articles];
 }
 
 class ArticleError extends ArticleState {
@@ -31,16 +30,30 @@ class ArticleError extends ArticleState {
   List<Object> get props => [message];
 }
 
+class ArticleRefreshing extends ArticleState {
+  const ArticleRefreshing();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ArticleRefreshed extends ArticleState {
-  final List<List<Article>> articles;
+  final List<Article> articles;
   const ArticleRefreshed(this.articles);
 
   @override
   List<Object> get props => [articles];
 }
 
+class ArticleLoadingMore extends ArticleState {
+  const ArticleLoadingMore();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ArticleLoadMore extends ArticleState {
-  final List<List<Article>> articles;
+  final List<Article> articles;
   const ArticleLoadMore(this.articles);
 
   @override

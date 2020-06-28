@@ -39,6 +39,7 @@ dev_dependencies:
   sprintf: ^4.0.2
   pull_to_refresh: ^1.5.8
   rxdart: ^0.24.1
+  shared_preferences: ^0.5.7+3
 
 
 # For information on the generic Dart part of this file, see the
@@ -84,6 +85,9 @@ flutter:
     - family:  NewspaperIcon
       fonts:
         - asset: assets/icons/NewspaperIcon.ttf
+    - family:  MoonIcon
+      fonts:
+        - asset: assets/icons/MoonIcon.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -10,7 +10,8 @@ class BottomTabScreen extends StatefulWidget {
   _BottomTabScreenState createState() => _BottomTabScreenState();
 }
 
-class _BottomTabScreenState extends State<BottomTabScreen> with AutomaticKeepAliveClientMixin{
+class _BottomTabScreenState extends State<BottomTabScreen>
+    with AutomaticKeepAliveClientMixin<BottomTabScreen> {
   final List<IconData> icons = <IconData>[
     CustomIcons.newspaper,
     Icons.music_note
@@ -55,13 +56,24 @@ class _BottomTabScreenState extends State<BottomTabScreen> with AutomaticKeepAli
   Widget build(BuildContext context) {
     super.build(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: AppBar(
-          title: Text("Trends"),
+          title: Text(
+            "Trends",
+            style: TextStyle(
+              
+            ),
+          ),
+          backgroundColor: Theme.of(context).bottomAppBarColor,
         ),
         drawer: MainDrawer(),
         body: PageView(
           controller: _pageController,
+          onPageChanged: (page){
+            setState(() {
+              _currentIndex = page;
+            });
+          },
           children: <Widget>[
             NewsScreen(),
             MusicScreen(),
@@ -76,7 +88,7 @@ class _BottomTabScreenState extends State<BottomTabScreen> with AutomaticKeepAli
             });
           },
           currentIndex: _currentIndex,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).bottomAppBarColor,
           selectedItemColor: Colors.black54,
           unselectedItemColor: Colors.white54,
           items: bottomBarItems,

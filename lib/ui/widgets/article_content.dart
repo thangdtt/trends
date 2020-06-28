@@ -67,11 +67,10 @@ class ArticleContentWidget extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-                    child: Text(
-                        article.description,
-                        style: Theme.of(context).textTheme.bodyText2,
-                      ),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+                    child: Text(article.description,
+                        style: Theme.of(context).textTheme.bodyText2),
                   ),
                 ),
                 buildContentWidget(article.content, context),
@@ -98,13 +97,13 @@ class ArticleContentWidget extends StatelessWidget {
     var list = List<Widget>();
     for (var item in content) {
       if (item.type == "text")
-        list.add(Container(
-          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
-          child: SelectableText(
-            item.info,
-            style: Theme.of(context).textTheme.bodyText2,
+        list.add(
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+            child: SelectableText(item.info,
+                style: Theme.of(context).textTheme.bodyText2),
           ),
-        ));
+        );
       else if (item.type == "image")
         list.add(Container(
           margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),

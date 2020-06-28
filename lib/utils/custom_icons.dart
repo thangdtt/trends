@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/NewspaperIcon.ttf
 ///
-/// 
+///
 /// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -25,5 +25,11 @@ class CustomIcons {
   static const _kFontFam = 'NewspaperIcon';
   static const _kFontPkg = null;
 
-  static const IconData newspaper = IconData(0xf1ea, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const _kFontFam1 = 'MoonIcon';
+  static const _kFontPkg1 = null;
+
+  static const IconData newspaper =
+      IconData(0xf1ea, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData moon =
+      IconData(0xe808, fontFamily: _kFontFam1, fontPackage: _kFontPkg1);
 }

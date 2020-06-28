@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/ui/global/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +17,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   Stream<ThemeState> mapEventToState(
     ThemeEvent event,
   ) async* {
-    if (event is LoadTheme)
-    {
+    if (event is LoadTheme) {
       yield ThemeLoading();
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isDarkMode;
@@ -28,14 +26,19 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       else
         isDarkMode = false;
 
+      bool isFastReadMode;
+      if (prefs.getBool('isFastReadMode') != null)
+        isFastReadMode = prefs.getBool('isFastReadMode');
+      else
+        isFastReadMode = false;
+
       yield ThemeLoaded(
           isDarkMode: isDarkMode,
           themeData: isDarkMode
               ? appThemeData[AppTheme.Dark]
-              : appThemeData[AppTheme.Light]);
-    
-    }
-    else if (event is ThemeChanged) {
+              : appThemeData[AppTheme.Light],
+          isFastReadMode: isFastReadMode);
+    } else if (event is ThemeChanged) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       bool isDarkMode;
       if (prefs.getBool('isDarkMode') != null)
@@ -43,11 +46,18 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       else
         isDarkMode = false;
 
+      bool isFastReadMode;
+      if (prefs.getBool('isFastReadMode') != null)
+        isFastReadMode = prefs.getBool('isFastReadMode');
+      else
+        isFastReadMode = false;
+
       yield ThemeLoaded(
           isDarkMode: isDarkMode,
           themeData: isDarkMode
               ? appThemeData[AppTheme.Dark]
-              : appThemeData[AppTheme.Light]);
+              : appThemeData[AppTheme.Light],
+          isFastReadMode: isFastReadMode);
     }
   }
 }

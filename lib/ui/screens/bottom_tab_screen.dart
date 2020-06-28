@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:trends/ui/screens/music_screen.dart';
@@ -55,21 +56,24 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Trends",
-            style: TextStyle(
-              
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(20 * screenHeight/360),
+          child: AppBar(
+            title: Text(
+              "Trends",
+              style: TextStyle(),
             ),
+            backgroundColor: Theme.of(context).bottomAppBarColor,
           ),
-          backgroundColor: Theme.of(context).bottomAppBarColor,
         ),
         drawer: MainDrawer(),
         body: PageView(
           controller: _pageController,
-          onPageChanged: (page){
+          onPageChanged: (page) {
             setState(() {
               _currentIndex = page;
             });

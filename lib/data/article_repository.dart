@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 
 //String articleUrl = ('http://127.0.0.1:5000/article/');
+//int idDifference = 1;
+int idDifference = 10;
 String articleUrl = ('https://server294.herokuapp.com/article/');
 
 class ArticleRepository {
@@ -40,7 +42,7 @@ class ArticleRepository {
 
   Future<List<Article>> loadMoreArticles() async {
     String url = articleUrl +
-        (_articles.last.id - 10).toString(); //cleardb -10 to get next id
+        (_articles.last.id - idDifference).toString(); //cleardb -10 to get next id
 
     http.Response response;
 

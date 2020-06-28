@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/data/models/article.dart';
 
@@ -17,6 +19,7 @@ class NewsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
     return GestureDetector(
       onTap: callback,
       child: Container(
@@ -35,51 +38,53 @@ class NewsWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  flex: 11,
-                  child: Hero(
-                    flightShuttleBuilder: (
-                      BuildContext flightContext,
-                      Animation<double> animation,
-                      HeroFlightDirection flightDirection,
-                      BuildContext fromHeroContext,
-                      BuildContext toHeroContext,
-                    ) {
-                      final Hero toHero = toHeroContext.widget;
-                      return RotationTransition(
-                        turns: animation,
-                        child: toHero.child,
-                      );
-                    },
-                    child: Container(
-                        width: 125 * screenWidth / 360,
-                        height: 130 * screenHeight / 780,
-                        decoration: article.firstImage.isNotEmpty
-                            ? BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(article.firstImage),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(3),
-                                    bottomLeft: Radius.circular(3)),
-                              )
-                            : BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://gstwar.com/theme/img/no-image.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(3),
-                                    bottomLeft: Radius.circular(3)),
-                              )),
-                    //+ DateTime.now to make all tag different from each others
-                    tag: tag == ''
-                        ? article.id.toString() + DateTime.now().toString()
-                        : tag,
+                if (themeBloc.state is ThemeLoaded &&
+                    (themeBloc.state as ThemeLoaded).isFastReadMode == false)
+                  Expanded(
+                    flex: 11,
+                    child: Hero(
+                      flightShuttleBuilder: (
+                        BuildContext flightContext,
+                        Animation<double> animation,
+                        HeroFlightDirection flightDirection,
+                        BuildContext fromHeroContext,
+                        BuildContext toHeroContext,
+                      ) {
+                        final Hero toHero = toHeroContext.widget;
+                        return RotationTransition(
+                          turns: animation,
+                          child: toHero.child,
+                        );
+                      },
+                      child: Container(
+                          width: 125 * screenWidth / 360,
+                          height: 130 * screenHeight / 780,
+                          decoration: article.firstImage.isNotEmpty
+                              ? BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(article.firstImage),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      bottomLeft: Radius.circular(3)),
+                                )
+                              : BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        'https://gstwar.com/theme/img/no-image.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(3),
+                                      bottomLeft: Radius.circular(3)),
+                                )),
+                      //+ DateTime.now to make all tag different from each others
+                      tag: tag == ''
+                          ? article.id.toString() + DateTime.now().toString()
+                          : tag,
+                    ),
                   ),
-                ),
                 Expanded(
                     flex: 1, child: SizedBox(width: 5 * screenWidth / 360)),
                 Expanded(

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/pref_utils.dart';
+import 'package:trends/utils/utils_class.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -31,79 +32,91 @@ class _MainDrawerState extends State<MainDrawer> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Drawer(
       child: Container(
-        child: Column(children: <Widget>[
-          Container(
-            height: 20 * screenHeight / 360,
-            width: double.infinity,
-            padding: const EdgeInsets.all(5),
-            alignment: Alignment.center,
-            color: Theme.of(context).bottomAppBarColor,
-            child: Text(
-              "Cài đặt", textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 22 * screenWidth / 360,),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
+        child: SingleChildScrollView(
+                  child: Column(
+            children: <Widget>[
+              Container(
+                height: 20 * screenHeight / 360,
+                width: double.infinity,
+                padding: const EdgeInsets.all(5),
+                alignment: Alignment.center,
+                color: Theme.of(context).primaryColor,
+                child: Text(
+                  "Cài đặt",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22 * screenWidth / 360,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: Icon(
-                        CustomIcons.moon,
-                        size: 20,
-                      ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(
+                            CustomIcons.moon,
+                            size: 20,
+                          ),
+                        ),
+                        Text(
+                          "Chế độ tối",
+                          style: TextStyle(
+                            fontFamily: 'RobotoCondensed',
+                            fontSize: 10 * screenHeight / 360,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Chế độ tối",
-                      style: TextStyle(
-                        fontFamily: 'RobotoCondensed',
-                        fontSize: 10 * screenHeight / 360,
-                      ),
-                    ),
+                    _buildToggleButton('isDarkMode'),
                   ],
                 ),
-                _buildToggleButton('isDarkMode'),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                      child: Icon(
-                        Icons.library_books,
-                        size: 20,
-                      ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(
+                            Icons.library_books,
+                            size: 20,
+                          ),
+                        ),
+                        Text(
+                          "Chế độ đọc nhanh",
+                          style: TextStyle(
+                            fontFamily: 'RobotoCondensed',
+                            fontSize: 10 * screenHeight / 360,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Chế độ đọc nhanh",
-                      style: TextStyle(
-                        fontFamily: 'RobotoCondensed',
-                        fontSize: 10 * screenHeight / 360,
-                      ),
-                    ),
+                    _buildToggleButton('isFastReadingMode'),
                   ],
                 ),
-                _buildToggleButton('isFastReadingMode'),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: ExpansionTile(
+                  title: Text(
+                    "Lọc",
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  children: _buildFilterButtons(),
+                ),
+              )
+            ],
           ),
-
-          // buildListTile("Filter", Icons.settings, () {
-          //   //Navigator.of(context).pushReplacementNamed(FilterScreen.routeName);
-          // }),
-        ]),
+        ),
       ),
     );
   }
@@ -187,5 +200,32 @@ class _MainDrawerState extends State<MainDrawer> {
             );
     } else
       return Container();
+  }
+
+  List<Widget> _buildFilterButtons() {
+    List<Widget> list = List();
+    categoryEnum.values.forEach((value) {
+      list.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  tabNames[value.index],
+                  style: TextStyle(
+                    fontFamily: 'RobotoCondensed',
+                    fontSize: 10 * MediaQuery.of(context).size.height / 360,
+                  ),
+                ),
+              ],
+            ),
+            _buildToggleButton('isDarkMode'),
+          ],
+        ),
+      ));
+    });
+    return list;
   }
 }

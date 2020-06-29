@@ -5,21 +5,24 @@ abstract class ArticleEvent extends Equatable {
 }
 
 class FetchArticles extends ArticleEvent {
-  const FetchArticles();
+  final categoryEnum catEnum;
+  FetchArticles(this.catEnum);
 
   @override
   List<Object> get props => [];
 }
 
 class RefreshArticles extends ArticleEvent {
-  const RefreshArticles();
+  final categoryEnum catEnum;
+  const RefreshArticles(this.catEnum);
 
   @override
   List<Object> get props => [];
 }
 
 class LoadMoreArticles extends ArticleEvent {
-  const LoadMoreArticles();
+  final categoryEnum catEnum;
+  const LoadMoreArticles(this.catEnum);
 
   @override
   List<Object> get props => [];

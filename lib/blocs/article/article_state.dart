@@ -16,7 +16,7 @@ class ArticleLoading extends ArticleState {
 }
 
 class ArticleLoaded extends ArticleState {
-  final List<Article> articles;
+  final Map<categoryEnum, List<Article>> articles;
   const ArticleLoaded(this.articles);
 
   @override
@@ -38,7 +38,7 @@ class ArticleRefreshing extends ArticleState {
 }
 
 class ArticleRefreshed extends ArticleState {
-  final List<Article> articles;
+  final Map<categoryEnum, List<Article>> articles;
   const ArticleRefreshed(this.articles);
 
   @override
@@ -53,7 +53,7 @@ class ArticleLoadingMore extends ArticleState {
 }
 
 class ArticleLoadMore extends ArticleState {
-  final List<Article> articles;
+  final Map<categoryEnum, List<Article>> articles;
   const ArticleLoadMore(this.articles);
 
   @override

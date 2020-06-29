@@ -43,7 +43,7 @@ final appThemeData = {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: TextTheme(
       headline1: TextStyle(fontSize: 72.0, fontStyle: FontStyle.italic),
-      headline6: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold),
+      headline6: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal),
       bodyText2: TextStyle(fontSize: 19, fontFamily: 'Hind'),
     ),
   ),
@@ -51,7 +51,7 @@ final appThemeData = {
     iconTheme: IconThemeData(color: Colors.amber),
     accentColor: Colors.amberAccent,
     bottomAppBarColor: Color.fromRGBO(10, 10, 10, 1),
-    backgroundColor: Color.fromRGBO(30, 30, 30, 1),
+    backgroundColor: Color.fromRGBO(45, 45, 45, 1),
     brightness: Brightness.dark,
     primarySwatch: Colors.blue,
     //canvasColor: Color.fromRGBO(255, 254, 229, 1),

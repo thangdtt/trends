@@ -132,12 +132,12 @@ class NewsWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Expanded(
-                              flex: 3,
+                              flex: 5,
                               child: Container(
                                 width: 140 * screenWidth / 360,
                                 child: Text(
                                   article.category,
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.visible,
                                   style: TextStyle(
                                     fontSize: 11 * screenWidth / 360,
                                     color: Colors.green,
@@ -147,7 +147,7 @@ class NewsWidget extends StatelessWidget {
                               ),
                             ),
                             Expanded(
-                              flex: 7,
+                              flex: 8,
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 10,

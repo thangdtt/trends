@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
@@ -20,12 +21,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     //turn off rotation
@@ -39,6 +39,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<ThemeBloc>(
           create: (BuildContext context) => ThemeBloc(),
+        ),
+        BlocProvider<SearcharticleBloc>(
+          create: (BuildContext context) => SearcharticleBloc(),
         ),
       ],
       child: RefreshConfiguration(

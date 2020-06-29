@@ -106,15 +106,15 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                         child: SizedBox(
                           child: Text(
                             article.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(
-                                    fontSize: 10 * screenHeight / 360 +
-                                        (themeBloc.state as ThemeLoaded)
-                                                .pageFontSizeFactor *
-                                            7,
-                                    color: textColor),
+                            style:
+                                Theme.of(context).textTheme.headline6.copyWith(
+                                      fontSize: 10 * screenHeight / 360 +
+                                          (themeBloc.state as ThemeLoaded)
+                                                  .pageFontSizeFactor *
+                                              7,
+                                      color: textColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                         ),
                       ),
@@ -140,9 +140,14 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                       child: Text(
                         article.author,
                         style: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 6 * screenHeight / 360 +
+                              (themeBloc.state as ThemeLoaded)
+                                      .pageFontSizeFactor *
+                                  4,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
                       ),
                       alignment: Alignment(1.0, 0.0),
                     )

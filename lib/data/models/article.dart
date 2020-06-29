@@ -116,7 +116,6 @@ class Article extends Equatable {
     var list = json['content'] as List;
     List<ArticleContent> content =
         list.map((i) => ArticleContent.fromJson(i)).toList();
-
     return Article(
       id: json['id'],
       title: json['title'],
@@ -151,20 +150,18 @@ class Article extends Equatable {
 }
 
 class ArticleContent extends Equatable {
-  final int id;
   final String info;
   final String type;
 
-  ArticleContent({this.id, this.info, this.type});
+  ArticleContent({this.info, this.type});
 
   factory ArticleContent.fromJson(Map<String, dynamic> json) {
     return ArticleContent(
-        id: json['id'], info: json['info'], type: json['type']);
+        info: json['info'], type: json['type']);
   }
 
   @override
   List<Object> get props => [
-        id,
         info,
         type,
       ];

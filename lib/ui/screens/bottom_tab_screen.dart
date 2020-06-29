@@ -61,11 +61,15 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(20 * screenHeight/360),
+          preferredSize: Size.fromHeight(20 * screenHeight / 360),
           child: AppBar(
+            iconTheme: Theme.of(context).iconTheme,
             title: Text(
               "Trends",
-              style: TextStyle(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyText2.color,
+              ),
             ),
             backgroundColor: Theme.of(context).bottomAppBarColor,
           ),
@@ -93,7 +97,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           },
           currentIndex: _currentIndex,
           backgroundColor: Theme.of(context).bottomAppBarColor,
-          selectedItemColor: Colors.black54,
+          selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
           unselectedItemColor: Colors.white54,
           items: bottomBarItems,
         ),

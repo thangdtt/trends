@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/utils/custom_icons.dart';
+import 'package:trends/utils/pref_utils.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -36,14 +36,13 @@ class _MainDrawerState extends State<MainDrawer> {
             height: 20 * screenHeight / 360,
             width: double.infinity,
             padding: const EdgeInsets.all(5),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             color: Theme.of(context).bottomAppBarColor,
             child: Text(
-              "Drawer testing",
+              "Cài đặt", textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  fontSize: 20 * screenWidth / 360,
-                  color: Colors.white70),
+                  fontSize: 22 * screenWidth / 360,),
             ),
           ),
           Padding(
@@ -127,16 +126,6 @@ class _MainDrawerState extends State<MainDrawer> {
     );
   }
 
-  setIsDarkModePref(bool value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isDarkMode', value);
-  }
-
-  setIsFastReadModePref(bool value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isFastReadMode', value);
-  }
-
   Widget _buildToggleButton(String type) {
     if (type == 'isDarkMode') {
       return Platform.isAndroid
@@ -146,7 +135,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 {
                   setState(() {
                     isDarkMode = newValue;
-                    setIsDarkModePref(isDarkMode);
+                    PrefUtils.setIsDarkModePref(isDarkMode);
                     BlocProvider.of<ThemeBloc>(context)
                         .add(ThemeChanged(isDarkMode: newValue));
                   });
@@ -160,7 +149,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     {
                       setState(() {
                         isDarkMode = newValue;
-                        setIsDarkModePref(isDarkMode);
+                        PrefUtils.setIsDarkModePref(isDarkMode);
                         BlocProvider.of<ThemeBloc>(context)
                             .add(ThemeChanged(isDarkMode: newValue));
                       });
@@ -175,7 +164,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 {
                   setState(() {
                     isFastReadMode = newValue;
-                    setIsFastReadModePref(isFastReadMode);
+                    PrefUtils.setIsFastReadModePref(isFastReadMode);
                     BlocProvider.of<ThemeBloc>(context)
                         .add(ThemeChanged(isFastReadMode: newValue));
                   });
@@ -189,7 +178,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     {
                       setState(() {
                         isFastReadMode = newValue;
-                        setIsFastReadModePref(isFastReadMode);
+                        PrefUtils.setIsFastReadModePref(isFastReadMode);
                         BlocProvider.of<ThemeBloc>(context)
                             .add(ThemeChanged(isFastReadMode: newValue));
                       });

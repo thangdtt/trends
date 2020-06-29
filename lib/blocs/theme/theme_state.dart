@@ -18,9 +18,29 @@ class ThemeLoaded extends ThemeState {
   final ThemeData themeData;
   final bool isDarkMode;
   final bool isFastReadMode;
-  
-  ThemeLoaded({this.themeData, this.isDarkMode, this.isFastReadMode});
+  final double pageFontSizeFactor;
+  final Color pageBackgroundColor;
+  final Color titleColor;
+  final Color textColor;
+
+  ThemeLoaded({
+    this.themeData,
+    this.isDarkMode,
+    this.isFastReadMode,
+    this.pageFontSizeFactor,
+    this.pageBackgroundColor,
+    this.textColor,
+    this.titleColor,
+  });
 
   @override
-  List<Object> get props => [themeData, isDarkMode, isFastReadMode];
+  List<Object> get props => [
+        themeData,
+        isDarkMode,
+        isFastReadMode,
+        pageFontSizeFactor,
+        pageBackgroundColor,
+        titleColor,
+        textColor,
+      ];
 }

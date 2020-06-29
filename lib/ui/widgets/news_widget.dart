@@ -110,6 +110,7 @@ class NewsWidget extends StatelessWidget {
                                     fontSize: 15 * screenWidth / 360,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.none,
+                                    color: Colors.deepOrange
                                   ),
                                 ),
                                 SizedBox(height: 3),
@@ -139,7 +140,7 @@ class NewsWidget extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 11 * screenWidth / 360,
-                                    color: Colors.teal,
+                                    color: Colors.green,
                                     decoration: TextDecoration.none,
                                   ),
                                 ),

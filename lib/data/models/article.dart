@@ -96,6 +96,7 @@ class Article extends Equatable {
   final String location;
   final String description;
   final String author;
+  bool isBookMarked = false;
   final List<ArticleContent> content;
   //String image;
 
@@ -108,6 +109,7 @@ class Article extends Equatable {
     this.description,
     this.author,
     this.content,
+    isBookMark = false,
   });
 
   factory Article.fromJson(json) {
@@ -137,6 +139,7 @@ class Article extends Equatable {
         description,
         author,
         content,
+        isBookMarked,
       ];
 
   String get firstImage {

@@ -10,6 +10,8 @@ import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 
 class NewsTab extends StatefulWidget {
+  final catEnum;
+  NewsTab({this.catEnum});
   @override
   _NewsTabState createState() => _NewsTabState();
 }
@@ -34,31 +36,39 @@ class _NewsTabState extends State<NewsTab>
       body: Container(
         child: BlocConsumer<ArticleBloc, ArticleState>(
           listener: (context, state) {
-            //await Future.delayed(Duration(milliseconds: 2000));
-            if (state is ArticleRefreshed) {
-              _refreshController.refreshCompleted();
-            }
-            if (state is ArticleLoadMore) {
-              _refreshController.loadComplete();
-            }
+
+              if (state is ArticleRefreshed) {
+                _refreshController.refreshCompleted();
+              }
+              if (state is ArticleLoadMore) {
+                _refreshController.loadComplete();
+              }
+          
           },
           builder: (context, state) {
             if (state is ArticleInitial) {
               return buildInitialInput();
             } else if (state is ArticleLoading) {
-              return buildLoadingInput();
+              if (_currentArticles.isEmpty)
+                return buildLoadingInput();
+              else
+                return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoaded) {
-              _currentArticles = state.articles;
+              if (_currentArticles.isEmpty)
+                _currentArticles =
+                    state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadingMore) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadMore) {
-              _currentArticles = state.articles;
+              _currentArticles =
+                  state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshing) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshed) {
-              _currentArticles = state.articles;
+              _currentArticles =
+                  state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else {
               return buildErrorInput();
@@ -149,15 +159,14 @@ class _NewsTabState extends State<NewsTab>
 
   void _onRefresh() async {
     // monitor network fetch
-    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles());
-    //await Future.delayed(Duration(milliseconds: 2000));
+    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles(widget.catEnum));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }
 
   void _onLoading() async {
     // monitor network fetch
-    BlocProvider.of<ArticleBloc>(context).add(LoadMoreArticles());
-    //await Future.delayed(Duration(milliseconds: 2000));
+    BlocProvider.of<ArticleBloc>(context)
+        .add(LoadMoreArticles(widget.catEnum));
 
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }

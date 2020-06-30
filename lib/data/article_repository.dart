@@ -6,10 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 import 'package:trends/utils/utils_class.dart';
 
-//String articleUrl = ('http://127.0.0.1:5000/article/');
-//int idDifference = 1;
-int idDifference = 10;
-String articleUrl = ('http://127.0.0.1:5000/articles/');
+// int idDifference = 10;
+// String articleUrl = ('http://127.0.0.1:5000/articles/');
+String articleUrl = ('http://server294.azurewebsites.net/articles/'); //Azure
 
 class ArticleRepository {
   Map<categoryEnum, List<Article>> _articles = {
@@ -59,7 +58,7 @@ class ArticleRepository {
     categoryEnum.PhapLuat: "phap_luat",
     categoryEnum.GiaoDuc: "giao_duc",
     categoryEnum.SucKhoe: "suc_khoe",
-    categoryEnum.DoiSong: "Đoi_song",
+    categoryEnum.DoiSong: "oi_song",
     categoryEnum.DuLich: "du_lich",
     categoryEnum.KhoaHoc: "khoa_hoc",
     categoryEnum.SoHoa: "so_hoa",

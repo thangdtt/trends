@@ -9,9 +9,12 @@ import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'blocs/article/article_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    Phoenix(child: MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {

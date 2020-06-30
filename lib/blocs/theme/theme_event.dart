@@ -11,6 +11,7 @@ class ThemeChanged extends ThemeEvent {
   final Color pageBackgroundColor;
   final Color titleColor;
   final Color textColor;
+  final List<String> filterList;
 
   ThemeChanged({
     this.isDarkMode,
@@ -19,6 +20,7 @@ class ThemeChanged extends ThemeEvent {
     this.pageBackgroundColor,
     this.textColor,
     this.titleColor,
+    this.filterList,
   });
 
   @override
@@ -28,7 +30,8 @@ class ThemeChanged extends ThemeEvent {
         pageFontSizeFactor,
         pageBackgroundColor,
         textColor,
-        titleColor
+        titleColor,
+        filterList
       ];
 }
 

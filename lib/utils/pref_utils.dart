@@ -65,4 +65,17 @@ class PrefUtils {
     else
       return 0;
   }
+
+  static setFilterPref(List<String> value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('filterList', value);
+  }
+
+  static Future<List<String>> getFilterPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('filterList') != null)
+      return prefs.getStringList('filterList');
+    else
+      return ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
+  }
 }

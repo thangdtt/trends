@@ -25,12 +25,15 @@ class NewsWidget extends StatelessWidget {
       child: Container(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: 2 * screenWidth / 360, vertical: 1),
+              horizontal: 7 * screenWidth / 360,
+              vertical: 3 * screenWidth / 360),
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(3)),
-              border: Border.all(color: Colors.black54, width: 0.5),
+              borderRadius: BorderRadius.all(
+                Radius.circular(25),
+              ),
+              //border: Border.all(color: Colors.black54, width: 0.5),
             ),
             width: width == 0 ? screenWidth : width,
             height: 130 * screenHeight / 780,
@@ -66,8 +69,9 @@ class NewsWidget extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(3),
-                                      bottomLeft: Radius.circular(3)),
+                                    topLeft: Radius.circular(25),
+                                    bottomLeft: Radius.circular(25),
+                                  ),
                                 )
                               : BoxDecoration(
                                   image: DecorationImage(
@@ -76,8 +80,9 @@ class NewsWidget extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(3),
-                                      bottomLeft: Radius.circular(3)),
+                                    topLeft: Radius.circular(25),
+                                    bottomLeft: Radius.circular(25),
+                                  ),
                                 )),
                       //+ DateTime.now to make all tag different from each others
                       tag: tag == ''
@@ -107,11 +112,10 @@ class NewsWidget extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: TextStyle(
-                                    fontSize: 15 * screenWidth / 360,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none,
-                                    color: Colors.deepOrange
-                                  ),
+                                      fontSize: 15 * screenWidth / 360,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none,
+                                      color: Colors.deepOrange),
                                 ),
                                 SizedBox(height: 3),
                                 Text(

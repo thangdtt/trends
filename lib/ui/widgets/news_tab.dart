@@ -8,11 +8,10 @@ import 'package:trends/blocs/article/article_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
-import 'package:trends/utils/utils_class.dart';
 
 class NewsTab extends StatefulWidget {
-  final tabIndex;
-  NewsTab({this.tabIndex});
+  final catEnum;
+  NewsTab({this.catEnum});
   @override
   _NewsTabState createState() => _NewsTabState();
 }
@@ -57,19 +56,19 @@ class _NewsTabState extends State<NewsTab>
             } else if (state is ArticleLoaded) {
               if (_currentArticles.isEmpty)
                 _currentArticles =
-                    state.articles[categoryEnum.values[widget.tabIndex]];
+                    state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadingMore) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadMore) {
               _currentArticles =
-                  state.articles[categoryEnum.values[widget.tabIndex]];
+                  state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshing) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshed) {
               _currentArticles =
-                  state.articles[categoryEnum.values[widget.tabIndex]];
+                  state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else {
               return buildErrorInput();
@@ -160,14 +159,14 @@ class _NewsTabState extends State<NewsTab>
 
   void _onRefresh() async {
     // monitor network fetch
-    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles(widget.tabIndex));
+    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles(widget.catEnum));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }
 
   void _onLoading() async {
     // monitor network fetch
     BlocProvider.of<ArticleBloc>(context)
-        .add(LoadMoreArticles(widget.tabIndex));
+        .add(LoadMoreArticles(widget.catEnum));
 
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }

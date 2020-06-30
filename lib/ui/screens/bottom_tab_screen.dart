@@ -34,11 +34,6 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -61,6 +56,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     super.build(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -88,7 +84,10 @@ class _BottomTabScreenState extends State<BottomTabScreen>
             ],
           ),
         ),
-        drawer: MainDrawer(),
+        drawer: Container(
+          width: screenWidth,
+          child: MainDrawer(),
+        ),
         body: PageView(
           controller: _pageController,
           onPageChanged: (page) {
@@ -152,7 +151,8 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    BlocProvider.of<SearcharticleBloc>(context).add(StartToSearchArticle(query));
+    BlocProvider.of<SearcharticleBloc>(context)
+        .add(StartToSearchArticle(query));
     return SearchResultScreen();
   }
 

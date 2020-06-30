@@ -75,8 +75,8 @@ List<String> tabNames = [
 Map<categoryEnum, bool> tabFilter = {
   categoryEnum.TinNong: false,
   categoryEnum.TinMoi: false,
-  categoryEnum.ThoiSu: true,
-  categoryEnum.TheGioi: true,
+  categoryEnum.ThoiSu: false,
+  categoryEnum.TheGioi: false,
   categoryEnum.KinhDoanh: false,
   categoryEnum.GiaiTri: false,
   categoryEnum.TheThao: false,
@@ -99,4 +99,26 @@ categoryEnum mapIndexToCategory(int index) {
     }
   }
   return categoryEnum.TinMoi;
+}
+
+void loadFilterPrefToMap(List<String> list) {
+  int i = 0;
+  for (var key in tabFilter.keys) {
+    if (list[i] == '0')
+      tabFilter[key] = false;
+    else
+      tabFilter[key] = true;
+    i++;
+  }
+}
+
+List<String> tabFilterToList() {
+  List<String> list = new List();
+  for (var value in tabFilter.values) {
+    if (value)
+      list.add('1');
+    else
+      list.add('0');
+  }
+  return list;
 }

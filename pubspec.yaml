@@ -36,10 +36,10 @@ dev_dependencies:
   equatable: ^1.2.0
   intl: ^0.16.1
   http: ^0.12.1
-  sprintf: ^4.0.2
   pull_to_refresh: ^1.5.8
   rxdart: ^0.24.1
   shared_preferences: ^0.5.7+3
+  flutter_phoenix: ^0.1.0
 
 
 # For information on the generic Dart part of this file, see the

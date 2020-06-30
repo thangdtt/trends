@@ -8,6 +8,7 @@ import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/pref_utils.dart';
 import 'package:trends/utils/utils_class.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -17,104 +18,147 @@ class MainDrawer extends StatefulWidget {
 class _MainDrawerState extends State<MainDrawer> {
   bool isDarkMode;
   bool isFastReadMode;
+  bool filterChange;
+  Map<categoryEnum, bool> currentFilter;
+
+  Key _key = Key("this");
   @override
   void initState() {
     super.initState();
+    filterChange = false;
     isDarkMode =
         (BlocProvider.of<ThemeBloc>(context).state as ThemeLoaded).isDarkMode;
     isFastReadMode = (BlocProvider.of<ThemeBloc>(context).state as ThemeLoaded)
         .isFastReadMode;
+    currentFilter = {
+      categoryEnum.TinNong: false,
+      categoryEnum.TinMoi: false,
+      categoryEnum.ThoiSu: false,
+      categoryEnum.TheGioi: false,
+      categoryEnum.KinhDoanh: false,
+      categoryEnum.GiaiTri: false,
+      categoryEnum.TheThao: false,
+      categoryEnum.PhapLuat: false,
+      categoryEnum.GiaoDuc: false,
+      categoryEnum.SucKhoe: false,
+      categoryEnum.DoiSong: false,
+      categoryEnum.DuLich: false,
+      categoryEnum.KhoaHoc: false,
+      categoryEnum.SoHoa: false,
+      categoryEnum.Xe: false,
+    };
+    for (var key in tabFilter.keys) currentFilter[key] = tabFilter[key];
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Drawer(
-      child: Container(
-        child: SingleChildScrollView(
-                  child: Column(
-            children: <Widget>[
-              Container(
-                height: 20 * screenHeight / 360,
-                width: double.infinity,
-                padding: const EdgeInsets.all(5),
-                alignment: Alignment.center,
-                color: Theme.of(context).primaryColor,
-                child: Text(
-                  "Cài đặt",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22 * screenWidth / 360,
+    return Dismissible(
+      key: _key,
+      confirmDismiss: (direction) {
+        return _willPopHandler();
+      },
+      direction: DismissDirection.endToStart,
+      // onDismissed: (direction) {
+      //   Navigator.of(context).pop();
+      // },
+
+      child: WillPopScope(
+        onWillPop: _willPopHandler,
+        child: Drawer(
+          child: Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 20 * screenHeight / 360,
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(5),
+                    alignment: Alignment.center,
+                    color: Theme.of(context).primaryColor,
+                    child: Text(
+                      "Cài đặt",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 22 * screenWidth / 360,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: Icon(
-                            CustomIcons.moon,
-                            size: 20,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                CustomIcons.moon,
+                                size: 20,
+                              ),
+                            ),
+                            Text(
+                              "Chế độ tối",
+                              style: TextStyle(
+                                fontFamily: 'RobotoCondensed',
+                                fontSize: 10 * screenHeight / 360,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Chế độ tối",
-                          style: TextStyle(
-                            fontFamily: 'RobotoCondensed',
-                            fontSize: 10 * screenHeight / 360,
-                          ),
-                        ),
+                        _buildToggleButton('isDarkMode'),
                       ],
                     ),
-                    _buildToggleButton('isDarkMode'),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: Icon(
-                            Icons.library_books,
-                            size: 20,
-                          ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                Icons.library_books,
+                                size: 20,
+                              ),
+                            ),
+                            Text(
+                              "Chế độ đọc nhanh",
+                              style: TextStyle(
+                                fontFamily: 'RobotoCondensed',
+                                fontSize: 10 * screenHeight / 360,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          "Chế độ đọc nhanh",
-                          style: TextStyle(
-                            fontFamily: 'RobotoCondensed',
-                            fontSize: 10 * screenHeight / 360,
-                          ),
-                        ),
+                        _buildToggleButton('isFastReadingMode'),
                       ],
                     ),
-                    _buildToggleButton('isFastReadingMode'),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: ExpansionTile(
-                  title: Text(
-                    "Lọc",
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
-                  children: _buildFilterButtons(),
-                ),
-              )
-            ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: ExpansionTile(
+                      title: Text(
+                        "Lọc",
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      children: _buildFilterButtons(),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -155,7 +199,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               })
           : Transform.scale(
-              scale: 0.65,
+              scale: 0.75,
               child: CupertinoSwitch(
                   value: isDarkMode,
                   onChanged: (newValue) {
@@ -184,7 +228,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               })
           : Transform.scale(
-              scale: 0.65,
+              scale: 0.75,
               child: CupertinoSwitch(
                   value: isFastReadMode,
                   onChanged: (newValue) {
@@ -213,7 +257,7 @@ class _MainDrawerState extends State<MainDrawer> {
             Row(
               children: <Widget>[
                 Text(
-                  tabNames[value.index],
+                  mapCategoryNames[value],
                   style: TextStyle(
                     fontFamily: 'RobotoCondensed',
                     fontSize: 10 * MediaQuery.of(context).size.height / 360,
@@ -221,11 +265,73 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
               ],
             ),
-            _buildToggleButton('isDarkMode'),
+            _buildFilterButton(value),
           ],
         ),
       ));
     });
     return list;
+  }
+
+  Widget _buildFilterButton(categoryEnum category) {
+    return Platform.isAndroid
+        ? Switch(
+            value: tabFilter[category],
+            onChanged: (newValue) {
+              {
+                setState(() {
+                  filterChange = true;
+                  tabFilter[category] = newValue;
+                  PrefUtils.setFilterPref(tabFilterToList());
+                });
+              }
+            })
+        : Transform.scale(
+            scale: 0.75,
+            child: CupertinoSwitch(
+                value: tabFilter[category],
+                onChanged: (newValue) {
+                  {
+                    setState(() {
+                      filterChange = true;
+                      tabFilter[category] = newValue;
+                      PrefUtils.setFilterPref(tabFilterToList());
+                    });
+                  }
+                }),
+          );
+  }
+
+  Future<bool> _willPopHandler() {
+    if (filterChange) {
+      return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Khởi động lại app ?"),
+              content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text('Không'),
+                    onPressed: () {
+                      setState(() {
+                        for (var key in currentFilter.keys)
+                          tabFilter[key] = currentFilter[key];
+                        filterChange = false;
+                        PrefUtils.setFilterPref(tabFilterToList());
+                      });
+                      Navigator.of(context).pop(false);
+                    }),
+                FlatButton(
+                    child: Text('Có'),
+                    onPressed: () {
+                      Phoenix.rebirth(context);
+                      Navigator.of(context).pop(true);
+                    }),
+              ],
+            );
+          });
+    }
+    Navigator.of(context).pop(true);
   }
 }

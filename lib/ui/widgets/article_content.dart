@@ -33,7 +33,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    //final screenWidth = MediaQuery.of(context).size.width;
     final Article article = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
@@ -191,7 +191,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
       if (item.type == "text")
         list.add(
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
             child: Text(
               item.info,
               style: Theme.of(context).textTheme.bodyText2.copyWith(
@@ -212,7 +212,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
       else
         list.add(
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+            margin: const EdgeInsets.fromLTRB(0, 3, 0, 3),
             child: Text(
               item.info,
               style: Theme.of(context).textTheme.caption.copyWith(

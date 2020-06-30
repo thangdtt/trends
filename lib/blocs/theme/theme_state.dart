@@ -22,16 +22,17 @@ class ThemeLoaded extends ThemeState {
   final Color pageBackgroundColor;
   final Color titleColor;
   final Color textColor;
+  final List<String> filterList;
 
-  ThemeLoaded({
-    this.themeData,
-    this.isDarkMode,
-    this.isFastReadMode,
-    this.pageFontSizeFactor,
-    this.pageBackgroundColor,
-    this.textColor,
-    this.titleColor,
-  });
+  ThemeLoaded(
+      {this.themeData,
+      this.isDarkMode,
+      this.isFastReadMode,
+      this.pageFontSizeFactor,
+      this.pageBackgroundColor,
+      this.textColor,
+      this.titleColor,
+      this.filterList});
 
   @override
   List<Object> get props => [
@@ -42,5 +43,6 @@ class ThemeLoaded extends ThemeState {
         pageBackgroundColor,
         titleColor,
         textColor,
+        filterList,
       ];
 }

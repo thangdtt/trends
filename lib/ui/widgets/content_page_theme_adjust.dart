@@ -78,8 +78,8 @@ class _ContentPageThemeAdjusterState extends State<ContentPageThemeAdjuster> {
                         _themeBloc.add(ThemeChanged(pageFontSizeFactor: s));
                       });
                     },
-                    divisions: 6,
-                    min: 0.5,
+                    divisions: 8,
+                    min: 0.3,
                     max: 2.0,
                   ),
                 ),
@@ -329,12 +329,14 @@ class _ContentPageThemeAdjusterState extends State<ContentPageThemeAdjuster> {
                     contentBackgroundColorData[contentBackgroundColor.White];
                 PrefUtils.setPageBackgroundColorPref(
                     contentBackgroundColor.White.index);
+                widget.changeBackColor(backColor);
+                widget.changeTextColor(textColor);
+                pageFontSizeFactor = 0.8;
+                PrefUtils.setPageFontSizeFactorPref(0.8);
                 _themeBloc.add(
                   ThemeChanged(
                       pageBackgroundColor: backColor, textColor: textColor),
                 );
-                widget.changeBackColor(backColor);
-                widget.changeTextColor(textColor);
               });
             },
             child: Text(

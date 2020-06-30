@@ -88,13 +88,12 @@ class _NewsScreenState extends State<NewsScreen>
 
   List<Widget> _buildTabContent(int max) {
     List<Widget> list = new List();
-    for (int i = 0; i < max; i++)
-      list.add(
-        NewsTab(
-          tabIndex: i,
-        ),
-      );
-
+    for (var key in tabFilter.keys) {
+      if (tabFilter[key] == false)
+        list.add(NewsTab(
+          catEnum: key,
+        ));
+    }
     return list;
   }
 }

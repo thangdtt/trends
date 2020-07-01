@@ -17,7 +17,8 @@ class SavedArticleLoading extends SavedArticleState {
 
 class SavedArticleLoaded extends SavedArticleState {
   final List<Article> articles;
-  const SavedArticleLoaded(this.articles);
+  final List<String> articleCache;
+  const SavedArticleLoaded(this.articles, this.articleCache);
 
   @override
   List<Object> get props => [articles];

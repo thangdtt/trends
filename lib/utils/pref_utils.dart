@@ -22,9 +22,9 @@ class PrefUtils {
   static Future<bool> getIsFastReadModePref() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('isFastReadMode') != null)
-        return prefs.getBool('isFastReadMode');
-      else
-        return false;
+      return prefs.getBool('isFastReadMode');
+    else
+      return false;
   }
 
   static setPageFontSizeFactorPref(double value) async {
@@ -76,7 +76,23 @@ class PrefUtils {
     if (prefs.getStringList('filterList') != null)
       return prefs.getStringList('filterList');
     else
-      return ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
+      return [
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0',
+        '0'
+      ];
   }
 
   static setSavedArticlesPref(List<String> value) async {

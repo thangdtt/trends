@@ -29,6 +29,7 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
           if (state is SavedArticleInitial) {
             return Container();
           } else if (state is SavedArticleLoading) {
+            Future.delayed(Duration(milliseconds: 200));
             return Center(child: Text("Đang tải"));
           } else if (state is SavedArticleLoaded) {
             if (state.articles.isEmpty)

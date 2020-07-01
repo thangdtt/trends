@@ -34,7 +34,7 @@ class SavedArticleBloc extends Bloc<SavedArticleEvent, SavedArticleState> {
         List<Article> _saveArticleList =
             await savedRepo.getAllSavedArticles(idList.reversed.toList());
 
-        yield SavedArticleLoaded(_saveArticleList);
+        yield SavedArticleLoaded(_saveArticleList, savedArticles);
       } catch (e) {
         yield SavedArticleError("get saved article error");
       }
@@ -56,7 +56,7 @@ class SavedArticleBloc extends Bloc<SavedArticleEvent, SavedArticleState> {
         List<Article> _saveArticleList =
             await savedRepo.getAllSavedArticles(idList.reversed.toList());
 
-        yield SavedArticleLoaded(_saveArticleList);
+        yield SavedArticleLoaded(_saveArticleList, savedArticles);
       } catch (e) {
         yield SavedArticleError("delete saved article error");
       }

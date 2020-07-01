@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trends/blocs/savedArticles/savedarticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/utils/pref_utils.dart';
 
 class ArticleContentTopBar extends StatefulWidget {
@@ -12,10 +14,52 @@ class ArticleContentTopBar extends StatefulWidget {
 }
 
 class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
+  bool isBookMarked = false;
+  List<int> savedIds;
+  List<String> savedArticles;
+  SavedArticleBloc saveBloc;
+  @override
+  void initState() {
+    super.initState();
+    saveBloc = BlocProvider.of(context);
+    saveBloc.add(GetSavedArticles());
+    savedIds = [];
+    savedArticles = [];
+    //savedArticles = (saveBloc.state as SavedArticleLoaded).articleCache;
+    // PrefUtils.getSavedArticlesPref().then((value) {
+    //   for (var item in value) {
+    //     savedArticles.add(item);
+    //   }
+    // });
+
+    // for (var item in savedArticles)
+    //   savedIds.add(int.tryParse(item.split('~').elementAt(0)));
+    // if (savedIds.indexOf(widget.article.id) < 0)
+    //   isBookMarked = false;
+    // else
+    //   isBookMarked = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    if (saveBloc.state is SavedArticleInitial ||
+        saveBloc.state is SavedArticleLoading) {
+    } else if (saveBloc.state is SavedArticleLoaded) {
+      savedArticles = (saveBloc.state as SavedArticleLoaded).articleCache;
+      for (var item in savedArticles)
+        savedIds.add(int.tryParse(item.split('~').elementAt(0)));
+      for (var id in savedIds) {
+        if (id == widget.article.id) {
+          setState(() {
+            isBookMarked = true;
+          });
+          break;
+        }
+      }
+    } else
+      return Center(child: Text("Xảy ra lỗi ở bookmark"));
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
@@ -51,17 +95,14 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
           GestureDetector(
             onTap: () {
               setState(() {
-                widget.article.isBookMarked = !widget.article.isBookMarked;
-                _bookMarkArticle(widget.article);
+                _bookMarkArticle();
               });
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(
                   0, 0, 4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
-                widget.article.isBookMarked
-                    ? Icons.bookmark
-                    : Icons.bookmark_border,
+                isBookMarked ? Icons.bookmark : Icons.bookmark_border,
                 size: 17 * screenHeight / 360,
               ),
             ),
@@ -71,15 +112,34 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     );
   }
 
-  void _bookMarkArticle(Article article) async {
-    List<String> currentSaveArticlePref =
-        await PrefUtils.getSavedArticlesPref();
-    for (var item in currentSaveArticlePref)
-      if (int.tryParse(item.split('~').elementAt(0)) == article.id) return;
-    String articleString =
-        "${article.id.toString()}~${article.title}~${article.firstImage}~${article.description}~${article.location}~${article.time}";
-    currentSaveArticlePref.add(articleString);
-    PrefUtils.setSavedArticlesPref(currentSaveArticlePref);
+  void _bookMarkArticle() async {
+    isBookMarked = !isBookMarked;
+    widget.article.isBookMarked = !isBookMarked;
+
+    int existed = -1;
+    for (var item in savedIds) {
+      if (item == widget.article.id) {
+        existed = item;
+        break;
+      }
+    }
+
+    //Unbookmarked
+    if (existed >= 0) {
+      //savedArticles.removeAt(savedIds.indexOf(existed));
+      //savedIds.removeWhere((element) => element == existed);
+      saveBloc.add(DeleteSavedArticle(existed));
+      //PrefUtils.setSavedArticlesPref(savedArticles);
+      return;
+    } else {
+      //Set Bookmark
+      String articleString =
+          "${widget.article.id.toString()}~${widget.article.title}~${widget.article.firstImage}~${widget.article.description}~${widget.article.location}~${widget.article.time}";
+      savedArticles.add(articleString);
+      savedIds.add(widget.article.id);
+      PrefUtils.setSavedArticlesPref(savedArticles);
+      saveBloc.add(GetSavedArticles());
+    }
   }
 }
 

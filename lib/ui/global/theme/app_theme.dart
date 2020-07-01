@@ -35,6 +35,7 @@ final contentTextColorData = {
 
 final appThemeData = {
   AppTheme.Light: ThemeData(
+    fontFamily: 'Pacifico-Regular',
     bottomAppBarColor: Color.fromRGBO(128, 128, 128, 1),
     backgroundColor: Color.fromRGBO(255, 255, 255, 1),
     brightness: Brightness.light,
@@ -48,6 +49,7 @@ final appThemeData = {
     ),
   ),
   AppTheme.Dark: ThemeData(
+    fontFamily: 'Pacifico-Regular',
     iconTheme: IconThemeData(color: Colors.amber),
     accentColor: Colors.amberAccent,
     bottomAppBarColor: Color.fromRGBO(10, 10, 10, 1),

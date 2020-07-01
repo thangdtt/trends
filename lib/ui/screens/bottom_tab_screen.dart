@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
+import 'package:trends/ui/screens/saved_screen.dart';
 import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
@@ -18,9 +20,10 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     with AutomaticKeepAliveClientMixin<BottomTabScreen> {
   final List<IconData> icons = <IconData>[
     CustomIcons.newspaper,
-    Icons.music_note
+    Icons.music_note,
+    Icons.star_border,
   ];
-  final List<String> tabDescriptions = ["News", "Music"];
+  final List<String> tabDescriptions = ["Bản tin", "Nhạc", "Đã lưu"];
   List<BottomNavigationBarItem> bottomBarItems;
 
   PageController _pageController;
@@ -29,6 +32,8 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   @override
   void initState() {
     super.initState();
+    //TODO FIX
+    BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
   }
@@ -67,6 +72,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
               "Trends",
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontFamily: 'Pacifico-Regular',
                 color: Theme.of(context).textTheme.bodyText2.color,
               ),
             ),
@@ -98,6 +104,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           children: <Widget>[
             NewsScreen(),
             MusicScreen(),
+            SavedScreen(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

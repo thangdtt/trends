@@ -187,7 +187,6 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   Widget buildContentWidget(
       List<ArticleContent> content, BuildContext context) {
     var list = List<Widget>();
-    //TODO : WRONG FIX
     if(content == null || content.isEmpty) return Container();
     for (var item in content) {
       if (item.type == "text")

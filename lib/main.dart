@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
-import 'package:trends/blocs/savedArticles/savedarticle_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';

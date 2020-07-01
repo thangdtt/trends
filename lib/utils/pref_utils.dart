@@ -78,4 +78,17 @@ class PrefUtils {
     else
       return ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'];
   }
+
+  static setSavedArticlesPref(List<String> value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('savedArticles', value);
+  }
+
+  static Future<List<String>> getSavedArticlesPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('savedArticles') != null)
+      return prefs.getStringList('savedArticles');
+    else
+      return [];
+  }
 }

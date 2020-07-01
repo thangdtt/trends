@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/data/models/article.dart';
+import 'package:trends/utils/pref_utils.dart';
 
-class ArticleContentTopBar extends StatelessWidget {
+class ArticleContentTopBar extends StatefulWidget {
   final Article article;
   ArticleContentTopBar(this.article);
+
+  @override
+  _ArticleContentTopBarState createState() => _ArticleContentTopBarState();
+}
+
+class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -22,7 +29,8 @@ class ArticleContentTopBar extends StatelessWidget {
         color: Theme.of(context).backgroundColor,
         //border: Border.(width: 0, color: Theme.of(context).textTheme.bodyText2.color),
         border: Border(
-          bottom: BorderSide(width: 0, color: Theme.of(context).textTheme.bodyText2.color),
+          bottom: BorderSide(
+              width: 0, color: Theme.of(context).textTheme.bodyText2.color),
         ),
       ),
       height: 22 * screenHeight / 360,
@@ -41,12 +49,19 @@ class ArticleContentTopBar extends StatelessWidget {
                   ))),
           Expanded(child: Container()),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                widget.article.isBookMarked = !widget.article.isBookMarked;
+                _bookMarkArticle(widget.article);
+              });
+            },
             child: Padding(
               padding: EdgeInsets.fromLTRB(
                   0, 0, 4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
-                article.isBookMarked ? Icons.bookmark : Icons.bookmark_border,
+                widget.article.isBookMarked
+                    ? Icons.bookmark
+                    : Icons.bookmark_border,
                 size: 17 * screenHeight / 360,
               ),
             ),
@@ -54,6 +69,17 @@ class ArticleContentTopBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _bookMarkArticle(Article article) async {
+    List<String> currentSaveArticlePref =
+        await PrefUtils.getSavedArticlesPref();
+    for (var item in currentSaveArticlePref)
+      if (int.tryParse(item.split('~').elementAt(0)) == article.id) return;
+    String articleString =
+        "${article.id.toString()}~${article.title}~${article.firstImage}~${article.description}~${article.location}~${article.time}";
+    currentSaveArticlePref.add(articleString);
+    PrefUtils.setSavedArticlesPref(currentSaveArticlePref);
   }
 }
 

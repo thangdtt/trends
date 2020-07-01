@@ -4,6 +4,7 @@ import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
+import 'package:trends/ui/screens/saved_screen.dart';
 import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
@@ -18,9 +19,10 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     with AutomaticKeepAliveClientMixin<BottomTabScreen> {
   final List<IconData> icons = <IconData>[
     CustomIcons.newspaper,
-    Icons.music_note
+    Icons.music_note,
+    Icons.star_border,
   ];
-  final List<String> tabDescriptions = ["News", "Music"];
+  final List<String> tabDescriptions = ["Bản tin", "Nhạc", "Đã lưu"];
   List<BottomNavigationBarItem> bottomBarItems;
 
   PageController _pageController;
@@ -67,6 +69,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
               "Trends",
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontFamily: 'Pacifico-Regular',
                 color: Theme.of(context).textTheme.bodyText2.color,
               ),
             ),
@@ -98,6 +101,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           children: <Widget>[
             NewsScreen(),
             MusicScreen(),
+            SavedScreen(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(

@@ -88,6 +88,9 @@ flutter:
     - family:  MoonIcon
       fonts:
         - asset: assets/icons/MoonIcon.ttf
+    - family:  Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

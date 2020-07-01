@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 
 import 'package:trends/ui/screens/music_screen.dart';
@@ -31,6 +32,8 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   @override
   void initState() {
     super.initState();
+    //TODO FIX
+    BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
   }

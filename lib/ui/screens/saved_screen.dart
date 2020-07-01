@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moor_ffi/database.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/savedArticles/savedarticle_bloc.dart';
 import 'package:trends/ui/widgets/saved_article_tab.dart';
 import 'package:trends/ui/widgets/love_music_tab.dart';
@@ -11,7 +13,7 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen>
     with SingleTickerProviderStateMixin {
-  SavedArticleBloc articleBloc;
+   DatabaseBloc dbBloc;
   TabController _tabController;
 
   @override
@@ -26,12 +28,12 @@ class _SavedScreenState extends State<SavedScreen>
 
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
-    articleBloc = BlocProvider.of<SavedArticleBloc>(context);
+    dbBloc = BlocProvider.of<DatabaseBloc>(context);
     //articleBloc.add(GetSavedArticles());
   }
 
   void _handleTabSelection() {
-    if (_tabController.index == 1) articleBloc.add(GetSavedArticles());
+    if (_tabController.index == 1) dbBloc.add(GetAllSaveArticle());
   }
 
   @override

@@ -1,21 +1,21 @@
-part of 'savedarticle_bloc.dart';
+// part of 'savedarticle_bloc.dart';
 
-abstract class SavedArticleEvent extends Equatable {
-  const SavedArticleEvent();
-}
+// abstract class SavedArticleEvent extends Equatable {
+//   const SavedArticleEvent();
+// }
 
-class GetSavedArticles extends SavedArticleEvent {
-  GetSavedArticles();
+// class GetSavedArticles extends SavedArticleEvent {
+//   GetSavedArticles();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-class DeleteSavedArticle extends SavedArticleEvent {
-  final int id;
-  DeleteSavedArticle(this.id);
+// class DeleteSavedArticle extends SavedArticleEvent {
+//   final int id;
+//   DeleteSavedArticle(this.id);
 
-  @override
-  List<Object> get props => [id];
-}
+//   @override
+//   List<Object> get props => [id];
+// }
 

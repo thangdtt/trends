@@ -10,7 +10,7 @@ String articleUrl = ('http://server294.azurewebsites.net/article/');
 List<Article> _savedArticles = [];
 
 class SavedArticleRepository {
-  Future<Article> getSavedArticle(int id) async {
+  static Future<Article> getSavedArticle(int id) async {
     String url = articleUrl + "?id=$id";
 
     http.Response response;

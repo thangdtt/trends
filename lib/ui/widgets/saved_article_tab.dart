@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/savedArticles/savedarticle_bloc.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
+import 'package:trends/data/saveArticle_repository.dart';
 
 class SavedArticleTab extends StatefulWidget {
   @override
@@ -12,30 +13,30 @@ class SavedArticleTab extends StatefulWidget {
 }
 
 class _SavedArticleTabState extends State<SavedArticleTab> {
-  SavedArticleBloc saveBloc;
+  DatabaseBloc dbBloc;
 
   @override
   void initState() {
     super.initState();
-    saveBloc = BlocProvider.of<SavedArticleBloc>(context);
-    saveBloc.add(GetSavedArticles());
+    dbBloc = BlocProvider.of<DatabaseBloc>(context);
+    //dbBloc.add(GetAllSaveArticle());
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: BlocBuilder<SavedArticleBloc, SavedArticleState>(
+      child: BlocBuilder<DatabaseBloc, DatabaseState>(
+        bloc: dbBloc,
         builder: (context, state) {
-          if (state is SavedArticleInitial) {
+          if (state is DatabaseInitial) {
             return Container();
-          } else if (state is SavedArticleLoading) {
-            Future.delayed(Duration(milliseconds: 200));
+          } else if (state is DatabaseLoading) {
             return Center(child: Text("Đang tải"));
-          } else if (state is SavedArticleLoaded) {
-            if (state.articles.isEmpty)
+          } else if (state is DatabaseLoaded) {
+            if (state.savedArticles.isEmpty)
               return Center(child: Text("Không tìm thấy !"));
             else
-              return buildLoadedInput(state.articles, context);
+              return buildLoadedInput(state.savedArticles, context);
           } else
             return Center(child: Text("Xảy ra lỗi"));
         },
@@ -50,7 +51,7 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
           child: Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
-              saveBloc.add(DeleteSavedArticle(articles[i].id));
+              dbBloc.add(DeleteSaveArticle(articles[i]));
             },
             background: Container(
               color: Colors.red[400],
@@ -62,8 +63,10 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
             child: NewsWidget(
               article: articles[i],
               callback: () {
-                Navigator.of(context).pushNamed(ArticleContentWidget.routeName,
-                    arguments: articles[i]);
+                getArticleContent(articles[i].id).then((value) =>
+                    Navigator.of(context).pushNamed(
+                        ArticleContentWidget.routeName,
+                        arguments: value));
               },
             ),
           ),
@@ -71,5 +74,10 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
       },
       itemCount: articles.length,
     );
+  }
+
+  Future<Article> getArticleContent(int id) async {
+    Article article = await SavedArticleRepository.getSavedArticle(id);
+    return article;
   }
 }

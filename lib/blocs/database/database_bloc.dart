@@ -4,15 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/data/moor_database.dart';
+import 'package:trends/utils/global_repo.dart';
 
 part 'database_event.dart';
 part 'database_state.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
-  AppDatabase database;
-  DatabaseBloc() {
-    database = new AppDatabase();
-  }
   @override
   DatabaseState get initialState => DatabaseInitial();
 
@@ -23,7 +20,7 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
     if (event is GetAllSaveArticle) {
       yield DatabaseLoading();
       try {
-        List<SavedArticleData> _list = await database.getAllSaveArticles();
+        List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
 
         List<Article> _saveArticles = [];
         for (var item in _list) {
@@ -56,9 +53,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             location: event.article.location,
             firstImage: event.article.firstImage);
 
-        database.inserSaveArticle(saveArticle);
+        databaseRepo.inserSaveArticle(saveArticle);
 
-        List<SavedArticleData> _list = await database.getAllSaveArticles();
+        List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
         List<Article> _saveArticles = [];
         for (var item in _list) {
           _saveArticles.add(new Article(
@@ -90,9 +87,9 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             author: event.article.author,
             location: event.article.location,
             firstImage: event.article.firstImage);
-        database.deleteSaveArticle(saveArticle);
+        databaseRepo.deleteSaveArticle(saveArticle);
 
-        List<SavedArticleData> _list = await database.getAllSaveArticles();
+        List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
         List<Article> _saveArticles = [];
         for (var item in _list) {
           _saveArticles.add(new Article(

@@ -5,18 +5,13 @@ import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trends/data/models/article.dart';
-import 'package:trends/data/article_repository.dart';
+import 'package:trends/utils/global_repo.dart';
 import 'package:trends/utils/utils_class.dart';
 
 part 'article_event.dart';
 part 'article_state.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
-  ArticleRepository articleRepo;
-  ArticleBloc() {
-    articleRepo = new ArticleRepository();
-  }
-
   @override
   ArticleState get initialState => ArticleInitial();
 

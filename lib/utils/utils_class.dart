@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 
 class Debouncer {
@@ -122,3 +123,13 @@ List<String> tabFilterToList() {
   }
   return list;
 }
+
+// Future<bool> checkConnection() async {
+//   var connectivityResult = await (Connectivity().checkConnectivity());
+//   if (connectivityResult == ConnectivityResult.mobile) {
+//     return true;
+//   } else if (connectivityResult == ConnectivityResult.wifi) {
+//     return true;
+//   }
+//   return false;
+// }

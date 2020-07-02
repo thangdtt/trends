@@ -3,16 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:trends/data/models/article.dart';
-import 'package:trends/data/searchArticle_repository.dart';
+import 'package:trends/utils/global_repo.dart';
 
 part 'searcharticle_event.dart';
 part 'searcharticle_state.dart';
 
 class SearcharticleBloc extends Bloc<SearchArticleEvent, SearchArticleState> {
-  SearchArticleRepository searchRepo;
-  SearcharticleBloc() {
-    searchRepo = new SearchArticleRepository();
-  }
 
   @override
   SearchArticleState get initialState => SearcharticleInitial();

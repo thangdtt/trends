@@ -20,6 +20,7 @@ class NewsWidget extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
+
     return GestureDetector(
       onTap: callback,
       child: Container(
@@ -60,30 +61,31 @@ class NewsWidget extends StatelessWidget {
                         );
                       },
                       child: Container(
-                          width: 125 * screenWidth / 360,
-                          height: 130 * screenHeight / 780,
-                          decoration: article.firstImage.isNotEmpty
-                              ? BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(article.firstImage),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25),
-                                    bottomLeft: Radius.circular(25),
-                                  ),
-                                )
-                              : BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        'https://gstwar.com/theme/img/no-image.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25),
-                                    bottomLeft: Radius.circular(25),
-                                  ),
-                                )),
+                        width: 125 * screenWidth / 360,
+                        height: 130 * screenHeight / 780,
+                        decoration: article.firstImage.isNotEmpty
+                            ? BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(article.firstImage),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  bottomLeft: Radius.circular(25),
+                                ),
+                              )
+                            : BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://gstwar.com/theme/img/no-image.jpg'),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25),
+                                  bottomLeft: Radius.circular(25),
+                                ),
+                              ),
+                      ),
                       //+ DateTime.now to make all tag different from each others
                       tag: tag == ''
                           ? article.id.toString() + DateTime.now().toString()
@@ -181,4 +183,42 @@ class NewsWidget extends StatelessWidget {
       ),
     );
   }
+
+  // BoxDecoration _buildImageProvider() {
+  //   checkConnection().then((value) {
+  //     if (!value)
+  //       return BoxDecoration(
+  //         image: DecorationImage(
+  //             image: Image.asset('assets/images/NoInternet.png').image),
+  //         borderRadius: BorderRadius.only(
+  //           topLeft: Radius.circular(25),
+  //           bottomLeft: Radius.circular(25),
+  //         ),
+  //       );
+  //     else {
+  //       return article.firstImage.isNotEmpty
+  //           ? BoxDecoration(
+  //               image: DecorationImage(
+  //                 image: NetworkImage(article.firstImage),
+  //                 fit: BoxFit.cover,
+  //               ),
+  //               borderRadius: BorderRadius.only(
+  //                 topLeft: Radius.circular(25),
+  //                 bottomLeft: Radius.circular(25),
+  //               ),
+  //             )
+  //           : BoxDecoration(
+  //               image: DecorationImage(
+  //                 image:
+  //                     NetworkImage('https://gstwar.com/theme/img/no-image.jpg'),
+  //                 fit: BoxFit.cover,
+  //               ),
+  //               borderRadius: BorderRadius.only(
+  //                 topLeft: Radius.circular(25),
+  //                 bottomLeft: Radius.circular(25),
+  //               ),
+  //             );
+  //     }
+  //   });
+  // }
 }

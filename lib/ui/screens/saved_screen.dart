@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moor_ffi/database.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
-import 'package:trends/blocs/savedArticles/savedarticle_bloc.dart';
 import 'package:trends/ui/widgets/saved_article_tab.dart';
 import 'package:trends/ui/widgets/love_music_tab.dart';
 

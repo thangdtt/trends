@@ -1,68 +1,49 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:trends/data/models/article.dart';
-import 'package:trends/data/article_repository.dart';
+import 'package:trends/utils/global_repo.dart';
 import 'package:trends/utils/utils_class.dart';
 
-part 'article_event.dart';
-part 'article_state.dart';
+part 'suggestArticle_event.dart';
+part 'suggestArticle_state.dart';
 
-class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
-  ArticleRepository articleRepo;
-  ArticleBloc() {
-    articleRepo = new ArticleRepository();
-  }
+class SuggestArticleBloc
+    extends Bloc<SuggestArticleEvent, SuggestArticleState> {
+  @override
+  SuggestArticleState get initialState => SuggestArticleInitial();
 
   @override
-  ArticleState get initialState => ArticleInitial();
-
-  @override
-  Stream<Transition<ArticleEvent, ArticleState>> transformEvents(
-    Stream<ArticleEvent> events,
-    TransitionFunction<ArticleEvent, ArticleState> transitionFn,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(const Duration(milliseconds: 500)),
-      transitionFn,
-    );
-  }
-
-  @override
-  Stream<ArticleState> mapEventToState(
-    ArticleEvent event,
+  Stream<SuggestArticleState> mapEventToState(
+    SuggestArticleEvent event,
   ) async* {
-    if (event is RefreshArticles) {
-      yield ArticleRefreshing();
+    yield SuggestArticleLoading();
+    if (event is FetchSuggestArticles) {
       try {
-        final listArticles = await articleRepo.getNewArticles(event.catEnum);
-        yield ArticleRefreshed(listArticles);
-      } on Error {
-        //yield ArticleError("Error !!!");
-        yield state;
-      }
-    } else if (event is LoadMoreArticles) {
-      yield ArticleLoadingMore();
-      try {
-        final listArticles = await articleRepo.loadMoreArticles(
-            event.catEnum, articleRepo.mapOffset[event.catEnum]);
-        yield ArticleLoadMore(listArticles);
-      } on Error {
-        //yield ArticleError("Error !!!");
-        yield state;
-      }
-    } else {
-      yield ArticleLoading();
-      if (event is FetchArticles) {
-        try {
-          final listArticles = await articleRepo.getNewArticles(event.catEnum);
-          yield ArticleLoaded(listArticles);
-        } on Error {
-          yield ArticleError("Error !!!");
+        Random rnd = new Random();
+        randomListItem(List lst) => lst[rnd.nextInt(lst.length)];
+        List<Article> articles =
+            new List<Article>.from(articleRepo.mapArticles[event.category]);
+        if (articles.isEmpty) {
+          await articleRepo.getNewArticles(event.category);
+          articles =
+              new List<Article>.from(articleRepo.mapArticles[event.category]);
         }
+        articles.shuffle(rnd);
+        int max = articles.length;
+        List<Article> result = [];
+        result.add(randomListItem(articles.sublist(0, (max / 3).round())));
+        result.add(randomListItem(
+            articles.sublist((max / 3).round(), (2 * max / 3).round())));
+        result
+            .add(randomListItem(articles.sublist((2 * max / 3).round(), max)));
+
+        yield SuggestArticleLoaded(result);
+      } on Error {
+        yield SuggestArticleError("Error !!!");
       }
     }
   }

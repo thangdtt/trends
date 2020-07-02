@@ -1,61 +1,31 @@
-part of 'article_bloc.dart';
+part of 'suggestArticle_bloc.dart';
 
-abstract class ArticleState extends Equatable {
-  const ArticleState();
+abstract class SuggestArticleState extends Equatable {
+  const SuggestArticleState();
 }
 
-class ArticleInitial extends ArticleState {
+class SuggestArticleInitial extends SuggestArticleState {
   @override
   List<Object> get props => [];
 }
 
-class ArticleLoading extends ArticleState {
-  const ArticleLoading();
+class SuggestArticleLoading extends SuggestArticleState {
+  const SuggestArticleLoading();
   @override
   List<Object> get props => [];
 }
 
-class ArticleLoaded extends ArticleState {
-  final Map<categoryEnum, List<Article>> articles;
-  const ArticleLoaded(this.articles);
+class SuggestArticleLoaded extends SuggestArticleState {
+  final List<Article> articles;
+  const SuggestArticleLoaded(this.articles);
 
   @override
   List<Object> get props => [articles];
 }
 
-class ArticleError extends ArticleState {
+class SuggestArticleError extends SuggestArticleState {
   final String message;
-  const ArticleError(this.message);
+  const SuggestArticleError(this.message);
   @override
   List<Object> get props => [message];
-}
-
-class ArticleRefreshing extends ArticleState {
-  const ArticleRefreshing();
-
-  @override
-  List<Object> get props => [];
-}
-
-class ArticleRefreshed extends ArticleState {
-  final Map<categoryEnum, List<Article>> articles;
-  const ArticleRefreshed(this.articles);
-
-  @override
-  List<Object> get props => [articles];
-}
-
-class ArticleLoadingMore extends ArticleState {
-  const ArticleLoadingMore();
-
-  @override
-  List<Object> get props => [];
-}
-
-class ArticleLoadMore extends ArticleState {
-  final Map<categoryEnum, List<Article>> articles;
-  const ArticleLoadMore(this.articles);
-
-  @override
-  List<Object> get props => [articles];
 }

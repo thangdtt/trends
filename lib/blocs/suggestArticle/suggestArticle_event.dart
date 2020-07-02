@@ -1,28 +1,12 @@
-part of 'article_bloc.dart';
+part of 'suggestArticle_bloc.dart';
 
-abstract class ArticleEvent extends Equatable {
-  const ArticleEvent();
+abstract class SuggestArticleEvent extends Equatable {
+  const SuggestArticleEvent();
 }
 
-class FetchArticles extends ArticleEvent {
-  final categoryEnum catEnum;
-  FetchArticles(this.catEnum);
-
-  @override
-  List<Object> get props => [];
-}
-
-class RefreshArticles extends ArticleEvent {
-  final categoryEnum catEnum;
-  const RefreshArticles(this.catEnum);
-
-  @override
-  List<Object> get props => [];
-}
-
-class LoadMoreArticles extends ArticleEvent {
-  final categoryEnum catEnum;
-  const LoadMoreArticles(this.catEnum);
+class FetchSuggestArticles extends SuggestArticleEvent {
+  final categoryEnum category;
+  FetchSuggestArticles(this.category);
 
   @override
   List<Object> get props => [];

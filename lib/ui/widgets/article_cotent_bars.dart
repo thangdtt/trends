@@ -7,7 +7,6 @@ import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:trends/utils/utils_class.dart';
 
 class ArticleContentTopBar extends StatefulWidget {
   final Article article;

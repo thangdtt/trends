@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
+import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
+import 'package:trends/utils/utils_class.dart';
 
 class SearchResultScreen extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,8 +45,17 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         return NewsWidget(
           article: articles[i],
           callback: () {
-            Navigator.of(context).pushNamed(ArticleContentWidget.routeName,
-                arguments: articles[i]);
+            categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
+                (k) => mapCategoryNames[k] == articles[i].category,
+                orElse: () => categoryEnum.TheGioi);
+
+            BlocProvider.of<SuggestArticleBloc>(context)
+                .add(FetchSuggestArticles(catEnum));
+            Navigator.of(context)
+                .pushNamed(ArticleContentWidget.routeName, arguments: {
+              'article': articles[i],
+              'catEnum': catEnum,
+            });
           },
         );
       },

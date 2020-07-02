@@ -5,6 +5,8 @@ import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/global/theme/app_theme.dart';
 import 'package:trends/ui/widgets/article_cotent_bars.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
+import 'package:trends/ui/widgets/sugguest_articles_widget.dart';
+import 'package:trends/utils/utils_class.dart';
 
 import 'content_page_theme_adjust.dart';
 
@@ -34,7 +36,10 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     //final screenWidth = MediaQuery.of(context).size.width;
-    final Article article = ModalRoute.of(context).settings.arguments;
+    final Map<String, Object> mapArguments =
+        ModalRoute.of(context).settings.arguments;
+    Article article = mapArguments['article'];
+    categoryEnum catEnum = mapArguments['catEnum'];
     return SafeArea(
       child: Scaffold(
         body: Stack(children: [
@@ -150,7 +155,9 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                         ),
                       ),
                       alignment: Alignment(1.0, 0.0),
-                    )
+                    ),
+                    SizedBox(height: 10 * screenHeight / 360),
+                    SuggestArticlesWidget(catEnum),
                   ],
                 ),
               ),
@@ -187,7 +194,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   Widget buildContentWidget(
       List<ArticleContent> content, BuildContext context) {
     var list = List<Widget>();
-    if(content == null || content.isEmpty) return Container();
+    if (content == null || content.isEmpty) return Container();
     for (var item in content) {
       if (item.type == "text")
         list.add(

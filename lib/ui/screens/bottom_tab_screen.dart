@@ -32,7 +32,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   @override
   void initState() {
     super.initState();
-    //TODO FIX
+
     BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();

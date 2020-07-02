@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trends/blocs/theme/theme_bloc.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/pref_utils.dart';
 import 'package:trends/utils/utils_class.dart';
+import 'package:trends/ui/screens/read_history_screen.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -99,17 +101,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         Row(
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
                               child: Icon(
                                 CustomIcons.moon,
-                                size: 20,
+                                size: 12 * screenHeight / 360,
                               ),
                             ),
                             Text(
                               "Chế độ tối",
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
-                                fontSize: 10 * screenHeight / 360,
+                                fontSize: 12 * screenHeight / 360,
                               ),
                             ),
                           ],
@@ -126,17 +128,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         Row(
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
                               child: Icon(
                                 Icons.library_books,
-                                size: 20,
+                                size: 12 * screenHeight / 360,
                               ),
                             ),
                             Text(
                               "Chế độ đọc nhanh",
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
-                                fontSize: 10 * screenHeight / 360,
+                                fontSize: 12 * screenHeight / 360,
                               ),
                             ),
                           ],
@@ -148,14 +150,52 @@ class _MainDrawerState extends State<MainDrawer> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ExpansionTile(
-                      title: Text(
-                        "Lọc",
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
-                      ),
+                      title: Row(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(
+                            Icons.filter_list,
+                            size: 12 * screenHeight / 360,
+                          ),
+                        ),
+                        Text(
+                          "Lọc",
+                          style: TextStyle(
+                              fontSize: 12 * screenHeight / 360,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ]),
                       children: _buildFilterButtons(),
                     ),
-                  )
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<HistoryBloc>(context).add(GetHistoryArticles());
+                      Navigator.of(context).pushNamed(ReadHistoryScreen.routeName);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                            child: Icon(
+                              Icons.history,
+                              size: 12 * screenHeight / 360,
+                            ),
+                          ),
+                          Text(
+                            "Lịch sử bài đã xem",
+                            style: TextStyle(
+                              fontFamily: 'RobotoCondensed',
+                              fontSize: 12 * screenHeight / 360,
+                            ),
+                          ),
+                          Expanded(child: SizedBox()),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -199,7 +239,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               })
           : Transform.scale(
-              scale: 0.75,
+              scale: 0.85,
               child: CupertinoSwitch(
                   value: isDarkMode,
                   onChanged: (newValue) {
@@ -228,7 +268,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 }
               })
           : Transform.scale(
-              scale: 0.75,
+              scale: 0.85,
               child: CupertinoSwitch(
                   value: isFastReadMode,
                   onChanged: (newValue) {
@@ -250,7 +290,7 @@ class _MainDrawerState extends State<MainDrawer> {
     List<Widget> list = List();
     categoryEnum.values.forEach((value) {
       list.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -260,7 +300,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   mapCategoryNames[value],
                   style: TextStyle(
                     fontFamily: 'RobotoCondensed',
-                    fontSize: 10 * MediaQuery.of(context).size.height / 360,
+                    fontSize: 12 * MediaQuery.of(context).size.height / 360,
                   ),
                 ),
               ],
@@ -287,7 +327,7 @@ class _MainDrawerState extends State<MainDrawer> {
               }
             })
         : Transform.scale(
-            scale: 0.75,
+            scale: 0.85,
             child: CupertinoSwitch(
                 value: tabFilter[category],
                 onChanged: (newValue) {

@@ -95,15 +95,15 @@ class PrefUtils {
       ];
   }
 
-  static setSavedArticlesPref(List<String> value) async {
+  static setHistoryPref(List<String> value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('savedArticles', value);
+    prefs.setStringList('history', value);
   }
 
-  static Future<List<String>> getSavedArticlesPref() async {
+  static Future<List<String>> getHistoryPref() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('savedArticles') != null)
-      return prefs.getStringList('savedArticles');
+    if (prefs.getStringList('history') != null)
+      return prefs.getStringList('history');
     else
       return [];
   }

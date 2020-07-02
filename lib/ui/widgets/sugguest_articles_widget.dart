@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 import 'package:trends/utils/utils_class.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 
 class SuggestArticlesWidget extends StatefulWidget {
   final categoryEnum catEnum;
@@ -52,6 +53,10 @@ class _SuggestArticlesWidgetState extends State<SuggestArticlesWidget> {
                 callback: () {
                   //suggest news of the same category
                   suggestBloc.add(FetchSuggestArticles(widget.catEnum));
+                  BlocProvider.of<HistoryBloc>(context).add(AddToHistory(
+                      (suggestBloc.state as SuggestArticleLoaded)
+                          .articles[i]
+                          .id));
                   Navigator.of(context).pushReplacementNamed(
                       ArticleContentWidget.routeName,
                       arguments: {

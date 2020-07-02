@@ -5,13 +5,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 
-String articleUrl = ('http://server294.azurewebsites.net/article/');
-
-List<Article> _savedArticles = [];
-
+String _articleUrl = ('http://server294.azurewebsites.net/article/');
 class SavedArticleRepository {
+  List<Article> _savedArticles = [];
   static Future<Article> getSavedArticle(int id) async {
-    String url = articleUrl + "?id=$id";
+    String url = _articleUrl + "?id=$id";
 
     http.Response response;
 

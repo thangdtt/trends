@@ -8,11 +8,10 @@ import 'package:trends/data/models/article.dart';
 //String articleUrl = ('http://127.0.0.1:5000/article/');
 //int idDifference = 1;
 //int idDifference = 10;
-String articleUrl = ('http://server294.azurewebsites.net/articles/');
-
-List<Article> _searchArticles = [];
 
 class SearchArticleRepository {
+  String articleUrl = ('http://server294.azurewebsites.net/articles/');
+  List<Article> _searchArticles = [];
   Future<List<Article>> searchArticle(String query) async {
     String url = articleUrl + "search/?info=$query";
 

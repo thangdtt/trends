@@ -7,9 +7,11 @@ import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/screens/read_history_screen.dart';
 import 'blocs/article/article_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
@@ -54,6 +56,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SuggestArticleBloc>(
           create: (BuildContext context) => SuggestArticleBloc(),
         ),
+        BlocProvider<HistoryBloc>(
+          create: (BuildContext context) => HistoryBloc(),
+        ),
       ],
       child: RefreshConfiguration(
         headerTriggerDistance: 80.0,
@@ -86,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         //'/': (ctx) => BottomTabScreen(),
         ArticleContentWidget.routeName: (ctx) => ArticleContentWidget(),
+        ReadHistoryScreen.routeName: (ctx) => ReadHistoryScreen(),
       },
     );
   }

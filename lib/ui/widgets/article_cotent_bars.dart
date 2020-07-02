@@ -182,7 +182,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
 
     final String url = "https://api.fpt.ai/hmi/tts/v5";
     final _headers = {
-      'api-key': 'Qo7PUncXm7GwTjkVg7LwtRCIvCwQCetc',
+      'api-key': '7gRdxIprqfZusVmoa4fdnEfHfI98Y77k',
       'speed': '',
       'voice': 'linhsan'
     };

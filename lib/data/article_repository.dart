@@ -80,7 +80,6 @@ class ArticleRepository {
       String categoryString = enumToString[category];
       url = articleUrl + "?cat=$categoryString&offset=0";
     }
-    print(url);
 
     http.Response response;
     try {
@@ -131,7 +130,6 @@ class ArticleRepository {
 
       for (int i = 0; i < decoded.length; i++) {
         _articles[category].add(Article.fromJson(decoded[i]));
-        print(Article.fromJson(decoded[i]).title);
       }
 
       mapOffset[category]++;

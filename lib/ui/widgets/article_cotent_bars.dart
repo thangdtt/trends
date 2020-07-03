@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:trends/utils/player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
@@ -17,17 +19,18 @@ class ArticleContentTopBar extends StatefulWidget {
 }
 
 class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
+  //AudioPlayer audioPlayer = AudioPlayer();
+
   bool isBookMarked = false;
   DatabaseBloc dbBloc;
   bool isOpened = false;
   bool isPlaying = false;
   bool isGettingSpeech = false;
   String link = "";
-  AssetsAudioPlayer player = AssetsAudioPlayer();
 
   @override
   void dispose() {
-    player.dispose();
+    audioPlayer.release();
     super.dispose();
   }
 
@@ -45,6 +48,12 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
       }
       break;
     }
+
+    audioPlayer.onPlayerCompletion.listen((event) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
   }
 
   @override
@@ -86,38 +95,33 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
           GestureDetector(
             onTap: () {
               if (!isGettingSpeech) {
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text('Đang lấy bài đọc')));
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text('Đang lấy bài đọc'),
+                  duration: (Duration(seconds: 1)),
+                ));
                 String payload = "";
                 for (var item in widget.article.content) {
                   if (item.type == "text") payload += item.info + " ";
                 }
-                _getSpeech(payload);
-              } else if (link != "" && !isOpened) {
-                setState(() {
-                  try {
-                    if (link == "") return;
-                    player
-                        .open(
-                      Audio.network(link),
-                    )
-                        .then((value) {
-                      player.stop();
-                      isOpened = true;
-                    });
-                  } catch (e) {
-                    print(e);
-                  }
+                _getSpeech(payload).then((value) {
+                  play(value);
                 });
-              }
-              if (isOpened) {
+              } else if (link != "" && isOpened) {
                 try {
-                  setState(() {
-                    player.playOrPause();
-                    isPlaying = !isPlaying;
-                  });
+                  if (isPlaying) {
+                    audioPlayer.pause();
+                    setState(() {
+                      isPlaying = false;
+                    });
+                  } else {
+                    audioPlayer.resume();
+                    setState(() {
+                      isPlaying = true;
+                    });
+                    ;
+                  }
                 } catch (e) {
-                  print(e);
+                  print(e.toString());
                 }
               }
             },
@@ -175,22 +179,51 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     }
   }
 
-  Future _getSpeech(String payload) async {
+  Future<String> _getSpeech(String payload) async {
     setState(() {
       isGettingSpeech = true;
     });
 
     final String url = "https://api.fpt.ai/hmi/tts/v5";
     final _headers = {
-      'api-key': '7gRdxIprqfZusVmoa4fdnEfHfI98Y77k',
+      'api-key': 'hA6TtBG0rdG1rRLVqbM1yvawggjwm0Mo',
       'speed': '',
       'voice': 'linhsan'
     };
-
-    final response = await http.post(url, headers: _headers, body: payload);
-    final _json = json.decode(response.body);
-    setState(() {
+    try {
+      final response = await http.post(url, headers: _headers, body: payload);
+      final _json = json.decode(response.body);
       link = _json["async"];
-    });
+      return link;
+    } catch (e) {
+      print(e.toString());
+      return link;
+    }
+  }
+
+  play(String url) async {
+    print(url);
+    try {
+      if (url == null)
+        Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('Không có nội dung'),
+            duration: (Duration(seconds: 1))));
+      while (true) {
+        final response = await http.get(url);
+        if (response.statusCode != 404) break;
+      }
+      int result = await audioPlayer.play(url, isLocal: false);
+      if (result == 1) {
+        setState(() {
+          isOpened = true;
+          isPlaying = true;
+        });
+      } else {
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Không thể bật audio')));
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

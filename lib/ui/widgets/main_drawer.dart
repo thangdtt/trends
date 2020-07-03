@@ -147,34 +147,16 @@ class _MainDrawerState extends State<MainDrawer> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: ExpansionTile(
-                      title: Row(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                          child: Icon(
-                            Icons.filter_list,
-                            size: 12 * screenHeight / 360,
-                          ),
-                        ),
-                        Text(
-                          "Lọc",
-                          style: TextStyle(
-                              fontSize: 12 * screenHeight / 360,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ]),
-                      children: _buildFilterButtons(),
-                    ),
-                  ),
                   GestureDetector(
                     onTap: () {
-                      BlocProvider.of<HistoryBloc>(context).add(GetHistoryArticles());
-                      Navigator.of(context).pushNamed(ReadHistoryScreen.routeName);
+                      BlocProvider.of<HistoryBloc>(context)
+                          .add(GetHistoryArticles());
+                      Navigator.of(context)
+                          .pushNamed(ReadHistoryScreen.routeName);
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 10),
                       child: Row(
                         children: <Widget>[
                           Padding(
@@ -194,6 +176,62 @@ class _MainDrawerState extends State<MainDrawer> {
                           Expanded(child: SizedBox()),
                         ],
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 10),
+                    child: GestureDetector(
+                      onTap: () => buildDialog()
+                          .then((value) => PrefUtils.setFptApiPref(value)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                                child: Icon(
+                                  Icons.insert_link,
+                                  size: 12 * screenHeight / 360,
+                                ),
+                              ),
+                              Text(
+                                "Đổi key FPT Api",
+                                style: TextStyle(
+                                  fontFamily: 'RobotoCondensed',
+                                  fontSize: 12 * screenHeight / 360,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: ExpansionTile(
+                      title: Row(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Icon(
+                            Icons.filter_list,
+                            size: 12 * screenHeight / 360,
+                          ),
+                        ),
+                        Text(
+                          "Lọc",
+                          style: TextStyle(
+                              fontSize: 12 * screenHeight / 360,
+                              fontWeight: FontWeight.normal),
+                        ),
+                      ]),
+                      children: _buildFilterButtons(),
                     ),
                   ),
                 ],
@@ -373,5 +411,28 @@ class _MainDrawerState extends State<MainDrawer> {
           });
     }
     Navigator.of(context).pop(true);
+  }
+
+  TextEditingController apiController = new TextEditingController();
+  Future<String> buildDialog() async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Nhập API key mới"),
+            content: TextField(
+              controller: apiController,
+            ),
+            actions: <Widget>[
+              RaisedButton(
+                elevation: 5,
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop(apiController.text);
+                },
+              ),
+            ],
+          );
+        });
   }
 }

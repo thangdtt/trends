@@ -164,7 +164,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
             ),
           ),
           AnimatedPositioned(
-            duration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 700),
             top: showMessage
                 ? screenHeight - (114 * screenHeight / 360)
                 : screenHeight + 50,

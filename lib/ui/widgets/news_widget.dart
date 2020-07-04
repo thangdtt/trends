@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/data/models/article.dart';
@@ -22,6 +23,49 @@ class NewsWidget extends StatelessWidget {
     final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return GestureDetector(
+      onLongPressStart: (LongPressStartDetails details) {
+        final _pos = details.globalPosition;
+        showMenu(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            items: <PopupMenuEntry>[
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: callback,
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.open_in_new),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Mở"),
+                    ],
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                child: GestureDetector(
+                  onTap: () {
+                    _bookmarkArticle(article, context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.bookmark_border),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text("Lưu"),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            context: context,
+            //position: buttonMenuPosition(context),
+            position: RelativeRect.fromLTRB(
+                _pos.dx - 150, _pos.dy - 50, _pos.dy, _pos.dx),
+            elevation: 5);
+      },
       onTap: callback,
       child: Container(
         child: Padding(
@@ -184,41 +228,20 @@ class NewsWidget extends StatelessWidget {
     );
   }
 
-  // BoxDecoration _buildImageProvider() {
-  //   checkConnection().then((value) {
-  //     if (!value)
-  //       return BoxDecoration(
-  //         image: DecorationImage(
-  //             image: Image.asset('assets/images/NoInternet.png').image),
-  //         borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(25),
-  //           bottomLeft: Radius.circular(25),
-  //         ),
-  //       );
-  //     else {
-  //       return article.firstImage.isNotEmpty
-  //           ? BoxDecoration(
-  //               image: DecorationImage(
-  //                 image: NetworkImage(article.firstImage),
-  //                 fit: BoxFit.cover,
-  //               ),
-  //               borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(25),
-  //                 bottomLeft: Radius.circular(25),
-  //               ),
-  //             )
-  //           : BoxDecoration(
-  //               image: DecorationImage(
-  //                 image:
-  //                     NetworkImage('https://gstwar.com/theme/img/no-image.jpg'),
-  //                 fit: BoxFit.cover,
-  //               ),
-  //               borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(25),
-  //                 bottomLeft: Radius.circular(25),
-  //               ),
-  //             );
-  //     }
-  //   });
-  // }
+  _bookmarkArticle(Article item, BuildContext context) {
+    BlocProvider.of<DatabaseBloc>(context).add(AddSaveArticle(item));
+  }
+
+  RelativeRect buttonMenuPosition(BuildContext c) {
+    final RenderBox bar = c.findRenderObject();
+    final RenderBox overlay = Overlay.of(c).context.findRenderObject();
+    final RelativeRect position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        bar.localToGlobal(bar.size.bottomRight(Offset.zero), ancestor: overlay),
+        bar.localToGlobal(bar.size.bottomRight(Offset.zero), ancestor: overlay),
+      ),
+      Offset.zero & overlay.size,
+    );
+    return position;
+  }
 }

@@ -36,7 +36,7 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
             return Center(child: Text("Đang tải"));
           } else if (state is DatabaseLoaded) {
             if (state.savedArticles.isEmpty)
-              return Center(child: Text("Không tìm thấy !"));
+              return Center(child: Text("Không có bài viết được lưu!"));
             else
               return buildLoadedInput(state.savedArticles, context);
           } else

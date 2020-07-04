@@ -127,8 +127,14 @@ class _NewsTabState extends State<NewsTab>
             body = Text("Tải thêm không thành công !");
           } else if (mode == LoadStatus.canLoading) {
             body = Text("Buông để tải thêm");
-          } else {
+          } else if (mode == LoadStatus.noMore) {
             body = Text("Không còn nội dụng để tải");
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('Không còn nội dụng để tải'),
+              duration: (Duration(seconds: 1)),
+            ));
+          } else {
+            body = Text("");
           }
           return Container(
             height: 55.0,
@@ -140,24 +146,24 @@ class _NewsTabState extends State<NewsTab>
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (ctx, i) {
-          return NewsWidget(
-            article: articles[i],
-            callback: () {
-              BlocProvider.of<SuggestArticleBloc>(context)
-                  .add(FetchSuggestArticles(widget.catEnum));
-              BlocProvider.of<HistoryBloc>(context)
-                  .add(AddToHistory(articles[i].id));
-              Navigator.of(context)
-                  .pushNamed(ArticleContentWidget.routeName, arguments: {
-                'article': articles[i],
-                'catEnum': widget.catEnum,
-              });
-            },
-          );
-        },
-        itemCount: articles.length,
-      ),
+              itemBuilder: (ctx, i) {
+                return NewsWidget(
+                  article: articles[i],
+                  callback: () {
+                    BlocProvider.of<SuggestArticleBloc>(context)
+                        .add(FetchSuggestArticles(widget.catEnum));
+                    BlocProvider.of<HistoryBloc>(context)
+                        .add(AddToHistory(articles[i].id));
+                    Navigator.of(context)
+                        .pushNamed(ArticleContentWidget.routeName, arguments: {
+                      'article': articles[i],
+                      'catEnum': widget.catEnum,
+                    });
+                  },
+                );
+              },
+              itemCount: articles.length,
+            ),
     );
   }
 

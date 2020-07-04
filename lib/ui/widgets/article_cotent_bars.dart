@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:share/share.dart';
 import 'package:trends/utils/player.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:trends/utils/pref_utils.dart';
 
 class ArticleContentTopBar extends StatefulWidget {
   final Article article;
@@ -86,7 +86,8 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
           GestureDetector(
               onTap: () => Navigator.of(context).pop(),
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 4 * screenHeight / 360),
+                  padding: EdgeInsets.fromLTRB(
+                      2 * screenHeight / 360, 0, 0, 4 * screenHeight / 360),
                   child: Icon(
                     CupertinoIcons.back,
                     size: 17 * screenHeight / 360,
@@ -100,6 +101,8 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
                   duration: (Duration(seconds: 1)),
                 ));
                 String payload = "";
+                payload += widget.article.title + "\n";
+                payload += widget.article.description + "\n";
                 for (var item in widget.article.content) {
                   if (item.type == "text") payload += item.info + " ";
                 }
@@ -138,13 +141,26 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
           ),
           GestureDetector(
             onTap: () {
+              Share.share(widget.article.link);
+            },
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+                  4 * screenWidth / 360, 4 * screenHeight / 360),
+              child: Icon(
+                Icons.share,
+                size: 17 * screenHeight / 360,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
               setState(() {
                 _bookMarkArticle();
               });
             },
             child: Padding(
-              padding: EdgeInsets.fromLTRB(
-                  0, 0, 4 * screenWidth / 360, 4 * screenHeight / 360),
+              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+                  4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
                 isBookMarked ? Icons.bookmark : Icons.bookmark_border,
                 size: 17 * screenHeight / 360,
@@ -185,18 +201,19 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     });
 
     final String url = "https://api.fpt.ai/hmi/tts/v5";
-    final _headers = {
-      'api-key': 'hA6TtBG0rdG1rRLVqbM1yvawggjwm0Mo',
-      'speed': '',
-      'voice': 'linhsan'
-    };
+    final apiKey = await PrefUtils.getFptApiPref();
+    print("key " + apiKey);
+    final _headers = {'api-key': apiKey, 'speed': '', 'voice': 'linhsan'};
     try {
+      if (payload.length > 5000) payload = payload.substring(0, 4999);
       final response = await http.post(url, headers: _headers, body: payload);
       final _json = json.decode(response.body);
       link = _json["async"];
       return link;
     } catch (e) {
       print(e.toString());
+      Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('API KEY hết hạn'), duration: (Duration(seconds: 1))));
       return link;
     }
   }
@@ -204,7 +221,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   play(String url) async {
     print(url);
     try {
-      if (url == null)
+      if (url == null && url == "")
         Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('Không có nội dung'),
             duration: (Duration(seconds: 1))));

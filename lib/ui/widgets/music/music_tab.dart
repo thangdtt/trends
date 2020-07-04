@@ -5,14 +5,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/music/music_bloc.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/music_widget.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
 
 class MusicTab extends StatefulWidget {
-  const MusicTab({Key key, this.category}) : super(key: key);
+  const MusicTab({Key key,}) : super(key: key);
 
   @override
   _MusicTabState createState() => _MusicTabState();
-  final String category;
 }
 
 class _MusicTabState extends State<MusicTab>
@@ -20,9 +18,6 @@ class _MusicTabState extends State<MusicTab>
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<Music> _currentMusics;
-  List<Audio>  _audios;
-
-  AssetsAudioPlayer get _assetsAudioPlayer => AssetsAudioPlayer.withId("music");
 
   @override
   void initState() {
@@ -50,7 +45,6 @@ class _MusicTabState extends State<MusicTab>
               return buildLoadingInput();
             } else if (state is MusicLoaded) {
               _currentMusics = state.musics;
-              _audios = state.audios;
               return buildLoadedInput(_currentMusics);
             } else if (state is MusicRefreshing) {
               return buildLoadedInput(_currentMusics);
@@ -135,10 +129,7 @@ class _MusicTabState extends State<MusicTab>
             music: musics[i],
             callback: () {
 //              Navigator.of(context).pushNamed('', arguments: musics[i]);
-              _assetsAudioPlayer.open(
-                Playlist(audios: _audios),
-                showNotification: true,
-              );
+
 
             },
           );

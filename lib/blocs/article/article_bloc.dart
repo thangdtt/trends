@@ -5,17 +5,13 @@ import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:trends/data/models/article.dart';
-import 'package:trends/data/article_repository.dart';
+import 'package:trends/utils/global_repo.dart';
+import 'package:trends/utils/utils_class.dart';
 
 part 'article_event.dart';
 part 'article_state.dart';
 
 class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
-  ArticleRepository articleRepo;
-  ArticleBloc() {
-    articleRepo = new ArticleRepository();
-  }
-
   @override
   ArticleState get initialState => ArticleInitial();
 
@@ -37,7 +33,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     if (event is RefreshArticles) {
       yield ArticleRefreshing();
       try {
-        final listArticles = await articleRepo.getNewArticles();
+        final listArticles = await articleRepo.getNewArticles(event.catEnum);
         yield ArticleRefreshed(listArticles);
       } on Error {
         //yield ArticleError("Error !!!");
@@ -46,7 +42,8 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
     } else if (event is LoadMoreArticles) {
       yield ArticleLoadingMore();
       try {
-        final listArticles = await articleRepo.loadMoreArticles();
+        final listArticles = await articleRepo.loadMoreArticles(
+            event.catEnum, articleRepo.mapOffset[event.catEnum]);
         yield ArticleLoadMore(listArticles);
       } on Error {
         //yield ArticleError("Error !!!");
@@ -56,7 +53,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState> {
       yield ArticleLoading();
       if (event is FetchArticles) {
         try {
-          final listArticles = await articleRepo.getNewArticles();
+          final listArticles = await articleRepo.getNewArticles(event.catEnum);
           yield ArticleLoaded(listArticles);
         } on Error {
           yield ArticleError("Error !!!");

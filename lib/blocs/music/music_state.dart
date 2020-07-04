@@ -17,11 +17,10 @@ class MusicLoading extends MusicState {
 
 class MusicLoaded extends MusicState {
   final List<Music> musics;
-  final List<Audio> audios;
-  const MusicLoaded(this.musics,this.audios);
+  const MusicLoaded(this.musics);
 
   @override
-  List<Object> get props => [musics,audios];
+  List<Object> get props => [musics];
 }
 
 class MusicError extends MusicState {
@@ -40,8 +39,7 @@ class MusicRefreshing extends MusicState {
 
 class MusicRefreshed extends MusicState {
   final List<Music> musics;
-  final List<Audio> audios;
-  const MusicRefreshed(this.musics, this.audios);
+  const MusicRefreshed(this.musics);
 
   @override
   List<Object> get props => [musics];

@@ -5,11 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:trends/blocs/article/article_bloc.dart';
+import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/widgets/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 
 class NewsTab extends StatefulWidget {
+  final catEnum;
+  NewsTab({this.catEnum});
   @override
   _NewsTabState createState() => _NewsTabState();
 }
@@ -34,7 +38,6 @@ class _NewsTabState extends State<NewsTab>
       body: Container(
         child: BlocConsumer<ArticleBloc, ArticleState>(
           listener: (context, state) {
-            //await Future.delayed(Duration(milliseconds: 2000));
             if (state is ArticleRefreshed) {
               _refreshController.refreshCompleted();
             }
@@ -46,19 +49,23 @@ class _NewsTabState extends State<NewsTab>
             if (state is ArticleInitial) {
               return buildInitialInput();
             } else if (state is ArticleLoading) {
-              return buildLoadingInput();
+              if (_currentArticles.isEmpty)
+                return buildLoadingInput();
+              else
+                return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoaded) {
-              _currentArticles = state.articles;
+              if (_currentArticles.isEmpty)
+                _currentArticles = state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadingMore) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleLoadMore) {
-              _currentArticles = state.articles;
+              _currentArticles = state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshing) {
               return buildLoadedInput(_currentArticles);
             } else if (state is ArticleRefreshed) {
-              _currentArticles = state.articles;
+              _currentArticles = state.articles[widget.catEnum];
               return buildLoadedInput(_currentArticles);
             } else {
               return buildErrorInput();
@@ -120,8 +127,14 @@ class _NewsTabState extends State<NewsTab>
             body = Text("Tải thêm không thành công !");
           } else if (mode == LoadStatus.canLoading) {
             body = Text("Buông để tải thêm");
-          } else {
+          } else if (mode == LoadStatus.noMore) {
             body = Text("Không còn nội dụng để tải");
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text('Không còn nội dụng để tải'),
+              duration: (Duration(seconds: 1)),
+            ));
+          } else {
+            body = Text("");
           }
           return Container(
             height: 55.0,
@@ -133,31 +146,36 @@ class _NewsTabState extends State<NewsTab>
       onRefresh: _onRefresh,
       onLoading: _onLoading,
       child: ListView.builder(
-        itemBuilder: (ctx, i) {
-          return NewsWidget(
-            article: articles[i],
-            callback: () {
-              Navigator.of(context).pushNamed(ArticleContentWidget.routeName,
-                  arguments: articles[i]);
-            },
-          );
-        },
-        itemCount: articles.length,
-      ),
+              itemBuilder: (ctx, i) {
+                return NewsWidget(
+                  article: articles[i],
+                  callback: () {
+                    BlocProvider.of<SuggestArticleBloc>(context)
+                        .add(FetchSuggestArticles(widget.catEnum));
+                    BlocProvider.of<HistoryBloc>(context)
+                        .add(AddToHistory(articles[i].id));
+                    Navigator.of(context)
+                        .pushNamed(ArticleContentWidget.routeName, arguments: {
+                      'article': articles[i],
+                      'catEnum': widget.catEnum,
+                    });
+                  },
+                );
+              },
+              itemCount: articles.length,
+            ),
     );
   }
 
   void _onRefresh() async {
     // monitor network fetch
-    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles());
-    //await Future.delayed(Duration(milliseconds: 2000));
+    BlocProvider.of<ArticleBloc>(context).add(RefreshArticles(widget.catEnum));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }
 
   void _onLoading() async {
     // monitor network fetch
-    BlocProvider.of<ArticleBloc>(context).add(LoadMoreArticles());
-    //await Future.delayed(Duration(milliseconds: 2000));
+    BlocProvider.of<ArticleBloc>(context).add(LoadMoreArticles(widget.catEnum));
 
     // if failed,use loadFailed(),if no data return,use LoadNodata()
   }

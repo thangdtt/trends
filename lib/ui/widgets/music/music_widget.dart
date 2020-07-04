@@ -1,4 +1,4 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/data/models/music.dart';
@@ -6,7 +6,6 @@ import 'package:trends/data/models/music.dart';
 class MusicWidget extends StatelessWidget {
   final GestureTapCallback callback;
   final Music music;
-  final Audio audio;
   final String tag;
   final double width;
   final String time;
@@ -17,7 +16,6 @@ class MusicWidget extends StatelessWidget {
       this.music,
       this.tag = '',
       this.width = 0,
-      this.audio,
       this.time})
       : super(key: key);
 

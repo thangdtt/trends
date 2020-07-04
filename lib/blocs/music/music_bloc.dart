@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
@@ -44,8 +42,7 @@ class MusicBloc extends Bloc<MusicEvent, MusicState> {
       try {
         final List<Music> listMusics =
             await _musicRepository.getMusics();
-        final List<Audio> audios = await _musicRepository.getAudios();
-        yield MusicRefreshed(listMusics, audios);
+        yield MusicRefreshed(listMusics);
       } on Error {
         //yield MusicError("Error !!!");
         yield state;
@@ -55,8 +52,7 @@ class MusicBloc extends Bloc<MusicEvent, MusicState> {
       if (event is FetchMusics) {
         try {
           final listMusics = await _musicRepository.getMusics();
-          final List<Audio> audios = await _musicRepository.getAudios();
-          yield MusicLoaded(listMusics, audios);
+          yield MusicLoaded(listMusics);
         } on Error {
           yield MusicError("Error !!!");
         }

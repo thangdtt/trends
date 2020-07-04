@@ -3,14 +3,22 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
+import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/screens/read_history_screen.dart';
 import 'blocs/article/article_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    Phoenix(child: MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -20,12 +28,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     //turn off rotation
@@ -39,6 +46,18 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<ThemeBloc>(
           create: (BuildContext context) => ThemeBloc(),
+        ),
+        BlocProvider<SearcharticleBloc>(
+          create: (BuildContext context) => SearcharticleBloc(),
+        ),
+        BlocProvider<DatabaseBloc>(
+          create: (BuildContext context) => DatabaseBloc(),
+        ),
+        BlocProvider<SuggestArticleBloc>(
+          create: (BuildContext context) => SuggestArticleBloc(),
+        ),
+        BlocProvider<HistoryBloc>(
+          create: (BuildContext context) => HistoryBloc(),
         ),
       ],
       child: RefreshConfiguration(
@@ -72,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         //'/': (ctx) => BottomTabScreen(),
         ArticleContentWidget.routeName: (ctx) => ArticleContentWidget(),
+        ReadHistoryScreen.routeName: (ctx) => ReadHistoryScreen(),
       },
     );
   }

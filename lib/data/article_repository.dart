@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 
 //String articleUrl = ('http://127.0.0.1:5000/article/');
-String articleUrl = ('https://server294.herokuapp.com/article/');
+String articleUrl = ('https://server294.azurewebsites.net/article/');
 
 class ArticleRepository {
   List<Article> _articles = [];

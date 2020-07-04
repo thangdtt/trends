@@ -10,9 +10,12 @@ import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/pref_utils.dart';
 import 'package:trends/utils/utils_class.dart';
 import 'package:trends/ui/screens/read_history_screen.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class MainDrawer extends StatefulWidget {
+  const MainDrawer({
+    Key key,
+  }) : super(key: key);
+
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
@@ -23,7 +26,6 @@ class _MainDrawerState extends State<MainDrawer> {
   bool filterChange;
   Map<categoryEnum, bool> currentFilter;
 
-  Key _key = Key("this");
   @override
   void initState() {
     super.initState();
@@ -32,24 +34,6 @@ class _MainDrawerState extends State<MainDrawer> {
         (BlocProvider.of<ThemeBloc>(context).state as ThemeLoaded).isDarkMode;
     isFastReadMode = (BlocProvider.of<ThemeBloc>(context).state as ThemeLoaded)
         .isFastReadMode;
-    currentFilter = {
-      categoryEnum.TinNong: false,
-      categoryEnum.TinMoi: false,
-      categoryEnum.ThoiSu: false,
-      categoryEnum.TheGioi: false,
-      categoryEnum.KinhDoanh: false,
-      categoryEnum.GiaiTri: false,
-      categoryEnum.TheThao: false,
-      categoryEnum.PhapLuat: false,
-      categoryEnum.GiaoDuc: false,
-      categoryEnum.SucKhoe: false,
-      categoryEnum.DoiSong: false,
-      categoryEnum.DuLich: false,
-      categoryEnum.KhoaHoc: false,
-      categoryEnum.SoHoa: false,
-      categoryEnum.Xe: false,
-    };
-    for (var key in tabFilter.keys) currentFilter[key] = tabFilter[key];
   }
 
   @override
@@ -61,25 +45,21 @@ class _MainDrawerState extends State<MainDrawer> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Dismissible(
-      key: _key,
-      confirmDismiss: (direction) {
-        return _willPopHandler();
-      },
-      direction: DismissDirection.endToStart,
-      // onDismissed: (direction) {
-      //   Navigator.of(context).pop();
-      // },
-
-      child: WillPopScope(
-        onWillPop: _willPopHandler,
-        child: Drawer(
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (BuildContext context, ThemeState state) {
+        if (state is ThemeLoaded) {
+          currentFilter = state.tabFilter;
+        }
+        if (currentFilter == null) {
+          return Container();
+        }
+        return Drawer(
           child: Container(
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: 20 * screenHeight / 360,
+                    height: 23 * screenHeight / 360,
                     width: double.infinity,
                     padding: const EdgeInsets.all(5),
                     alignment: Alignment.center,
@@ -101,17 +81,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Row(
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 0, 10, 0),
                               child: Icon(
                                 CustomIcons.moon,
-                                size: 12 * screenHeight / 360,
+                                size: 20 * screenWidth / 360,
                               ),
                             ),
                             Text(
                               "Chế độ tối",
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
-                                fontSize: 12 * screenHeight / 360,
+                                fontSize: 20 * screenWidth / 360,
                               ),
                             ),
                           ],
@@ -128,17 +109,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Row(
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 0, 10, 0),
                               child: Icon(
                                 Icons.library_books,
-                                size: 12 * screenHeight / 360,
+                                size: 20 * screenWidth / 360,
                               ),
                             ),
                             Text(
                               "Chế độ đọc nhanh",
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
-                                fontSize: 12 * screenHeight / 360,
+                                fontSize: 20 * screenWidth / 360,
                               ),
                             ),
                           ],
@@ -160,17 +142,18 @@ class _MainDrawerState extends State<MainDrawer> {
                       child: Row(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                            padding:
+                                const EdgeInsets.fromLTRB(15, 0, 10, 0),
                             child: Icon(
                               Icons.history,
-                              size: 12 * screenHeight / 360,
+                              size: 20 * screenWidth / 360,
                             ),
                           ),
                           Text(
                             "Lịch sử bài đã xem",
                             style: TextStyle(
                               fontFamily: 'RobotoCondensed',
-                              fontSize: 12 * screenHeight / 360,
+                              fontSize: 20 * screenWidth / 360,
                             ),
                           ),
                           Expanded(child: SizedBox()),
@@ -194,14 +177,14 @@ class _MainDrawerState extends State<MainDrawer> {
                                     const EdgeInsets.fromLTRB(15, 0, 10, 0),
                                 child: Icon(
                                   Icons.insert_link,
-                                  size: 12 * screenHeight / 360,
+                                  size: 20 * screenWidth / 360,
                                 ),
                               ),
                               Text(
                                 "Đổi key FPT Api",
                                 style: TextStyle(
                                   fontFamily: 'RobotoCondensed',
-                                  fontSize: 12 * screenHeight / 360,
+                                  fontSize: 20 * screenWidth / 360,
                                 ),
                               ),
                             ],
@@ -221,13 +204,13 @@ class _MainDrawerState extends State<MainDrawer> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                           child: Icon(
                             Icons.filter_list,
-                            size: 12 * screenHeight / 360,
+                            size: 20 * screenWidth / 360,
                           ),
                         ),
                         Text(
                           "Lọc",
                           style: TextStyle(
-                              fontSize: 12 * screenHeight / 360,
+                              fontSize: 20 * screenWidth / 360,
                               fontWeight: FontWeight.normal),
                         ),
                       ]),
@@ -238,8 +221,8 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -338,7 +321,7 @@ class _MainDrawerState extends State<MainDrawer> {
                   mapCategoryNames[value],
                   style: TextStyle(
                     fontFamily: 'RobotoCondensed',
-                    fontSize: 12 * MediaQuery.of(context).size.height / 360,
+                    fontSize: 20 * MediaQuery.of(context).size.width / 360,
                   ),
                 ),
               ],
@@ -354,66 +337,68 @@ class _MainDrawerState extends State<MainDrawer> {
   Widget _buildFilterButton(categoryEnum category) {
     return Platform.isAndroid
         ? Switch(
-            value: tabFilter[category],
+            value: currentFilter[category],
             onChanged: (newValue) {
               {
                 setState(() {
                   filterChange = true;
-                  tabFilter[category] = newValue;
-                  PrefUtils.setFilterPref(tabFilterToList());
+                  currentFilter[category] = newValue;
+                  PrefUtils.setFilterPref(tabFilterToList(currentFilter));
+                  BlocProvider.of<ThemeBloc>(context).add(ThemeChanged());
                 });
               }
             })
         : Transform.scale(
             scale: 0.85,
             child: CupertinoSwitch(
-                value: tabFilter[category],
+                value: currentFilter[category],
                 onChanged: (newValue) {
                   {
                     setState(() {
                       filterChange = true;
-                      tabFilter[category] = newValue;
-                      PrefUtils.setFilterPref(tabFilterToList());
+                      currentFilter[category] = newValue;
+                      PrefUtils.setFilterPref(tabFilterToList(currentFilter));
                     });
                   }
                 }),
           );
   }
 
-  Future<bool> _willPopHandler() {
-    if (filterChange) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Khởi động lại app ?"),
-              content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
-              actions: <Widget>[
-                FlatButton(
-                    child: Text('Không'),
-                    onPressed: () {
-                      setState(() {
-                        for (var key in currentFilter.keys)
-                          tabFilter[key] = currentFilter[key];
-                        filterChange = false;
-                        PrefUtils.setFilterPref(tabFilterToList());
-                      });
-                      Navigator.of(context).pop(false);
-                    }),
-                FlatButton(
-                    child: Text('Có'),
-                    onPressed: () {
-                      Phoenix.rebirth(context);
-                      Navigator.of(context).pop(true);
-                    }),
-              ],
-            );
-          });
-    }
-    Navigator.of(context).pop(true);
-  }
+  // Future<bool> _willPopHandler() {
+  //   if (filterChange) {
+  //     return showDialog(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             title: Text("Khởi động lại app ?"),
+  //             content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
+  //             actions: <Widget>[
+  //               FlatButton(
+  //                   child: Text('Không'),
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       for (var key in currentFilter.keys)
+  //                         currentFilter[key] = currentFilter[key];
+  //                       filterChange = false;
+  //                       PrefUtils.setFilterPref(tabFilterToList(currentFilter));
+  //                     });
+  //                     Navigator.of(context).pop(false);
+  //                   }),
+  //               FlatButton(
+  //                   child: Text('Có'),
+  //                   onPressed: () {
+  //                     Phoenix.rebirth(context);
+  //                     Navigator.of(context).pop(true);
+  //                   }),
+  //             ],
+  //           );
+  //         });
+  //   }
+  //   Navigator.of(context).pop(true);
+  // }
 
   TextEditingController apiController = new TextEditingController();
+
   Future<String> buildDialog() async {
     return showDialog(
         context: context,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
+import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
@@ -25,14 +26,12 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   ];
   final List<String> tabDescriptions = ["Bản tin", "Nhạc", "Đã lưu"];
   List<BottomNavigationBarItem> bottomBarItems;
-
   PageController _pageController;
   int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-
     BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
@@ -72,7 +71,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
               "Trends",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Pacifico-Regular',
+                fontFamily: 'Pacifico',
                 color: Theme.of(context).textTheme.bodyText2.color,
               ),
             ),
@@ -91,7 +90,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           ),
         ),
         drawer: Container(
-          width: screenWidth,
+          width: screenWidth*4/5,
           child: MainDrawer(),
         ),
         body: PageView(
@@ -102,7 +101,18 @@ class _BottomTabScreenState extends State<BottomTabScreen>
             });
           },
           children: <Widget>[
-            NewsScreen(),
+            BlocBuilder<ThemeBloc, ThemeState>(
+              builder: (BuildContext context, ThemeState state) {
+                if (state is ThemeLoaded) {
+                  return NewsScreen(
+                    key: GlobalKey(),
+                    tabFilter: state.tabFilter,
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
             MusicScreen(),
             SavedScreen(),
           ],

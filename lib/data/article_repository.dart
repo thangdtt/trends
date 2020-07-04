@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 import 'package:trends/utils/utils_class.dart';
 
-// int idDifference = 10;
-// String articleUrl = ('http://127.0.0.1:5000/articles/');
+
 String articleUrl = ('http://server294.azurewebsites.net/articles/'); //Azure
 
 class ArticleRepository {

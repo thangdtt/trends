@@ -10,7 +10,6 @@ import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/pref_utils.dart';
 import 'package:trends/utils/utils_class.dart';
 import 'package:trends/ui/screens/read_history_screen.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({
@@ -26,8 +25,6 @@ class _MainDrawerState extends State<MainDrawer> {
   bool isFastReadMode;
   bool filterChange;
   Map<categoryEnum, bool> currentFilter;
-
-  Key _key = Key("this");
 
   @override
   void initState() {
@@ -367,38 +364,38 @@ class _MainDrawerState extends State<MainDrawer> {
           );
   }
 
-  Future<bool> _willPopHandler() {
-    if (filterChange) {
-      return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Khởi động lại app ?"),
-              content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
-              actions: <Widget>[
-                FlatButton(
-                    child: Text('Không'),
-                    onPressed: () {
-                      setState(() {
-                        for (var key in currentFilter.keys)
-                          currentFilter[key] = currentFilter[key];
-                        filterChange = false;
-                        PrefUtils.setFilterPref(tabFilterToList(currentFilter));
-                      });
-                      Navigator.of(context).pop(false);
-                    }),
-                FlatButton(
-                    child: Text('Có'),
-                    onPressed: () {
-                      Phoenix.rebirth(context);
-                      Navigator.of(context).pop(true);
-                    }),
-              ],
-            );
-          });
-    }
-    Navigator.of(context).pop(true);
-  }
+  // Future<bool> _willPopHandler() {
+  //   if (filterChange) {
+  //     return showDialog(
+  //         context: context,
+  //         builder: (BuildContext context) {
+  //           return AlertDialog(
+  //             title: Text("Khởi động lại app ?"),
+  //             content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
+  //             actions: <Widget>[
+  //               FlatButton(
+  //                   child: Text('Không'),
+  //                   onPressed: () {
+  //                     setState(() {
+  //                       for (var key in currentFilter.keys)
+  //                         currentFilter[key] = currentFilter[key];
+  //                       filterChange = false;
+  //                       PrefUtils.setFilterPref(tabFilterToList(currentFilter));
+  //                     });
+  //                     Navigator.of(context).pop(false);
+  //                   }),
+  //               FlatButton(
+  //                   child: Text('Có'),
+  //                   onPressed: () {
+  //                     Phoenix.rebirth(context);
+  //                     Navigator.of(context).pop(true);
+  //                   }),
+  //             ],
+  //           );
+  //         });
+  //   }
+  //   Navigator.of(context).pop(true);
+  // }
 
   TextEditingController apiController = new TextEditingController();
 

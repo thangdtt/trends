@@ -11,7 +11,6 @@ import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
 import 'package:trends/utils/custom_icons.dart';
-import 'package:trends/utils/utils_class.dart';
 
 class BottomTabScreen extends StatefulWidget {
   @override
@@ -72,7 +71,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
               "Trends",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Pacifico-Regular',
+                fontFamily: 'Pacifico',
                 color: Theme.of(context).textTheme.bodyText2.color,
               ),
             ),

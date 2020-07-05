@@ -38,12 +38,13 @@ class _SuggestArticlesWidgetState extends State<SuggestArticlesWidget> {
       return Container();
     } else if (suggestBloc.state is SuggestArticleLoaded) {
       return Container(
+        margin: const EdgeInsets.fromLTRB(0,0,0,10),
+        height: 139 * MediaQuery.of(context).size.height / 780,
         decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         child: ListView.builder(
-          scrollDirection: Axis.vertical,
+          scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemBuilder: (ctx, i) {
             return Container(

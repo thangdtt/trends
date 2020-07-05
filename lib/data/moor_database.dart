@@ -19,6 +19,8 @@ class ArticleToSaveTable extends Table {
   TextColumn get description => text()();
   TextColumn get author => text().nullable()();
   TextColumn get firstImage => text()();
+  TextColumn get link => text().nullable()();
+  TextColumn get source => text().nullable()();
   DateTimeColumn get addTime => dateTime().nullable()();
 
   @override

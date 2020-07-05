@@ -27,6 +27,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           saveArticles = [];
           for (var item in _list) {
             saveArticles.add(new Article(
+                link: item.link,
+                source: item.source,
                 id: item.id,
                 title: item.title,
                 description: item.description,
@@ -48,6 +50,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
+            source: event.article.source,
+            link: event.article.link,
             id: event.article.id,
             title: event.article.title,
             category: event.article.category,
@@ -68,6 +72,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             saveArticles = [];
             for (var item in _list) {
               saveArticles.add(new Article(
+                  source: item.source,
+                  link: item.link,
                   id: item.id,
                   title: item.title,
                   description: item.description,
@@ -93,6 +99,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
+            source: event.article.source,
+            link: event.article.link,
             id: event.article.id,
             title: event.article.title,
             category: event.article.category,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:share/share.dart';
+import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,10 +91,10 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               onTap: () => Navigator.of(context).pop(),
               child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                      2 * screenHeight / 360, 0, 0, 4 * screenHeight / 360),
+                      10 * screenWidth / 360, 0, 0, 4 * screenHeight / 360),
                   child: Icon(
-                    CupertinoIcons.back,
-                    size: 17 * screenHeight / 360,
+                    CustomIcons.arrow_left,
+                    size: 30 * screenWidth / 360,
                   ))),
           Expanded(child: Container()),
           GestureDetector(
@@ -137,7 +138,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
                 isPlaying
                     ? Icons.pause_circle_outline
                     : Icons.play_circle_outline,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),
@@ -146,11 +147,11 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               Share.share(widget.article.link);
             },
             child: Padding(
-              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+              padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
                   4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
                 Icons.share,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),
@@ -161,11 +162,11 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               });
             },
             child: Padding(
-              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+              padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
                   4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
                 isBookMarked ? Icons.bookmark : Icons.bookmark_border,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),

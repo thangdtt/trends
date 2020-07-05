@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/ui/widgets/saved_article_tab.dart';
 import 'package:trends/ui/widgets/love_music_tab.dart';
+import 'package:trends/utils/custom_icons.dart';
 
 class SavedScreen extends StatefulWidget {
   @override
@@ -11,7 +13,7 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen>
     with SingleTickerProviderStateMixin {
-   DatabaseBloc dbBloc;
+  DatabaseBloc dbBloc;
   TabController _tabController;
 
   @override
@@ -38,41 +40,78 @@ class _SavedScreenState extends State<SavedScreen>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-          bottom: TabBar(
-            labelColor: Theme.of(context).textSelectionColor,
-            controller: _tabController,
-            isScrollable: true,
-            tabs: [
-              Tab(
-                child: Text(
-                  "Tin đã lưu",
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      fontSize: 8 * screenHeight / 360,
-                      fontWeight: FontWeight.bold),
+    return IconTheme(
+      data: new IconThemeData(
+          color: (BlocProvider.of<ThemeBloc>(context).state as ThemeLoaded)
+                  .isDarkMode
+              ? Colors.amber
+              : Colors.black),
+      child: Scaffold(
+        appBar: PreferredSize(
+          child: AppBar(
+            bottom: TabBar(
+              labelColor: Theme.of(context).textSelectionColor,
+              controller: _tabController,
+              isScrollable: false,
+              tabs: [
+                Tab(
+                  child: Container(
+                    width: screenWidth / 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Icon(
+                            CustomIcons.bookmark,
+                            size: 17 * screenWidth / 360,
+                          ),
+                        ),
+                        Text(
+                          "Tin đã lưu",
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              fontSize: 17 * screenWidth / 360,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              Tab(
-                child: Text(
-                  "Nhạc yêu thích",
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(
-                      fontSize: 8 * screenHeight / 360,
-                      fontWeight: FontWeight.bold),
+                Tab(
+                  child: Container(
+                    width: screenWidth / 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Icon(
+                            CustomIcons.heart_1,
+                            size: 17 * screenWidth / 360,
+                          ),
+                        ),
+                        Text(
+                          "Nhạc yêu thích",
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              fontSize: 17 * screenWidth / 360,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+          preferredSize: Size.fromHeight(50.0),
         ),
-        preferredSize: Size.fromHeight(50.0),
-      ),
-      body: TabBarView(
-        children: [
-          SavedArticleTab(),
-          LovedMusicTab(),
-        ],
-        controller: _tabController,
+        body: TabBarView(
+          children: [
+            SavedArticleTab(),
+            LovedMusicTab(),
+          ],
+          controller: _tabController,
+        ),
       ),
     );
   }

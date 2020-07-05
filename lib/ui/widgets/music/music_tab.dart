@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,11 @@ import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/music_widget.dart';
 
 class MusicTab extends StatefulWidget {
-  const MusicTab({Key key,}) : super(key: key);
+  const MusicTab({
+    Key key,
+    this.onPressPlay,
+  }) : super(key: key);
+  final Function(List<Music> musics, int index) onPressPlay;
 
   @override
   _MusicTabState createState() => _MusicTabState();
@@ -22,8 +27,11 @@ class _MusicTabState extends State<MusicTab>
   @override
   void initState() {
     super.initState();
+
     BlocProvider.of<MusicBloc>(context).add(FetchMusics());
+
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,47 +103,52 @@ class _MusicTabState extends State<MusicTab>
   }
 
   Widget buildLoadedInput(List<Music> musics) {
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      header: ClassicHeader(),
-      footer: CustomFooter(
-        loadStyle: LoadStyle.ShowWhenLoading,
-        builder: (BuildContext context, LoadStatus mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = SizedBox();
-          } else if (mode == LoadStatus.loading) {
-            body = CupertinoActivityIndicator();
-          } else if (mode == LoadStatus.failed) {
-            body = Text("Tải thêm không thành công !");
-          } else if (mode == LoadStatus.canLoading) {
-            body = Text("Buông để tải thêm");
-          } else {
-            body = Text("Không còn nội dụng để tải");
-          }
-          return Container(
-            height: 55.0,
-            child: Center(child: body),
-          );
-        },
-      ),
-      controller: _refreshController,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: ListView.builder(
-        itemBuilder: (ctx, i) {
-          return MusicWidget(
-            music: musics[i],
-            callback: () {
-//              Navigator.of(context).pushNamed('', arguments: musics[i]);
-
-
+    return Stack(
+      children: <Widget>[
+        SmartRefresher(
+          enablePullDown: true,
+          enablePullUp: true,
+          header: ClassicHeader(),
+          footer: CustomFooter(
+            loadStyle: LoadStyle.ShowWhenLoading,
+            builder: (BuildContext context, LoadStatus mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = SizedBox();
+              } else if (mode == LoadStatus.loading) {
+                body = CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("Tải thêm không thành công !");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("Buông để tải thêm");
+              } else {
+                body = Text("Không còn nội dụng để tải");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
             },
-          );
-        },
-        itemCount: musics.length,
-      ),
+          ),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView.builder(
+            itemBuilder: (BuildContext ctx, int i) {
+              return MusicWidget(
+                music: musics[i],
+                callback: () async {
+                  if (widget.onPressPlay != null) {
+                    widget.onPressPlay(_currentMusics, i);
+                  }
+//              Navigator.of(context).pushNamed('', arguments: musics[i]);
+                },
+              );
+            },
+            itemCount: musics.length,
+          ),
+        ),
+      ],
     );
   }
 

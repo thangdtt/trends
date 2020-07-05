@@ -100,7 +100,7 @@ class _MusicPlayingState extends State<MusicPlaying>
             },
           ),
           IconButton(
-            icon: Icon(widget.isPlaying ? Icons.play_arrow : Icons.stop),
+            icon: Icon(widget.isPlaying ? Icons.pause  : Icons.play_arrow),
             onPressed: () {
               if (widget.playCallBack != null) {
                 widget.playCallBack();

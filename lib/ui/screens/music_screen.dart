@@ -1,6 +1,10 @@
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/music/music_bloc.dart';
+import 'package:trends/data/models/music.dart';
+import 'package:trends/ui/widgets/music/music_playing.dart';
 import 'package:trends/ui/widgets/music/music_tab.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -12,12 +16,35 @@ class _MusicScreenState extends State<MusicScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<String> categories = <String>['vn', 'us-uk'];
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  List<Music> _currentMusics;
+  Music _currentMusic;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      if(event == AudioPlayerState.COMPLETED){
+        changeMusicIndex(_currentIndex + 1);
+      }
+
+    });
+  }
+
+  Future<void> changeMusicIndex(int index) async {
+    _currentIndex = index;
+    if (_currentIndex > _currentMusics.length - 1) {
+      _currentIndex = 0;
+    } else if (_currentIndex < 0) {
+      _currentIndex = _currentMusics.length - 1;
+    }
+    _currentMusic = _currentMusics[_currentIndex];
+    await audioPlayer.play(_currentMusic.link);
+    setState(() {});
   }
 
   void _handleTabSelection() {}
@@ -49,22 +76,71 @@ class _MusicScreenState extends State<MusicScreen>
         ),
         preferredSize: Size.fromHeight(50.0),
       ),
-      body: TabBarView(
-        children: [
-          BlocProvider(
-            create: (BuildContext context) {
-              return MusicBloc('vn');
-            },
-            child: MusicTab(),
+      body: Stack(
+        children: <Widget>[
+          TabBarView(
+            children: [
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('vn');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    isPlaying = true;
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('us-uk');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    isPlaying = true;
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+            ],
+            controller: _tabController,
           ),
-          BlocProvider(
-            create: (BuildContext context) {
-              return MusicBloc('us-uk');
-            },
-            child: MusicTab(),
-          ),
+          if (_currentMusic != null)
+            Positioned(
+              bottom: 0,
+              child: MusicPlaying(
+                isPlaying: isPlaying,
+                music: _currentMusic,
+                nextCallBack: () {
+                  changeMusicIndex(_currentIndex + 1);
+                },
+                playCallBack: () async {
+                  if (!isPlaying) {
+                    await audioPlayer.play(_currentMusic.link);
+                    isPlaying = true;
+                    setState(() {});
+                  } else {
+                    await audioPlayer.pause();
+                    isPlaying = false;
+                    setState(() {});
+                  }
+                },
+                previousCallBack: () {
+                  changeMusicIndex(_currentIndex + 1);
+                },
+              ),
+            )
+          else
+            const SizedBox()
         ],
-        controller: _tabController,
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
+import 'package:trends/push_notifications.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article_content.dart';
@@ -22,6 +23,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  PushNotificationsManager pushNotiManager;
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
@@ -31,6 +33,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    PushNotificationsManager pushNotiManager = new PushNotificationsManager();
+    pushNotiManager.init();
   }
 
   @override

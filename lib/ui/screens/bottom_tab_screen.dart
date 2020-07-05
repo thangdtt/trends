@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
@@ -20,9 +22,9 @@ class BottomTabScreen extends StatefulWidget {
 class _BottomTabScreenState extends State<BottomTabScreen>
     with AutomaticKeepAliveClientMixin<BottomTabScreen> {
   final List<IconData> icons = <IconData>[
-    CustomIcons.newspaper,
-    Icons.music_note,
-    Icons.star_border,
+    CupertinoIcons.news,
+    CupertinoIcons.double_music_note,
+    CupertinoIcons.heart,
   ];
   final List<String> tabDescriptions = ["Bản tin", "Nhạc", "Đã lưu"];
   List<BottomNavigationBarItem> bottomBarItems;
@@ -81,7 +83,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
             actions: <Widget>[
               IconButton(
                 icon: Icon(
-                  Icons.search,
+                  Platform.isIOS ? CupertinoIcons.search : Icons.search,
                   color: Theme.of(context).textTheme.bodyText2.color,
                 ),
                 onPressed: () {

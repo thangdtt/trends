@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:share/share.dart';
 import 'package:trends/utils/custom_icons.dart';
@@ -93,7 +94,9 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
                   padding: EdgeInsets.fromLTRB(
                       10 * screenWidth / 360, 0, 0, 4 * screenHeight / 360),
                   child: Icon(
-                    CustomIcons.arrow_left,
+                    Platform.isAndroid
+                        ? CustomIcons.arrow_left
+                        : CupertinoIcons.back,
                     size: 30 * screenWidth / 360,
                   ))),
           Expanded(child: Container()),
@@ -135,9 +138,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               padding: EdgeInsets.fromLTRB(
                   0, 0, 4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
-                isPlaying
-                    ? Icons.pause_circle_outline
-                    : Icons.play_circle_outline,
+                _buildReadNewsIcon(),
                 size: 30 * screenWidth / 360,
               ),
             ),
@@ -150,7 +151,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
                   4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
-                Icons.share,
+                Platform.isAndroid ? Icons.share : CupertinoIcons.share,
                 size: 30 * screenWidth / 360,
               ),
             ),
@@ -163,9 +164,9 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
             },
             child: Padding(
               padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
-                  4 * screenWidth / 360, 4 * screenHeight / 360),
+                  4 * screenWidth / 360, 3 * screenHeight / 360),
               child: Icon(
-                isBookMarked ? Icons.bookmark : Icons.bookmark_border,
+                _buildBookMarkIcon(),
                 size: 30 * screenWidth / 360,
               ),
             ),
@@ -244,5 +245,17 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     } catch (e) {
       print(e);
     }
+  }
+
+  IconData _buildReadNewsIcon() {
+    return Platform.isAndroid
+        ? isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline
+        : isPlaying ? CupertinoIcons.pause : CupertinoIcons.play_arrow;
+  }
+
+  IconData _buildBookMarkIcon() {
+    return Platform.isAndroid
+        ? isBookMarked ? Icons.bookmark : Icons.bookmark_border
+        : isBookMarked ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark;
   }
 }

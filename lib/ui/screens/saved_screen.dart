@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
@@ -86,7 +87,7 @@ class _SavedScreenState extends State<SavedScreen>
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           child: Icon(
-                            CustomIcons.heart_1,
+                            CupertinoIcons.heart_solid,
                             size: 17 * screenWidth / 360,
                           ),
                         ),

@@ -38,6 +38,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
         categoryEnum.GiaiTri: false,
         categoryEnum.TheThao: false,
         categoryEnum.PhapLuat: false,
+        categoryEnum.NhipSongTre: false,
+        categoryEnum.VanHoa: false,
         categoryEnum.GiaoDuc: false,
         categoryEnum.SucKhoe: false,
         categoryEnum.DoiSong: false,
@@ -45,6 +47,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
         categoryEnum.KhoaHoc: false,
         categoryEnum.SoHoa: false,
         categoryEnum.Xe: false,
+        categoryEnum.GiaThat: false,
       };
       List<String> filterList = await PrefUtils.getFilterPref().then((value) {
         tabFilter = loadFilterPrefToMap(value, tabFilter);

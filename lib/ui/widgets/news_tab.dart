@@ -78,7 +78,7 @@ class _NewsTabState extends State<NewsTab>
 
   Widget buildInitialInput() {
     return Container(
-      color: Colors.green,
+      color: Theme.of(context).canvasColor,
     );
   }
 

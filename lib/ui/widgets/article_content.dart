@@ -43,8 +43,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    //final screenWidth = MediaQuery.of(context).size.width;
-
+    final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         body: Stack(children: [
@@ -58,7 +57,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
               scrollDirection: Axis.vertical,
               child: Container(
                 color: backgroundColor,
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -66,10 +65,23 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          width: 15 * screenWidth / 360,
+                          height: 15 * screenWidth / 360,
+                          decoration: new BoxDecoration(
+                              border: Border.all(width: 0.3),
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: _chooseNewsPaperImage(article.source),
+                              )),
+                        ),
                         Flexible(
                           child: Container(
+                            margin: const EdgeInsets.fromLTRB(5, 10, 10, 0),
                             child: Text(
-                              article.location,
+                              article.source,
                               style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w700,
@@ -88,6 +100,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                         ),
                         Flexible(
                           child: Container(
+                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Text(
                               article.time,
                               style: TextStyle(
@@ -112,7 +125,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                       alignment: Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 5),
+                            horizontal: 10, vertical: 5),
                         child: SizedBox(
                           child: Text(
                             article.title,
@@ -133,9 +146,11 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                       alignment: Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 0, vertical: 5),
+                            horizontal: 10, vertical: 5),
                         child: Text(
-                          article.description,
+                          article.location.isNotEmpty
+                              ? article.location + " - " + article.description
+                              : article.description,
                           style: Theme.of(context).textTheme.bodyText2.copyWith(
                               fontSize: 8 * screenHeight / 360 +
                                   (themeBloc.state as ThemeLoaded)
@@ -147,6 +162,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                     ),
                     buildContentWidget(article.content, context),
                     Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         article.author,
                         style: TextStyle(
@@ -204,7 +220,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
       if (item.type == "text")
         list.add(
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
               item.info,
               style: Theme.of(context).textTheme.bodyText2.copyWith(
@@ -216,7 +232,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
         );
       else if (item.type == "image")
         list.add(Container(
-          margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Image.network(
             item.info,
             fit: BoxFit.cover,
@@ -225,7 +241,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
       else
         list.add(
           Container(
-            margin: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
             child: Text(
               item.info,
               style: Theme.of(context).textTheme.caption.copyWith(
@@ -266,5 +282,16 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
       return Colors.black87;
     else
       return Colors.black54;
+  }
+
+  NetworkImage _chooseNewsPaperImage(String source) {
+    if (source == "VnExpress")
+      return NetworkImage(
+        "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/b0/be/04/b0be046b-1ef0-c33b-a380-a02f26f90e6e/AppIcon-0-0-1x_U007emarketing-0-0-0-7-85-220.png/320x0w.png",
+      );
+    else if (source == "Tuổi trẻ")
+      return NetworkImage(
+        "https://image.winudf.com/v2/image/dm4udHVvaXRyZWFwcC5uZXdzX2ljb25fMTUxMjQ1MTUyMl8wNjc/icon.png?w=170&fakeurl=1",
+      );
   }
 }

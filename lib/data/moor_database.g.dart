@@ -17,6 +17,9 @@ class SavedArticleData extends DataClass
   final String description;
   final String author;
   final String firstImage;
+  final String link;
+  final String source;
+  final DateTime addTime;
   SavedArticleData(
       {@required this.id,
       @required this.title,
@@ -25,13 +28,17 @@ class SavedArticleData extends DataClass
       this.location,
       @required this.description,
       this.author,
-      @required this.firstImage});
+      @required this.firstImage,
+      this.link,
+      this.source,
+      this.addTime});
   factory SavedArticleData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return SavedArticleData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       title:
@@ -47,6 +54,11 @@ class SavedArticleData extends DataClass
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}author']),
       firstImage: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}first_image']),
+      link: stringType.mapFromDatabaseResponse(data['${effectivePrefix}link']),
+      source:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}source']),
+      addTime: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}add_time']),
     );
   }
   @override
@@ -76,6 +88,15 @@ class SavedArticleData extends DataClass
     if (!nullToAbsent || firstImage != null) {
       map['first_image'] = Variable<String>(firstImage);
     }
+    if (!nullToAbsent || link != null) {
+      map['link'] = Variable<String>(link);
+    }
+    if (!nullToAbsent || source != null) {
+      map['source'] = Variable<String>(source);
+    }
+    if (!nullToAbsent || addTime != null) {
+      map['add_time'] = Variable<DateTime>(addTime);
+    }
     return map;
   }
 
@@ -99,6 +120,12 @@ class SavedArticleData extends DataClass
       firstImage: firstImage == null && nullToAbsent
           ? const Value.absent()
           : Value(firstImage),
+      link: link == null && nullToAbsent ? const Value.absent() : Value(link),
+      source:
+          source == null && nullToAbsent ? const Value.absent() : Value(source),
+      addTime: addTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(addTime),
     );
   }
 
@@ -114,6 +141,9 @@ class SavedArticleData extends DataClass
       description: serializer.fromJson<String>(json['description']),
       author: serializer.fromJson<String>(json['author']),
       firstImage: serializer.fromJson<String>(json['firstImage']),
+      link: serializer.fromJson<String>(json['link']),
+      source: serializer.fromJson<String>(json['source']),
+      addTime: serializer.fromJson<DateTime>(json['addTime']),
     );
   }
   @override
@@ -128,6 +158,9 @@ class SavedArticleData extends DataClass
       'description': serializer.toJson<String>(description),
       'author': serializer.toJson<String>(author),
       'firstImage': serializer.toJson<String>(firstImage),
+      'link': serializer.toJson<String>(link),
+      'source': serializer.toJson<String>(source),
+      'addTime': serializer.toJson<DateTime>(addTime),
     };
   }
 
@@ -139,7 +172,10 @@ class SavedArticleData extends DataClass
           String location,
           String description,
           String author,
-          String firstImage}) =>
+          String firstImage,
+          String link,
+          String source,
+          DateTime addTime}) =>
       SavedArticleData(
         id: id ?? this.id,
         title: title ?? this.title,
@@ -149,6 +185,9 @@ class SavedArticleData extends DataClass
         description: description ?? this.description,
         author: author ?? this.author,
         firstImage: firstImage ?? this.firstImage,
+        link: link ?? this.link,
+        source: source ?? this.source,
+        addTime: addTime ?? this.addTime,
       );
   @override
   String toString() {
@@ -160,7 +199,10 @@ class SavedArticleData extends DataClass
           ..write('location: $location, ')
           ..write('description: $description, ')
           ..write('author: $author, ')
-          ..write('firstImage: $firstImage')
+          ..write('firstImage: $firstImage, ')
+          ..write('link: $link, ')
+          ..write('source: $source, ')
+          ..write('addTime: $addTime')
           ..write(')'))
         .toString();
   }
@@ -176,8 +218,16 @@ class SavedArticleData extends DataClass
                   time.hashCode,
                   $mrjc(
                       location.hashCode,
-                      $mrjc(description.hashCode,
-                          $mrjc(author.hashCode, firstImage.hashCode))))))));
+                      $mrjc(
+                          description.hashCode,
+                          $mrjc(
+                              author.hashCode,
+                              $mrjc(
+                                  firstImage.hashCode,
+                                  $mrjc(
+                                      link.hashCode,
+                                      $mrjc(source.hashCode,
+                                          addTime.hashCode)))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -189,7 +239,10 @@ class SavedArticleData extends DataClass
           other.location == this.location &&
           other.description == this.description &&
           other.author == this.author &&
-          other.firstImage == this.firstImage);
+          other.firstImage == this.firstImage &&
+          other.link == this.link &&
+          other.source == this.source &&
+          other.addTime == this.addTime);
 }
 
 class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
@@ -201,6 +254,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
   final Value<String> description;
   final Value<String> author;
   final Value<String> firstImage;
+  final Value<String> link;
+  final Value<String> source;
+  final Value<DateTime> addTime;
   const ArticleToSaveTableCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
@@ -210,6 +266,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
     this.description = const Value.absent(),
     this.author = const Value.absent(),
     this.firstImage = const Value.absent(),
+    this.link = const Value.absent(),
+    this.source = const Value.absent(),
+    this.addTime = const Value.absent(),
   });
   ArticleToSaveTableCompanion.insert({
     this.id = const Value.absent(),
@@ -220,6 +279,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
     @required String description,
     this.author = const Value.absent(),
     @required String firstImage,
+    this.link = const Value.absent(),
+    this.source = const Value.absent(),
+    this.addTime = const Value.absent(),
   })  : title = Value(title),
         category = Value(category),
         time = Value(time),
@@ -234,6 +296,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
     Expression<String> description,
     Expression<String> author,
     Expression<String> firstImage,
+    Expression<String> link,
+    Expression<String> source,
+    Expression<DateTime> addTime,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -244,6 +309,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
       if (description != null) 'description': description,
       if (author != null) 'author': author,
       if (firstImage != null) 'first_image': firstImage,
+      if (link != null) 'link': link,
+      if (source != null) 'source': source,
+      if (addTime != null) 'add_time': addTime,
     });
   }
 
@@ -255,7 +323,10 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
       Value<String> location,
       Value<String> description,
       Value<String> author,
-      Value<String> firstImage}) {
+      Value<String> firstImage,
+      Value<String> link,
+      Value<String> source,
+      Value<DateTime> addTime}) {
     return ArticleToSaveTableCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
@@ -265,6 +336,9 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
       description: description ?? this.description,
       author: author ?? this.author,
       firstImage: firstImage ?? this.firstImage,
+      link: link ?? this.link,
+      source: source ?? this.source,
+      addTime: addTime ?? this.addTime,
     );
   }
 
@@ -295,6 +369,15 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
     if (firstImage.present) {
       map['first_image'] = Variable<String>(firstImage.value);
     }
+    if (link.present) {
+      map['link'] = Variable<String>(link.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (addTime.present) {
+      map['add_time'] = Variable<DateTime>(addTime.value);
+    }
     return map;
   }
 
@@ -308,7 +391,10 @@ class ArticleToSaveTableCompanion extends UpdateCompanion<SavedArticleData> {
           ..write('location: $location, ')
           ..write('description: $description, ')
           ..write('author: $author, ')
-          ..write('firstImage: $firstImage')
+          ..write('firstImage: $firstImage, ')
+          ..write('link: $link, ')
+          ..write('source: $source, ')
+          ..write('addTime: $addTime')
           ..write(')'))
         .toString();
   }
@@ -417,9 +503,56 @@ class $ArticleToSaveTableTable extends ArticleToSaveTable
     );
   }
 
+  final VerificationMeta _linkMeta = const VerificationMeta('link');
+  GeneratedTextColumn _link;
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, title, category, time, location, description, author, firstImage];
+  GeneratedTextColumn get link => _link ??= _constructLink();
+  GeneratedTextColumn _constructLink() {
+    return GeneratedTextColumn(
+      'link',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _sourceMeta = const VerificationMeta('source');
+  GeneratedTextColumn _source;
+  @override
+  GeneratedTextColumn get source => _source ??= _constructSource();
+  GeneratedTextColumn _constructSource() {
+    return GeneratedTextColumn(
+      'source',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _addTimeMeta = const VerificationMeta('addTime');
+  GeneratedDateTimeColumn _addTime;
+  @override
+  GeneratedDateTimeColumn get addTime => _addTime ??= _constructAddTime();
+  GeneratedDateTimeColumn _constructAddTime() {
+    return GeneratedDateTimeColumn(
+      'add_time',
+      $tableName,
+      true,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        title,
+        category,
+        time,
+        location,
+        description,
+        author,
+        firstImage,
+        link,
+        source,
+        addTime
+      ];
   @override
   $ArticleToSaveTableTable get asDslTable => this;
   @override
@@ -476,6 +609,18 @@ class $ArticleToSaveTableTable extends ArticleToSaveTable
     } else if (isInserting) {
       context.missing(_firstImageMeta);
     }
+    if (data.containsKey('link')) {
+      context.handle(
+          _linkMeta, link.isAcceptableOrUnknown(data['link'], _linkMeta));
+    }
+    if (data.containsKey('source')) {
+      context.handle(_sourceMeta,
+          source.isAcceptableOrUnknown(data['source'], _sourceMeta));
+    }
+    if (data.containsKey('add_time')) {
+      context.handle(_addTimeMeta,
+          addTime.isAcceptableOrUnknown(data['add_time'], _addTimeMeta));
+    }
     return context;
   }
 
@@ -502,6 +647,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
   final String composer;
   final String album;
   final String releaseYear;
+  final DateTime addTime;
   SavedMusicData(
       {@required this.id,
       @required this.name,
@@ -510,13 +656,15 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       this.image,
       this.composer,
       this.album,
-      this.releaseYear});
+      this.releaseYear,
+      this.addTime});
   factory SavedMusicData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
+    final dateTimeType = db.typeSystem.forDartType<DateTime>();
     return SavedMusicData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
@@ -531,6 +679,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}album']),
       releaseYear: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}release_year']),
+      addTime: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}add_time']),
     );
   }
   @override
@@ -560,6 +710,9 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     if (!nullToAbsent || releaseYear != null) {
       map['release_year'] = Variable<String>(releaseYear);
     }
+    if (!nullToAbsent || addTime != null) {
+      map['add_time'] = Variable<DateTime>(addTime);
+    }
     return map;
   }
 
@@ -581,6 +734,9 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       releaseYear: releaseYear == null && nullToAbsent
           ? const Value.absent()
           : Value(releaseYear),
+      addTime: addTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(addTime),
     );
   }
 
@@ -596,6 +752,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       composer: serializer.fromJson<String>(json['composer']),
       album: serializer.fromJson<String>(json['album']),
       releaseYear: serializer.fromJson<String>(json['releaseYear']),
+      addTime: serializer.fromJson<DateTime>(json['addTime']),
     );
   }
   @override
@@ -610,6 +767,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       'composer': serializer.toJson<String>(composer),
       'album': serializer.toJson<String>(album),
       'releaseYear': serializer.toJson<String>(releaseYear),
+      'addTime': serializer.toJson<DateTime>(addTime),
     };
   }
 
@@ -621,7 +779,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           String image,
           String composer,
           String album,
-          String releaseYear}) =>
+          String releaseYear,
+          DateTime addTime}) =>
       SavedMusicData(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -631,6 +790,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
         composer: composer ?? this.composer,
         album: album ?? this.album,
         releaseYear: releaseYear ?? this.releaseYear,
+        addTime: addTime ?? this.addTime,
       );
   @override
   String toString() {
@@ -642,7 +802,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           ..write('image: $image, ')
           ..write('composer: $composer, ')
           ..write('album: $album, ')
-          ..write('releaseYear: $releaseYear')
+          ..write('releaseYear: $releaseYear, ')
+          ..write('addTime: $addTime')
           ..write(')'))
         .toString();
   }
@@ -658,8 +819,12 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
                   link.hashCode,
                   $mrjc(
                       image.hashCode,
-                      $mrjc(composer.hashCode,
-                          $mrjc(album.hashCode, releaseYear.hashCode))))))));
+                      $mrjc(
+                          composer.hashCode,
+                          $mrjc(
+                              album.hashCode,
+                              $mrjc(releaseYear.hashCode,
+                                  addTime.hashCode)))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -671,7 +836,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           other.image == this.image &&
           other.composer == this.composer &&
           other.album == this.album &&
-          other.releaseYear == this.releaseYear);
+          other.releaseYear == this.releaseYear &&
+          other.addTime == this.addTime);
 }
 
 class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
@@ -683,6 +849,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   final Value<String> composer;
   final Value<String> album;
   final Value<String> releaseYear;
+  final Value<DateTime> addTime;
   const MusicToSaveTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -692,6 +859,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     this.composer = const Value.absent(),
     this.album = const Value.absent(),
     this.releaseYear = const Value.absent(),
+    this.addTime = const Value.absent(),
   });
   MusicToSaveTableCompanion.insert({
     this.id = const Value.absent(),
@@ -702,6 +870,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     this.composer = const Value.absent(),
     this.album = const Value.absent(),
     this.releaseYear = const Value.absent(),
+    this.addTime = const Value.absent(),
   })  : name = Value(name),
         link = Value(link);
   static Insertable<SavedMusicData> custom({
@@ -713,6 +882,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     Expression<String> composer,
     Expression<String> album,
     Expression<String> releaseYear,
+    Expression<DateTime> addTime,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -723,6 +893,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       if (composer != null) 'composer': composer,
       if (album != null) 'album': album,
       if (releaseYear != null) 'release_year': releaseYear,
+      if (addTime != null) 'add_time': addTime,
     });
   }
 
@@ -734,7 +905,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       Value<String> image,
       Value<String> composer,
       Value<String> album,
-      Value<String> releaseYear}) {
+      Value<String> releaseYear,
+      Value<DateTime> addTime}) {
     return MusicToSaveTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -744,6 +916,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       composer: composer ?? this.composer,
       album: album ?? this.album,
       releaseYear: releaseYear ?? this.releaseYear,
+      addTime: addTime ?? this.addTime,
     );
   }
 
@@ -774,6 +947,9 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     if (releaseYear.present) {
       map['release_year'] = Variable<String>(releaseYear.value);
     }
+    if (addTime.present) {
+      map['add_time'] = Variable<DateTime>(addTime.value);
+    }
     return map;
   }
 
@@ -787,7 +963,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
           ..write('image: $image, ')
           ..write('composer: $composer, ')
           ..write('album: $album, ')
-          ..write('releaseYear: $releaseYear')
+          ..write('releaseYear: $releaseYear, ')
+          ..write('addTime: $addTime')
           ..write(')'))
         .toString();
   }
@@ -896,9 +1073,21 @@ class $MusicToSaveTableTable extends MusicToSaveTable
     );
   }
 
+  final VerificationMeta _addTimeMeta = const VerificationMeta('addTime');
+  GeneratedDateTimeColumn _addTime;
+  @override
+  GeneratedDateTimeColumn get addTime => _addTime ??= _constructAddTime();
+  GeneratedDateTimeColumn _constructAddTime() {
+    return GeneratedDateTimeColumn(
+      'add_time',
+      $tableName,
+      true,
+    );
+  }
+
   @override
   List<GeneratedColumn> get $columns =>
-      [id, name, country, link, image, composer, album, releaseYear];
+      [id, name, country, link, image, composer, album, releaseYear, addTime];
   @override
   $MusicToSaveTableTable get asDslTable => this;
   @override
@@ -946,6 +1135,10 @@ class $MusicToSaveTableTable extends MusicToSaveTable
           _releaseYearMeta,
           releaseYear.isAcceptableOrUnknown(
               data['release_year'], _releaseYearMeta));
+    }
+    if (data.containsKey('add_time')) {
+      context.handle(_addTimeMeta,
+          addTime.isAcceptableOrUnknown(data['add_time'], _addTimeMeta));
     }
     return context;
   }

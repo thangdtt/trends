@@ -78,7 +78,7 @@ class _NewsTabState extends State<NewsTab>
 
   Widget buildInitialInput() {
     return Container(
-      color: Colors.green,
+      color: Theme.of(context).canvasColor,
     );
   }
 
@@ -147,19 +147,22 @@ class _NewsTabState extends State<NewsTab>
       onLoading: _onLoading,
       child: ListView.builder(
               itemBuilder: (ctx, i) {
-                return NewsWidget(
-                  article: articles[i],
-                  callback: () {
-                    BlocProvider.of<SuggestArticleBloc>(context)
-                        .add(FetchSuggestArticles(widget.catEnum));
-                    BlocProvider.of<HistoryBloc>(context)
-                        .add(AddToHistory(articles[i].id));
-                    Navigator.of(context)
-                        .pushNamed(ArticleContentWidget.routeName, arguments: {
-                      'article': articles[i],
-                      'catEnum': widget.catEnum,
-                    });
-                  },
+                return Container(
+                  padding: EdgeInsets.fromLTRB(4,0,4,0),
+                  child: NewsWidget(
+                    article: articles[i],
+                    callback: () {
+                      BlocProvider.of<SuggestArticleBloc>(context)
+                          .add(FetchSuggestArticles(widget.catEnum));
+                      BlocProvider.of<HistoryBloc>(context)
+                          .add(AddToHistory(articles[i].id));
+                      Navigator.of(context)
+                          .pushNamed(ArticleContentWidget.routeName, arguments: {
+                        'article': articles[i],
+                        'catEnum': widget.catEnum,
+                      });
+                    },
+                  ),
                 );
               },
               itemCount: articles.length,

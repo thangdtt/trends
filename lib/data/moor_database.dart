@@ -19,6 +19,9 @@ class ArticleToSaveTable extends Table {
   TextColumn get description => text()();
   TextColumn get author => text().nullable()();
   TextColumn get firstImage => text()();
+  TextColumn get link => text().nullable()();
+  TextColumn get source => text().nullable()();
+  DateTimeColumn get addTime => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -37,6 +40,7 @@ class MusicToSaveTable extends Table {
   TextColumn get composer => text().nullable()();
   TextColumn get album => text().nullable()();
   TextColumn get releaseYear => text().nullable()();
+  DateTimeColumn get addTime => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -64,16 +68,15 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 1;
 
   Future<List<SavedArticleData>> getAllSaveArticles() =>
-      select(articleToSaveTable).get();
-
-  Stream<List<SavedArticleData>> watchAllSaveArticles() =>
-      select(articleToSaveTable).watch();
+      (select(articleToSaveTable)
+            ..orderBy([(article) => OrderingTerm(expression: article.addTime)]))
+          .get();
 
   Future<SavedArticleData> getOneSaveArticle(int id) =>
       (select(articleToSaveTable)..where((t) => t._id.equals(id))).getSingle();
 
   Future inserSaveArticle(SavedArticleData data) =>
-      into(articleToSaveTable).insert(data);
+      into(articleToSaveTable).insertOnConflictUpdate(data);
 
   Future updateSaveArticle(SavedArticleData data) =>
       update(articleToSaveTable).replace(data);
@@ -92,8 +95,6 @@ class AppDatabase extends _$AppDatabase {
 //   int get schemaVersion => 1;
 
 //   Future<List<ArticleToSaveTableData>> getAllSaveArticles() => select(savedArticleTable).get();
-
-//   Stream<List<ArticleToSaveTableData>> watchAllSaveArticles() => select(savedArticleTable).watch();
 
 //   Future inserSaveArticle(ArticleToSaveTableData data) => into(savedArticleTable).insert(data);
 

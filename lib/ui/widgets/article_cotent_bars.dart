@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:share/share.dart';
+import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,15 +39,18 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   void initState() {
     super.initState();
     dbBloc = BlocProvider.of<DatabaseBloc>(context);
-    //dbBloc.add(GetAllSaveArticle());
 
-    for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
-      if (widget.article.id == item.id) {
-        setState(() {
-          isBookMarked = true;
-        });
+    try {
+      for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
+        if (widget.article.id == item.id) {
+          setState(() {
+            isBookMarked = true;
+          });
+          break;
+        }
       }
-      break;
+    } catch (e) {
+      print(e);
     }
 
     audioPlayer.onPlayerCompletion.listen((event) {
@@ -87,10 +91,10 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               onTap: () => Navigator.of(context).pop(),
               child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                      2 * screenHeight / 360, 0, 0, 4 * screenHeight / 360),
+                      10 * screenWidth / 360, 0, 0, 4 * screenHeight / 360),
                   child: Icon(
-                    CupertinoIcons.back,
-                    size: 17 * screenHeight / 360,
+                    CustomIcons.arrow_left,
+                    size: 30 * screenWidth / 360,
                   ))),
           Expanded(child: Container()),
           GestureDetector(
@@ -121,7 +125,6 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
                     setState(() {
                       isPlaying = true;
                     });
-                    ;
                   }
                 } catch (e) {
                   print(e.toString());
@@ -135,7 +138,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
                 isPlaying
                     ? Icons.pause_circle_outline
                     : Icons.play_circle_outline,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),
@@ -144,11 +147,11 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               Share.share(widget.article.link);
             },
             child: Padding(
-              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+              padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
                   4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
                 Icons.share,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),
@@ -159,11 +162,11 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               });
             },
             child: Padding(
-              padding: EdgeInsets.fromLTRB(4 * screenHeight / 360, 0,
+              padding: EdgeInsets.fromLTRB(4 * screenWidth / 360, 0,
                   4 * screenWidth / 360, 4 * screenHeight / 360),
               child: Icon(
                 isBookMarked ? Icons.bookmark : Icons.bookmark_border,
-                size: 17 * screenHeight / 360,
+                size: 30 * screenWidth / 360,
               ),
             ),
           ),
@@ -173,23 +176,22 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   }
 
   void _bookMarkArticle() async {
-    // SavedArticleData savedData;
-    // dbBloc.database
-    //     .getOneSaveArticle(widget.article.id)
-    //     .then((value) => savedData = value);
     bool existed = false;
-    for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
-      if (widget.article.id == item.id) existed = true;
-      break;
+    try {
+      for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
+        if (widget.article.id == item.id) {
+          existed = true;
+          break;
+        }
+      }
+    } catch (e) {
+      print(e);
     }
+
     if (existed) {
       isBookMarked = false;
       dbBloc.add(DeleteSaveArticle(widget.article));
     } else {
-      //Set Bookmark
-      // String articleString =
-      //     "${widget.article.id.toString()}~${widget.article.title}~${widget.article.firstImage}~${widget.article.description}~${widget.article.location}~${widget.article.time}";
-
       isBookMarked = true;
       dbBloc.add(AddSaveArticle(widget.article));
     }
@@ -202,7 +204,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
 
     final String url = "https://api.fpt.ai/hmi/tts/v5";
     final apiKey = await PrefUtils.getFptApiPref();
-    print("key " + apiKey);
+    print("Api: $apiKey\n");
     final _headers = {'api-key': apiKey, 'speed': '', 'voice': 'linhsan'};
     try {
       if (payload.length > 5000) payload = payload.substring(0, 4999);

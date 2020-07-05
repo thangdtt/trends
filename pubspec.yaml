@@ -83,6 +83,9 @@ flutter:
     - family:  MoonIcon
       fonts:
         - asset: assets/icons/MoonIcon.ttf
+    - family:  HeartIcon
+      fonts: 
+        - asset: assets/icons/Heart.ttf
     - family:  Pacifico
       fonts:
         - asset: assets/fonts/Pacifico-Regular.ttf

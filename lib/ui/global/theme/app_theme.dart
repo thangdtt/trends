@@ -39,7 +39,8 @@ final appThemeData = {
     bottomAppBarColor: Color.fromRGBO(128, 128, 128, 1),
     backgroundColor: Color.fromRGBO(255, 255, 255, 1),
     brightness: Brightness.light,
-    primarySwatch: Colors.blue,
+    primarySwatch: Colors.teal,
+    primaryColor: Color.fromRGBO(240, 240, 240, 1),
     canvasColor: Color.fromRGBO(230, 230, 230, 1),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     textTheme: TextTheme(
@@ -55,7 +56,7 @@ final appThemeData = {
     bottomAppBarColor: Color.fromRGBO(10, 10, 10, 1),
     backgroundColor: Color.fromRGBO(45, 45, 45, 1),
     brightness: Brightness.dark,
-    primarySwatch: Colors.blue,
+    primarySwatch: Colors.amber,
     //canvasColor: Color.fromRGBO(255, 254, 229, 1),
     canvasColor: Color.fromRGBO(20, 20, 20, 1),
     visualDensity: VisualDensity.adaptivePlatformDensity,

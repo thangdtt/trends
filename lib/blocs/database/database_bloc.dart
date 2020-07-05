@@ -12,6 +12,7 @@ part 'database_state.dart';
 class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   @override
   DatabaseState get initialState => DatabaseInitial();
+  List<Article> saveArticles = [];
 
   @override
   Stream<DatabaseState> mapEventToState(
@@ -22,19 +23,24 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
 
-        List<Article> _saveArticles = [];
-        for (var item in _list) {
-          _saveArticles.add(new Article(
-              id: item.id,
-              title: item.title,
-              description: item.description,
-              category: item.category,
-              author: item.author,
-              location: item.location,
-              time: item.time,
-              firstImage: item.firstImage));
+        if (_list != null) {
+          saveArticles = [];
+          for (var item in _list) {
+            saveArticles.add(new Article(
+                link: item.link,
+                source: item.source,
+                id: item.id,
+                title: item.title,
+                description: item.description,
+                category: item.category,
+                author: item.author,
+                location: item.location,
+                time: item.time,
+                firstImage: item.firstImage));
+          }
         }
-        yield DatabaseLoaded(_saveArticles);
+
+        yield DatabaseLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
         yield DatabaseError("get saved article error");
@@ -44,6 +50,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
+            source: event.article.source,
+            link: event.article.link,
             id: event.article.id,
             title: event.article.title,
             category: event.article.category,
@@ -51,25 +59,37 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             time: event.article.time,
             author: event.article.author,
             location: event.article.location,
-            firstImage: event.article.firstImage);
+            firstImage: event.article.firstImage,
+            addTime: DateTime.now());
 
-        databaseRepo.inserSaveArticle(saveArticle);
+        try {
+          await databaseRepo.inserSaveArticle(saveArticle);
 
-        List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
-        List<Article> _saveArticles = [];
-        for (var item in _list) {
-          _saveArticles.add(new Article(
-              id: item.id,
-              title: item.title,
-              description: item.description,
-              category: item.category,
-              author: item.author,
-              location: item.location,
-              time: item.time,
-              firstImage: item.firstImage));
+          List<SavedArticleData> _list =
+              await databaseRepo.getAllSaveArticles();
+
+          if (_list != null) {
+            saveArticles = [];
+            for (var item in _list) {
+              saveArticles.add(new Article(
+                  source: item.source,
+                  link: item.link,
+                  id: item.id,
+                  title: item.title,
+                  description: item.description,
+                  category: item.category,
+                  author: item.author,
+                  location: item.location,
+                  time: item.time,
+                  firstImage: item.firstImage));
+            }
+          }
+        } catch (e) {
+          print(e);
+          yield DatabaseLoaded(saveArticles.reversed.toList());
         }
 
-        yield DatabaseLoaded(_saveArticles);
+        yield DatabaseLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
         yield DatabaseError("add saved article error");
@@ -79,6 +99,8 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
+            source: event.article.source,
+            link: event.article.link,
             id: event.article.id,
             title: event.article.title,
             category: event.article.category,
@@ -86,24 +108,14 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
             time: event.article.time,
             author: event.article.author,
             location: event.article.location,
-            firstImage: event.article.firstImage);
-        databaseRepo.deleteSaveArticle(saveArticle);
+            firstImage: event.article.firstImage,
+            addTime: DateTime.now());
 
-        List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
-        List<Article> _saveArticles = [];
-        for (var item in _list) {
-          _saveArticles.add(new Article(
-              id: item.id,
-              title: item.title,
-              description: item.description,
-              category: item.category,
-              author: item.author,
-              location: item.location,
-              time: item.time,
-              firstImage: item.firstImage));
+        if (await databaseRepo.deleteSaveArticle(saveArticle) != null) {
+          saveArticles.removeWhere((element) => element.id == event.article.id);
         }
 
-        yield DatabaseLoaded(_saveArticles);
+        yield DatabaseLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
         yield DatabaseError("delete saved article error");

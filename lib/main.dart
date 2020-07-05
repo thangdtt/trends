@@ -1,20 +1,25 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
-import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/push_notifications.dart';
+import 'package:trends/data/models/article.dart';
+import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
+import 'package:trends/ui/screens/music_playing_screen.dart';
+import 'package:trends/ui/screens/read_history_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article_content.dart';
-import 'package:trends/ui/screens/read_history_screen.dart';
+import 'package:trends/utils/utils_class.dart';
+
 import 'blocs/article/article_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() {
   runApp(
@@ -90,13 +95,69 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: theme,
-      //initialRoute: '/',
+      initialRoute: '/',
       home: BottomTabScreen(),
-      routes: {
-        //'/': (ctx) => BottomTabScreen(),
-        ArticleContentWidget.routeName: (ctx) => ArticleContentWidget(),
-        ReadHistoryScreen.routeName: (ctx) => ReadHistoryScreen(),
+      onGenerateRoute: (settings) {
+        final name = settings.name;
+        switch (name) {
+          case MusicPlayingScreen.routeName:
+            Map<String, dynamic> arguments = settings.arguments;
+            final List<Music> musics = arguments['musics'];
+            final int musicIndex = arguments['musicIndex'];
+            final AudioPlayer audioPlayer = arguments['audioPlayer'];
+            final bool isPlaying = arguments['isPlaying'];
+            return PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    MusicPlayingScreen(
+                      audioPlayer: audioPlayer,
+                      musicIndex: musicIndex,
+                      musics: musics,
+                      isPlaying: isPlaying,
+                    ),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  var begin = Offset(0.0, 1.0);
+                  var end = Offset.zero;
+                  var tween = Tween(begin: begin, end: end);
+                  var offsetAnimation = animation.drive(tween);
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+                settings: RouteSettings(name: name, arguments: arguments));
+            break;
+          case ArticleContentWidget.routeName:
+            Map<String, dynamic> arguments = settings.arguments;
+            Article article = arguments['article'];
+            categoryEnum catEnum = arguments['catEnum'];
+            return MaterialPageRoute(
+                builder: (context) {
+                  return ArticleContentWidget(
+                    article: article,
+                    catEnum: catEnum,
+                  );
+                },
+                settings: RouteSettings(name: name, arguments: arguments));
+          case ReadHistoryScreen.routeName:
+            return MaterialPageRoute(
+                builder: (context) {
+                  return ReadHistoryScreen();
+                },
+                settings: RouteSettings(name: name));
+        }
+        return MaterialPageRoute(
+            builder: (context) {
+              return BottomTabScreen();
+            },
+            settings: RouteSettings(name: name));
       },
+//      routes: {
+//        //'/': (ctx) => BottomTabScreen(),
+//        ArticleContentWidget.routeName: (ctx) => ArticleContentWidget(),
+//        ReadHistoryScreen.routeName: (ctx) => ReadHistoryScreen(),
+//        MusicPlayingScreen.routeName: (ctx) => MusicPlayingScreen(),
+//      },
     );
   }
 }

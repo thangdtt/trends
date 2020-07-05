@@ -38,6 +38,7 @@ class _MusicPlayingState extends State<MusicPlaying>
 
   @override
   Widget build(BuildContext context) {
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final double aspectWidth = screenWidth / 360;
     return Container(

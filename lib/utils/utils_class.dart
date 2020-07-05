@@ -27,6 +27,8 @@ enum categoryEnum {
   GiaiTri,
   TheThao,
   PhapLuat,
+  NhipSongTre,
+  VanHoa,
   GiaoDuc,
   SucKhoe,
   DoiSong,
@@ -34,6 +36,7 @@ enum categoryEnum {
   KhoaHoc,
   SoHoa,
   Xe,
+  GiaThat,
 }
 
 Map<categoryEnum, String> mapCategoryNames = {
@@ -45,6 +48,8 @@ Map<categoryEnum, String> mapCategoryNames = {
   categoryEnum.GiaiTri: "Giải trí",
   categoryEnum.TheThao: "Thể thao",
   categoryEnum.PhapLuat: "Pháp luật",
+  categoryEnum.NhipSongTre: "Nhịp sống trẻ",
+  categoryEnum.VanHoa: "Văn hóa",
   categoryEnum.GiaoDuc: "Giáo dục",
   categoryEnum.SucKhoe: "Sức khỏe",
   categoryEnum.DoiSong: "Đời sống",
@@ -52,6 +57,7 @@ Map<categoryEnum, String> mapCategoryNames = {
   categoryEnum.KhoaHoc: "Khoa học",
   categoryEnum.SoHoa: "Số hóa",
   categoryEnum.Xe: "Xe",
+  categoryEnum.GiaThat: "Giả - Thật",
 };
 
 List<String> tabNames = [
@@ -63,6 +69,8 @@ List<String> tabNames = [
   "Giải trí",
   "Thể thao",
   "Pháp luật",
+  "Nhịp sống trẻ"
+  "Văn hóa",
   "Giáo dục",
   "Sức khỏe",
   "Đời sống",
@@ -70,6 +78,7 @@ List<String> tabNames = [
   "Khoa học",
   "Số hóa",
   "Xe",
+  "Giả - Thật",
 ];
 
 

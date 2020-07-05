@@ -50,7 +50,7 @@ class _ReadHistoryScreenState extends State<ReadHistoryScreen> {
       children: <Widget>[
         Container(
           height: 25 * MediaQuery.of(context).size.height / 360,
-          child: Center(child: Text("Tin đã đọc")),
+          child: Center(child: Text("Tin đã xem")),
         ),
         Expanded(
           child: Container(

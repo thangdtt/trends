@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:trends/data/models/article.dart';
 import 'package:trends/utils/utils_class.dart';
 
-
 String articleUrl = ('http://server294.azurewebsites.net/articles/'); //Azure
 
 class ArticleRepository {
@@ -18,6 +17,8 @@ class ArticleRepository {
     categoryEnum.GiaiTri: [],
     categoryEnum.TheThao: [],
     categoryEnum.PhapLuat: [],
+    categoryEnum.NhipSongTre: [],
+    categoryEnum.VanHoa: [],
     categoryEnum.GiaoDuc: [],
     categoryEnum.SucKhoe: [],
     categoryEnum.DoiSong: [],
@@ -25,6 +26,7 @@ class ArticleRepository {
     categoryEnum.KhoaHoc: [],
     categoryEnum.SoHoa: [],
     categoryEnum.Xe: [],
+    categoryEnum.GiaThat: [],
   };
 
   Map<categoryEnum, int> mapOffset = {
@@ -36,6 +38,8 @@ class ArticleRepository {
     categoryEnum.GiaiTri: 0,
     categoryEnum.TheThao: 0,
     categoryEnum.PhapLuat: 0,
+    categoryEnum.NhipSongTre: 0,
+    categoryEnum.VanHoa: 0,
     categoryEnum.GiaoDuc: 0,
     categoryEnum.SucKhoe: 0,
     categoryEnum.DoiSong: 0,
@@ -43,6 +47,7 @@ class ArticleRepository {
     categoryEnum.KhoaHoc: 0,
     categoryEnum.SoHoa: 0,
     categoryEnum.Xe: 0,
+    categoryEnum.GiaThat: 0,
   };
 
   Map<categoryEnum, String> enumToString = {
@@ -54,6 +59,8 @@ class ArticleRepository {
     categoryEnum.GiaiTri: "giai_tri",
     categoryEnum.TheThao: "the_thao",
     categoryEnum.PhapLuat: "phap_luat",
+    categoryEnum.NhipSongTre: "nhip_song_tre",
+    categoryEnum.VanHoa: "van_hoa",
     categoryEnum.GiaoDuc: "giao_duc",
     categoryEnum.SucKhoe: "suc_khoe",
     categoryEnum.DoiSong: "oi_song",
@@ -61,6 +68,7 @@ class ArticleRepository {
     categoryEnum.KhoaHoc: "khoa_hoc",
     categoryEnum.SoHoa: "so_hoa",
     categoryEnum.Xe: "xe",
+    categoryEnum.GiaThat: "gia - that",
   };
 
   List<Article> _searchArticles = [];

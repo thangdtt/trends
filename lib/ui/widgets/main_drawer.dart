@@ -154,7 +154,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               ),
                             ),
                             Text(
-                              "Lịch sử bài đã xem",
+                              "Lịch sử tin đã xem",
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
                                 fontSize: 20 * screenWidth / 360,

@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/music/music_bloc.dart';
 import 'package:trends/data/models/music.dart';
-import 'package:trends/ui/widgets/music/music_playing.dart';
 import 'package:trends/ui/widgets/music/music_widget.dart';
 
 class MusicTab extends StatefulWidget {
   const MusicTab({
     Key key,
+    this.onPressPlay,
   }) : super(key: key);
+  final Function(List<Music> musics, int index) onPressPlay;
 
   @override
   _MusicTabState createState() => _MusicTabState();
@@ -22,32 +23,15 @@ class _MusicTabState extends State<MusicTab>
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<Music> _currentMusics;
-  AudioPlayer audioPlayer = AudioPlayer();
-  int _currentIndex = 0;
-  Music _currentMusic;
-  bool isPlaying = false;
 
   @override
   void initState() {
     super.initState();
 
     BlocProvider.of<MusicBloc>(context).add(FetchMusics());
-    audioPlayer.onPlayerCompletion.listen((event) {
-      changeMusicIndex(_currentIndex + 1);
-    });
+
   }
 
-  void changeMusicIndex(int index) {
-    _currentIndex = index;
-    if (_currentIndex > _currentMusics.length - 1) {
-      _currentIndex = 0;
-    } else if (_currentIndex < 0) {
-      _currentIndex = _currentMusics.length - 1;
-    }
-    setState(() {
-      _currentMusic = _currentMusics[_currentIndex];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,17 +134,12 @@ class _MusicTabState extends State<MusicTab>
           onRefresh: _onRefresh,
           onLoading: _onLoading,
           child: ListView.builder(
-            itemBuilder: (ctx, i) {
+            itemBuilder: (BuildContext ctx, int i) {
               return MusicWidget(
                 music: musics[i],
                 callback: () async {
-                  isPlaying = false;
-                  int result = await audioPlayer.play(musics[i].link);
-                  if (result == 1) {
-                    // success
-                    _currentMusic = _currentMusics[i];
-                    isPlaying = true;
-                    setState(() {});
+                  if (widget.onPressPlay != null) {
+                    widget.onPressPlay(_currentMusics, i);
                   }
 //              Navigator.of(context).pushNamed('', arguments: musics[i]);
                 },
@@ -169,28 +148,6 @@ class _MusicTabState extends State<MusicTab>
             itemCount: musics.length,
           ),
         ),
-        if (_currentMusic != null) Positioned(
-          bottom: 0,
-          child: MusicPlaying(
-                  isPlaying: isPlaying,
-                  music: _currentMusic,
-                  nextCallBack: () {
-                    changeMusicIndex(_currentIndex + 1);
-                  },
-                  playCallBack: () {
-                    isPlaying = !isPlaying;
-                    if (isPlaying) {
-                      audioPlayer.resume();
-                    } else {
-                      audioPlayer.pause();
-                    }
-                    setState(() {});
-                  },
-                  previousCallBack: () {
-                    changeMusicIndex(_currentIndex + 1);
-                  },
-                ),
-        ) else const SizedBox()
       ],
     );
   }

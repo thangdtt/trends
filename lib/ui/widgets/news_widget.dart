@@ -5,6 +5,7 @@ import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/data/models/article.dart';
+import 'package:trends/ui/widgets/custom_popup_menu_item.dart';
 
 class NewsWidget extends StatelessWidget {
   final GestureTapCallback callback;
@@ -23,40 +24,34 @@ class NewsWidget extends StatelessWidget {
     final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
 
     return GestureDetector(
-      onLongPressStart: (LongPressStartDetails details) {
+      onLongPressStart: (LongPressStartDetails details) async {
         final _pos = details.globalPosition;
-        showMenu(
+        final int value = await showCustomMenu(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            items: <PopupMenuEntry>[
-              PopupMenuItem(
-                child: GestureDetector(
-                  onTap: callback,
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.open_in_new),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text("Mở"),
-                    ],
-                  ),
+            items: <CustomPopupMenuEntry<int>>[
+              CustomPopupMenuItem(
+                value: 0,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.open_in_new),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("Mở"),
+                  ],
                 ),
               ),
-              PopupMenuItem(
-                child: GestureDetector(
-                  onTap: () {
-                    _bookmarkArticle(article, context);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.bookmark_border),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text("Lưu"),
-                    ],
-                  ),
+              CustomPopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.bookmark_border),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("Lưu"),
+                  ],
                 ),
               ),
             ],
@@ -65,18 +60,26 @@ class NewsWidget extends StatelessWidget {
             position: RelativeRect.fromLTRB(
                 _pos.dx - 150, _pos.dy - 50, _pos.dy, _pos.dx),
             elevation: 5);
+
+        if (value == 0) {
+          callback();
+        } else {
+          _bookmarkArticle(article, context);
+        }
       },
       onTap: callback,
       child: Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 7 * screenWidth / 360,
-              vertical: 3 * screenWidth / 360),
+        child: Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            //side: BorderSide(color: Colors.white70, width: 1),
+            borderRadius: BorderRadius.circular(15),
+          ),
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.all(
-                Radius.circular(25),
+                Radius.circular(15),
               ),
               //border: Border.all(color: Colors.black54, width: 0.5),
             ),
@@ -114,8 +117,8 @@ class NewsWidget extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25),
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
                                 ),
                               )
                             : BoxDecoration(
@@ -125,8 +128,8 @@ class NewsWidget extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25),
-                                  bottomLeft: Radius.circular(25),
+                                  topLeft: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
                                 ),
                               ),
                       ),
@@ -161,7 +164,7 @@ class NewsWidget extends StatelessWidget {
                                       fontSize: 15 * screenWidth / 360,
                                       fontWeight: FontWeight.bold,
                                       decoration: TextDecoration.none,
-                                      color: Colors.deepOrange),
+                                      color: Colors.teal),
                                 ),
                                 SizedBox(height: 3),
                                 Text(
@@ -181,15 +184,28 @@ class NewsWidget extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
+                            Container(
+                              width: 15 * screenWidth / 360,
+                              height: 15 * screenWidth / 360,
+                              decoration: new BoxDecoration(
+                                border: Border.all(width: 0.3),
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: _chooseNewsPaperImage(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 3),
                             Expanded(
-                              flex: 5,
+                              flex: 7,
                               child: Container(
                                 width: 140 * screenWidth / 360,
                                 child: Text(
-                                  article.category,
+                                  article.source,
                                   overflow: TextOverflow.visible,
                                   style: TextStyle(
-                                    fontSize: 11 * screenWidth / 360,
+                                    fontSize: 12 * screenWidth / 360,
                                     color: Colors.green,
                                     decoration: TextDecoration.none,
                                   ),
@@ -197,18 +213,15 @@ class NewsWidget extends StatelessWidget {
                               ),
                             ),
                             Expanded(
-                              flex: 8,
+                              flex: 16,
                               child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 0,
-                                ),
+                                margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   article.time.toString(),
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.clip,
                                   style: TextStyle(
-                                    fontSize: 10 * screenWidth / 360,
+                                    fontSize: 11 * screenWidth / 360,
                                     decoration: TextDecoration.none,
                                   ),
                                 ),
@@ -243,5 +256,16 @@ class NewsWidget extends StatelessWidget {
       Offset.zero & overlay.size,
     );
     return position;
+  }
+
+  NetworkImage _chooseNewsPaperImage() {
+    if (article.link.contains("vnexpress.net"))
+      return NetworkImage(
+        "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/b0/be/04/b0be046b-1ef0-c33b-a380-a02f26f90e6e/AppIcon-0-0-1x_U007emarketing-0-0-0-7-85-220.png/320x0w.png",
+      );
+    else if (article.link.contains("tuoitre.vn"))
+      return NetworkImage(
+        "https://image.winudf.com/v2/image/dm4udHVvaXRyZWFwcC5uZXdzX2ljb25fMTUxMjQ1MTUyMl8wNjc/icon.png?w=170&fakeurl=1",
+      );
   }
 }

@@ -9,6 +9,7 @@ class Article extends Equatable {
   final String description;
   final String author;
   final String link;
+  final String source;
   bool isBookMarked;
   String firstImage;
   final List<ArticleContent> content;
@@ -24,6 +25,7 @@ class Article extends Equatable {
     this.author,
     this.content,
     this.link,
+    this.source,
     this.isBookMarked = false,
     this.firstImage = "",
   }) {
@@ -38,6 +40,13 @@ class Article extends Equatable {
     var list = json['content'] as List;
     List<ArticleContent> content =
         list.map((i) => ArticleContent.fromJson(i)).toList();
+
+    String link = json['link'].toString();
+    String source = "";
+    if (link.contains("vnexpress.net"))
+      source = "VnExpress";
+    else if (link.contains("tuoitre.vn")) source = "Tuổi trẻ";
+
     return Article(
       id: json['id'],
       title: json['title'],
@@ -46,7 +55,8 @@ class Article extends Equatable {
       location: json['location'],
       description: json['description'],
       author: json['author'],
-      link: json['link'],
+      link: json['link'].toString(),
+      source: source,
       content: content,
     );
   }
@@ -61,6 +71,7 @@ class Article extends Equatable {
         description,
         author,
         link,
+        source,
         content,
         isBookMarked,
       ];

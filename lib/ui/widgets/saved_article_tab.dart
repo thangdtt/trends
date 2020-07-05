@@ -62,29 +62,32 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
               alignment: AlignmentDirectional.centerEnd,
             ),
             direction: DismissDirection.endToStart,
-            child: NewsWidget(
-              article: articles[i],
-              callback: () {
-                categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
-                    (k) => mapCategoryNames[k] == articles[i].category,
-                    orElse: () => categoryEnum.TheGioi);
+            child: Container(
+              padding: EdgeInsets.fromLTRB(4,0,4,0),
+              child: NewsWidget(
+                article: articles[i],
+                callback: () {
+                  categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
+                      (k) => mapCategoryNames[k] == articles[i].category,
+                      orElse: () => categoryEnum.TheGioi);
 
-                getArticleContent(articles[i].id).then((value) {
-                  if (value != null) {
-                    BlocProvider.of<SuggestArticleBloc>(context)
-                        .add(FetchSuggestArticles(catEnum));
-                    Navigator.of(context)
-                        .pushNamed(ArticleContentWidget.routeName, arguments: {
-                      'article': value,
-                      'catEnum': catEnum,
-                    });
-                  } else
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text('Vui lòng kết nối internet'),
-                      duration: Duration(seconds: 1),
-                    ));
-                });
-              },
+                  getArticleContent(articles[i].id).then((value) {
+                    if (value != null) {
+                      BlocProvider.of<SuggestArticleBloc>(context)
+                          .add(FetchSuggestArticles(catEnum));
+                      Navigator.of(context)
+                          .pushNamed(ArticleContentWidget.routeName, arguments: {
+                        'article': value,
+                        'catEnum': catEnum,
+                      });
+                    } else
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('Vui lòng kết nối internet'),
+                        duration: Duration(seconds: 1),
+                      ));
+                  });
+                },
+              ),
             ),
           ),
         );

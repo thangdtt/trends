@@ -35,7 +35,7 @@ class _ReadHistoryScreenState extends State<ReadHistoryScreen> {
             } else if (state is HistoryLoading) {
               return Center(child: Text("Đang tải"));
             } else if (state is HistoryLoaded) {
-                return _buildLoadedHistory(state.articles, state.times);
+              return _buildLoadedHistory(state.articles, state.times);
             } else
               return Center(child: Text("Xảy ra lỗi"));
           },
@@ -54,25 +54,28 @@ class _ReadHistoryScreenState extends State<ReadHistoryScreen> {
         ),
         Expanded(
           child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (ctx, i) {
-                return NewsWidget(
-                  article: articles[i],
-                  callback: () {
-                    categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
-                        (k) => mapCategoryNames[k] == articles[i].category,
-                        orElse: () => categoryEnum.TheGioi);
-                    BlocProvider.of<SuggestArticleBloc>(context)
-                        .add(FetchSuggestArticles(catEnum));
-                    Navigator.of(context)
-                        .pushNamed(ArticleContentWidget.routeName, arguments: {
-                      'article': articles[i],
-                      'catEnum': catEnum,
-                    });
-                  },
+                return Container(
+                  padding: EdgeInsets.fromLTRB(4,0,4,0),
+                  child: NewsWidget(
+                    article: articles[i],
+                    callback: () {
+                      categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
+                          (k) => mapCategoryNames[k] == articles[i].category,
+                          orElse: () => categoryEnum.TheGioi);
+                      BlocProvider.of<SuggestArticleBloc>(context)
+                          .add(FetchSuggestArticles(catEnum));
+                      Navigator.of(context).pushNamed(
+                          ArticleContentWidget.routeName,
+                          arguments: {
+                            'article': articles[i],
+                            'catEnum': catEnum,
+                          });
+                    },
+                  ),
                 );
               },
               itemCount: articles.length,

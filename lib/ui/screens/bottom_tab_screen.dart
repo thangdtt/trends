@@ -28,10 +28,12 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   List<BottomNavigationBarItem> bottomBarItems;
   PageController _pageController;
   int _currentIndex = 0;
+  ThemeBloc themeBloc;
 
   @override
   void initState() {
     super.initState();
+    themeBloc = BlocProvider.of<ThemeBloc>(context);
     BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
@@ -90,7 +92,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           ),
         ),
         drawer: Container(
-          width: screenWidth*4/5,
+          width: screenWidth * 4 / 5,
           child: MainDrawer(),
         ),
         body: PageView(
@@ -102,6 +104,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           },
           children: <Widget>[
             BlocBuilder<ThemeBloc, ThemeState>(
+              bloc: themeBloc,
               builder: (BuildContext context, ThemeState state) {
                 if (state is ThemeLoaded) {
                   return NewsScreen(
@@ -128,7 +131,9 @@ class _BottomTabScreenState extends State<BottomTabScreen>
           currentIndex: _currentIndex,
           backgroundColor: Theme.of(context).primaryColor,
           selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
-          unselectedItemColor: Colors.white54,
+          unselectedItemColor: (themeBloc.state as ThemeLoaded).isDarkMode
+              ? Colors.white60
+              : Colors.black38,
           items: bottomBarItems,
         ),
       ),

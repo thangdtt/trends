@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "275310143768",
+    "firebase_url": "https://pushnotiflutter.firebaseio.com",
+    "project_id": "pushnotiflutter",
+    "storage_bucket": "pushnotiflutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275310143768:android:9ace6f4a10882ae8ee166d",
+        "android_client_info": {
+          "package_name": "com.trends.server294"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "275310143768-s1dhdv0ikivhohbcsqivkqqme6m31ii3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_pEu75-JoZZ7CXw9nZ8m8q_QCmxorHpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "275310143768-s1dhdv0ikivhohbcsqivkqqme6m31ii3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

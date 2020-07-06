@@ -14,7 +14,7 @@ part 'theme_state.dart';
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   @override
   ThemeState get initialState => ThemeInitial();
-  Map<categoryEnum, bool> tabFilter;
+  Map<CategoryEnum, bool> tabFilter;
 
   @override
   Stream<ThemeState> mapEventToState(
@@ -30,24 +30,24 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
       int textColor = await PrefUtils.getTextColorPref();
       var textColorEnum = contentTextColor.values[textColor];
       tabFilter = {
-        categoryEnum.TinNong: false,
-        categoryEnum.TinMoi: false,
-        categoryEnum.ThoiSu: false,
-        categoryEnum.TheGioi: false,
-        categoryEnum.KinhDoanh: false,
-        categoryEnum.GiaiTri: false,
-        categoryEnum.TheThao: false,
-        categoryEnum.PhapLuat: false,
-        categoryEnum.NhipSongTre: false,
-        categoryEnum.VanHoa: false,
-        categoryEnum.GiaoDuc: false,
-        categoryEnum.SucKhoe: false,
-        categoryEnum.DoiSong: false,
-        categoryEnum.DuLich: false,
-        categoryEnum.KhoaHoc: false,
-        categoryEnum.SoHoa: false,
-        categoryEnum.Xe: false,
-        categoryEnum.GiaThat: false,
+        CategoryEnum.TinNong: false,
+        CategoryEnum.TinMoi: false,
+        CategoryEnum.ThoiSu: false,
+        CategoryEnum.TheGioi: false,
+        CategoryEnum.KinhDoanh: false,
+        CategoryEnum.GiaiTri: false,
+        CategoryEnum.TheThao: false,
+        CategoryEnum.PhapLuat: false,
+        CategoryEnum.NhipSongTre: false,
+        CategoryEnum.VanHoa: false,
+        CategoryEnum.GiaoDuc: false,
+        CategoryEnum.SucKhoe: false,
+        CategoryEnum.DoiSong: false,
+        CategoryEnum.DuLich: false,
+        CategoryEnum.KhoaHoc: false,
+        CategoryEnum.SoHoa: false,
+        CategoryEnum.Xe: false,
+        CategoryEnum.GiaThat: false,
       };
       List<String> filterList = await PrefUtils.getFilterPref().then((value) {
         tabFilter = loadFilterPrefToMap(value, tabFilter);

@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/global/theme/app_theme.dart';
 import 'package:trends/ui/widgets/article_cotent_bars.dart';
-import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/ui/widgets/sugguest_articles_widget.dart';
 import 'package:trends/utils/utils_class.dart';
 
 import 'content_page_theme_adjust.dart';
 
 class ArticleContentWidget extends StatefulWidget {
-  static const routeName = '/article-content';
+  static const routeName = '/read-article';
+
+  const ArticleContentWidget({Key key, this.article, this.catEnum})
+      : super(key: key);
+  final Article article;
+  final CategoryEnum catEnum;
 
   @override
   _ArticleContentWidgetState createState() => _ArticleContentWidgetState();
@@ -23,6 +27,8 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   bool showMessage = false;
 
   ThemeBloc themeBloc;
+  Article article;
+  CategoryEnum catEnum;
 
   @override
   void initState() {
@@ -30,16 +36,14 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
     themeBloc = BlocProvider.of<ThemeBloc>(context);
     backgroundColor = (themeBloc.state as ThemeLoaded).pageBackgroundColor;
     textColor = (themeBloc.state as ThemeLoaded).textColor;
+    article = widget.article;
+    catEnum = widget.catEnum;
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final Map<String, Object> mapArguments =
-        ModalRoute.of(context).settings.arguments;
-    Article article = mapArguments['article'];
-    categoryEnum catEnum = mapArguments['catEnum'];
     return SafeArea(
       child: Scaffold(
         body: Stack(children: [
@@ -288,6 +292,10 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
     else if (source == "Tuổi trẻ")
       return NetworkImage(
         "https://image.winudf.com/v2/image/dm4udHVvaXRyZWFwcC5uZXdzX2ljb25fMTUxMjQ1MTUyMl8wNjc/icon.png?w=170&fakeurl=1",
+      );
+    else
+      return NetworkImage(
+        "https://scontent.fvca1-1.fna.fbcdn.net/v/t31.0-8/p960x960/26170708_1569204013199886_9008855621358191382_o.jpg?_nc_cat=1&_nc_sid=85a577&_nc_ohc=rLgfEAudOHkAX8sQ2R0&_nc_ht=scontent.fvca1-1.fna&_nc_tp=6&oh=ccce07b088e6410be8087e7b7f585b7e&oe=5F2A0D93",
       );
   }
 }

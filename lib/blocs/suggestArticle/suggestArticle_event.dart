@@ -5,7 +5,7 @@ abstract class SuggestArticleEvent extends Equatable {
 }
 
 class FetchSuggestArticles extends SuggestArticleEvent {
-  final categoryEnum category;
+  final CategoryEnum category;
   FetchSuggestArticles(this.category);
 
   @override

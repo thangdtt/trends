@@ -24,7 +24,7 @@ class _MainDrawerState extends State<MainDrawer> {
   bool isDarkMode;
   bool isFastReadMode;
   bool filterChange;
-  Map<categoryEnum, bool> currentFilter;
+  Map<CategoryEnum, bool> currentFilter;
 
   @override
   void initState() {
@@ -316,7 +316,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
   List<Widget> _buildFilterButtons() {
     List<Widget> list = List();
-    categoryEnum.values.forEach((value) {
+    CategoryEnum.values.forEach((value) {
       list.add(Padding(
         padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
         child: Row(
@@ -341,7 +341,7 @@ class _MainDrawerState extends State<MainDrawer> {
     return list;
   }
 
-  Widget _buildFilterButton(categoryEnum category) {
+  Widget _buildFilterButton(CategoryEnum category) {
     return Platform.isAndroid
         ? Switch(
             value: currentFilter[category],

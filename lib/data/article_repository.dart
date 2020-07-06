@@ -8,79 +8,79 @@ import 'package:trends/utils/utils_class.dart';
 String articleUrl = ('http://server294.azurewebsites.net/articles/'); //Azure
 
 class ArticleRepository {
-  Map<categoryEnum, List<Article>> _articles = {
-    categoryEnum.TinNong: [],
-    categoryEnum.TinMoi: [],
-    categoryEnum.ThoiSu: [],
-    categoryEnum.TheGioi: [],
-    categoryEnum.KinhDoanh: [],
-    categoryEnum.GiaiTri: [],
-    categoryEnum.TheThao: [],
-    categoryEnum.PhapLuat: [],
-    categoryEnum.NhipSongTre: [],
-    categoryEnum.VanHoa: [],
-    categoryEnum.GiaoDuc: [],
-    categoryEnum.SucKhoe: [],
-    categoryEnum.DoiSong: [],
-    categoryEnum.DuLich: [],
-    categoryEnum.KhoaHoc: [],
-    categoryEnum.SoHoa: [],
-    categoryEnum.Xe: [],
-    categoryEnum.GiaThat: [],
+  Map<CategoryEnum, List<Article>> _articles = {
+    CategoryEnum.TinNong: [],
+    CategoryEnum.TinMoi: [],
+    CategoryEnum.ThoiSu: [],
+    CategoryEnum.TheGioi: [],
+    CategoryEnum.KinhDoanh: [],
+    CategoryEnum.GiaiTri: [],
+    CategoryEnum.TheThao: [],
+    CategoryEnum.PhapLuat: [],
+    CategoryEnum.NhipSongTre: [],
+    CategoryEnum.VanHoa: [],
+    CategoryEnum.GiaoDuc: [],
+    CategoryEnum.SucKhoe: [],
+    CategoryEnum.DoiSong: [],
+    CategoryEnum.DuLich: [],
+    CategoryEnum.KhoaHoc: [],
+    CategoryEnum.SoHoa: [],
+    CategoryEnum.Xe: [],
+    CategoryEnum.GiaThat: [],
   };
 
-  Map<categoryEnum, int> mapOffset = {
-    categoryEnum.TinNong: 0,
-    categoryEnum.TinMoi: 0,
-    categoryEnum.ThoiSu: 0,
-    categoryEnum.TheGioi: 0,
-    categoryEnum.KinhDoanh: 0,
-    categoryEnum.GiaiTri: 0,
-    categoryEnum.TheThao: 0,
-    categoryEnum.PhapLuat: 0,
-    categoryEnum.NhipSongTre: 0,
-    categoryEnum.VanHoa: 0,
-    categoryEnum.GiaoDuc: 0,
-    categoryEnum.SucKhoe: 0,
-    categoryEnum.DoiSong: 0,
-    categoryEnum.DuLich: 0,
-    categoryEnum.KhoaHoc: 0,
-    categoryEnum.SoHoa: 0,
-    categoryEnum.Xe: 0,
-    categoryEnum.GiaThat: 0,
+  Map<CategoryEnum, int> mapOffset = {
+    CategoryEnum.TinNong: 0,
+    CategoryEnum.TinMoi: 0,
+    CategoryEnum.ThoiSu: 0,
+    CategoryEnum.TheGioi: 0,
+    CategoryEnum.KinhDoanh: 0,
+    CategoryEnum.GiaiTri: 0,
+    CategoryEnum.TheThao: 0,
+    CategoryEnum.PhapLuat: 0,
+    CategoryEnum.NhipSongTre: 0,
+    CategoryEnum.VanHoa: 0,
+    CategoryEnum.GiaoDuc: 0,
+    CategoryEnum.SucKhoe: 0,
+    CategoryEnum.DoiSong: 0,
+    CategoryEnum.DuLich: 0,
+    CategoryEnum.KhoaHoc: 0,
+    CategoryEnum.SoHoa: 0,
+    CategoryEnum.Xe: 0,
+    CategoryEnum.GiaThat: 0,
   };
 
-  Map<categoryEnum, String> enumToString = {
-    categoryEnum.TinNong: "",
-    categoryEnum.TinMoi: "",
-    categoryEnum.ThoiSu: "thoi_su",
-    categoryEnum.TheGioi: "the_gioi",
-    categoryEnum.KinhDoanh: "kinh_doanh",
-    categoryEnum.GiaiTri: "giai_tri",
-    categoryEnum.TheThao: "the_thao",
-    categoryEnum.PhapLuat: "phap_luat",
-    categoryEnum.NhipSongTre: "nhip_song_tre",
-    categoryEnum.VanHoa: "van_hoa",
-    categoryEnum.GiaoDuc: "giao_duc",
-    categoryEnum.SucKhoe: "suc_khoe",
-    categoryEnum.DoiSong: "oi_song",
-    categoryEnum.DuLich: "du_lich",
-    categoryEnum.KhoaHoc: "khoa_hoc",
-    categoryEnum.SoHoa: "so_hoa",
-    categoryEnum.Xe: "xe",
-    categoryEnum.GiaThat: "gia - that",
+  Map<CategoryEnum, String> enumToString = {
+    CategoryEnum.TinNong: "",
+    CategoryEnum.TinMoi: "",
+    CategoryEnum.ThoiSu: "thoi_su",
+    CategoryEnum.TheGioi: "the_gioi",
+    CategoryEnum.KinhDoanh: "kinh_doanh",
+    CategoryEnum.GiaiTri: "giai_tri",
+    CategoryEnum.TheThao: "the_thao",
+    CategoryEnum.PhapLuat: "phap_luat",
+    CategoryEnum.NhipSongTre: "nhip_song_tre",
+    CategoryEnum.VanHoa: "van_hoa",
+    CategoryEnum.GiaoDuc: "giao_duc",
+    CategoryEnum.SucKhoe: "suc_khoe",
+    CategoryEnum.DoiSong: "oi_song",
+    CategoryEnum.DuLich: "du_lich",
+    CategoryEnum.KhoaHoc: "khoa_hoc",
+    CategoryEnum.SoHoa: "so_hoa",
+    CategoryEnum.Xe: "xe",
+    CategoryEnum.GiaThat: "gia - that",
   };
 
   List<Article> _searchArticles = [];
 
-  Map<categoryEnum, List<Article>> get mapArticles => _articles;
+  Map<CategoryEnum, List<Article>> get mapArticles => _articles;
 
-  Future<Map<categoryEnum, List<Article>>> getNewArticles(
-      categoryEnum category) async {
+  Future<Map<CategoryEnum, List<Article>>> getNewArticles(
+      CategoryEnum category) async {
     String url;
-    if (category == categoryEnum.TinNong)
+    if (category == CategoryEnum.TinNong)
       url = articleUrl + "hot/?offset=0";
-    else if (category == categoryEnum.TinMoi)
+    else if (category == CategoryEnum.TinMoi)
       url = articleUrl + "new/?offset=0";
     else {
       String categoryString = enumToString[category];
@@ -111,12 +111,12 @@ class ArticleRepository {
     }
   }
 
-  Future<Map<categoryEnum, List<Article>>> loadMoreArticles(
-      categoryEnum category, int offset) async {
+  Future<Map<CategoryEnum, List<Article>>> loadMoreArticles(
+      CategoryEnum category, int offset) async {
     String url;
-    if (category == categoryEnum.TinNong)
+    if (category == CategoryEnum.TinNong)
       url = articleUrl + "hot/?offset=$offset";
-    else if (category == categoryEnum.TinMoi)
+    else if (category == CategoryEnum.TinMoi)
       url = articleUrl + "new/?offset=$offset";
     else {
       String categoryString = enumToString[category];
@@ -172,7 +172,7 @@ class ArticleRepository {
     }
   }
 
-  void clearArticles(categoryEnum category) {
+  void clearArticles(CategoryEnum category) {
     _articles[category] = [];
     mapOffset[category] = 0;
   }

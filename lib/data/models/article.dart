@@ -45,7 +45,10 @@ class Article extends Equatable {
     String source = "";
     if (link.contains("vnexpress.net"))
       source = "VnExpress";
-    else if (link.contains("tuoitre.vn")) source = "Tuổi trẻ";
+    else if (link.contains("tuoitre.vn"))
+      source = "Tuổi trẻ";
+    else
+      source = "VTC News";
 
     return Article(
       id: json['id'],

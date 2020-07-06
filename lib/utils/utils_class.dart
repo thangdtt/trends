@@ -18,7 +18,7 @@ class Debouncer {
   }
 }
 
-enum categoryEnum {
+enum CategoryEnum {
   TinNong,
   TinMoi,
   ThoiSu,
@@ -39,25 +39,25 @@ enum categoryEnum {
   GiaThat,
 }
 
-Map<categoryEnum, String> mapCategoryNames = {
-  categoryEnum.TinNong: "Tin nóng",
-  categoryEnum.TinMoi: "Tin mới",
-  categoryEnum.ThoiSu: "Thời sự",
-  categoryEnum.TheGioi: "Thế giới",
-  categoryEnum.KinhDoanh: "Kinh doanh",
-  categoryEnum.GiaiTri: "Giải trí",
-  categoryEnum.TheThao: "Thể thao",
-  categoryEnum.PhapLuat: "Pháp luật",
-  categoryEnum.NhipSongTre: "Nhịp sống trẻ",
-  categoryEnum.VanHoa: "Văn hóa",
-  categoryEnum.GiaoDuc: "Giáo dục",
-  categoryEnum.SucKhoe: "Sức khỏe",
-  categoryEnum.DoiSong: "Đời sống",
-  categoryEnum.DuLich: "Du lịch",
-  categoryEnum.KhoaHoc: "Khoa học",
-  categoryEnum.SoHoa: "Số hóa",
-  categoryEnum.Xe: "Xe",
-  categoryEnum.GiaThat: "Giả - Thật",
+Map<CategoryEnum, String> mapCategoryNames = {
+  CategoryEnum.TinNong: "Tin nóng",
+  CategoryEnum.TinMoi: "Tin mới",
+  CategoryEnum.ThoiSu: "Thời sự",
+  CategoryEnum.TheGioi: "Thế giới",
+  CategoryEnum.KinhDoanh: "Kinh doanh",
+  CategoryEnum.GiaiTri: "Giải trí",
+  CategoryEnum.TheThao: "Thể thao",
+  CategoryEnum.PhapLuat: "Pháp luật",
+  CategoryEnum.NhipSongTre: "Nhịp sống trẻ",
+  CategoryEnum.VanHoa: "Văn hóa",
+  CategoryEnum.GiaoDuc: "Giáo dục",
+  CategoryEnum.SucKhoe: "Sức khỏe",
+  CategoryEnum.DoiSong: "Đời sống",
+  CategoryEnum.DuLich: "Du lịch",
+  CategoryEnum.KhoaHoc: "Khoa học",
+  CategoryEnum.SoHoa: "Số hóa",
+  CategoryEnum.Xe: "Xe",
+  CategoryEnum.GiaThat: "Giả - Thật",
 };
 
 List<String> tabNames = [
@@ -83,7 +83,7 @@ List<String> tabNames = [
 
 
 
-categoryEnum mapIndexToCategory(int index, Map<categoryEnum, bool> tabFilter) {
+CategoryEnum mapIndexToCategory(int index, Map<CategoryEnum, bool> tabFilter) {
   int i = 0;
   for (var key in tabFilter.keys) {
     if (tabFilter[key] == false) {
@@ -91,10 +91,10 @@ categoryEnum mapIndexToCategory(int index, Map<categoryEnum, bool> tabFilter) {
       i++;
     }
   }
-  return categoryEnum.TinMoi;
+  return CategoryEnum.TinMoi;
 }
 
-Map<categoryEnum, bool>  loadFilterPrefToMap(List<String> list, Map<categoryEnum, bool> tabFilter) {
+Map<CategoryEnum, bool>  loadFilterPrefToMap(List<String> list, Map<CategoryEnum, bool> tabFilter) {
   int i = 0;
   for (var key in tabFilter.keys) {
     if (list[i] == '0')
@@ -106,7 +106,7 @@ Map<categoryEnum, bool>  loadFilterPrefToMap(List<String> list, Map<categoryEnum
   return tabFilter;
 }
 
-List<String> tabFilterToList( Map<categoryEnum, bool> tabFilter) {
+List<String> tabFilterToList( Map<CategoryEnum, bool> tabFilter) {
   List<String> list = new List();
   for (var value in tabFilter.values) {
     if (value)

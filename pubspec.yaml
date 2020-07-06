@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   moor_flutter: ^3.0.0
-  flutter_phoenix: ^0.1.0
   flutter_bloc: ^4.0.0
   equatable: ^1.2.0
   intl: ^0.16.1

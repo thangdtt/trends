@@ -86,7 +86,7 @@ List<String> tabNames = [
 CategoryEnum mapIndexToCategory(int index, Map<CategoryEnum, bool> tabFilter) {
   int i = 0;
   for (var key in tabFilter.keys) {
-    if (tabFilter[key] == false) {
+    if (tabFilter[key] == true) {
       if (i == index) return key;
       i++;
     }

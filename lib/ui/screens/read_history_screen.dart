@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';

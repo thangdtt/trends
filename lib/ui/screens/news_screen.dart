@@ -31,7 +31,7 @@ class _NewsScreenState extends State<NewsScreen>
     super.initState();
     numberOfCategory = 0;
     for (var item in widget.tabFilter.values) {
-      if (!item) numberOfCategory++;
+      if (item) numberOfCategory++;
     }
     _tabController = new TabController(length: numberOfCategory, vsync: this);
     _tabController.addListener(_handleTabSelection);
@@ -75,7 +75,7 @@ class _NewsScreenState extends State<NewsScreen>
   List<Widget> _buildTabs() {
     List<Widget> list = new List();
     for (var key in widget.tabFilter.keys) {
-      if (widget.tabFilter[key] == false)
+      if (widget.tabFilter[key] == true)
         list.add(Tab(
           child: Text(
             mapCategoryNames[key],
@@ -92,7 +92,7 @@ class _NewsScreenState extends State<NewsScreen>
   List<Widget> _buildTabContent(int max) {
     List<Widget> list = new List();
     for (var key in widget.tabFilter.keys) {
-      if (widget.tabFilter[key] == false)
+      if (widget.tabFilter[key] == true)
         list.add(NewsTab(
           catEnum: key,
         ));

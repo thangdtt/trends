@@ -3,8 +3,9 @@ import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 import 'package:trends/data/models/music.dart';
-import 'package:trends/ui/widgets/custom_icon_button.dart';
+import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
 
 class MusicPlayingScreen extends StatefulWidget {
@@ -257,7 +258,12 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         ),
                         IconButton(
                           iconSize: 30 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () {
+                            Share.share(
+                                "${_musics[_musicIndex].name} - ${_musics[_musicIndex].singer}\nlink: ${_musics[_musicIndex].link}",
+                                subject:
+                                    "${_musics[_musicIndex].name} - ${_musics[_musicIndex].singer}");
+                          },
                           icon: Icon(
                             Icons.share,
                             color: Colors.white,

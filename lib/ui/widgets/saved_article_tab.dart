@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 import 'package:trends/data/saveArticle_repository.dart';
 import 'package:trends/utils/utils_class.dart';

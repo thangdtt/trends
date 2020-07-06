@@ -8,7 +8,7 @@ import 'package:trends/blocs/article/article_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/data/models/article.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 
 class NewsTab extends StatefulWidget {

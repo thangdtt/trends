@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
 import 'package:trends/ui/screens/read_history_screen.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/utils/utils_class.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

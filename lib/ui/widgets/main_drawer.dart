@@ -371,39 +371,6 @@ class _MainDrawerState extends State<MainDrawer> {
           );
   }
 
-  // Future<bool> _willPopHandler() {
-  //   if (filterChange) {
-  //     return showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Text("Khởi động lại app ?"),
-  //             content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
-  //             actions: <Widget>[
-  //               FlatButton(
-  //                   child: Text('Không'),
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       for (var key in currentFilter.keys)
-  //                         currentFilter[key] = currentFilter[key];
-  //                       filterChange = false;
-  //                       PrefUtils.setFilterPref(tabFilterToList(currentFilter));
-  //                     });
-  //                     Navigator.of(context).pop(false);
-  //                   }),
-  //               FlatButton(
-  //                   child: Text('Có'),
-  //                   onPressed: () {
-  //                     Phoenix.rebirth(context);
-  //                     Navigator.of(context).pop(true);
-  //                   }),
-  //             ],
-  //           );
-  //         });
-  //   }
-  //   Navigator.of(context).pop(true);
-  // }
-
   TextEditingController apiController = new TextEditingController();
 
   Future<String> buildDialog() async {

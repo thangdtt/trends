@@ -11,7 +11,7 @@ class NewsScreen extends StatefulWidget {
 
   @override
   _NewsScreenState createState() => _NewsScreenState();
-  final Map<categoryEnum, bool> tabFilter;
+  final Map<CategoryEnum, bool> tabFilter;
 }
 
 class _NewsScreenState extends State<NewsScreen>

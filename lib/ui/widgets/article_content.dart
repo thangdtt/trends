@@ -15,7 +15,7 @@ class ArticleContentWidget extends StatefulWidget {
   const ArticleContentWidget({Key key, this.article, this.catEnum})
       : super(key: key);
   final Article article;
-  final categoryEnum catEnum;
+  final CategoryEnum catEnum;
 
   @override
   _ArticleContentWidgetState createState() => _ArticleContentWidgetState();
@@ -28,7 +28,7 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
 
   ThemeBloc themeBloc;
   Article article;
-  categoryEnum catEnum;
+  CategoryEnum catEnum;
 
   @override
   void initState() {
@@ -292,6 +292,10 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
     else if (source == "Tuổi trẻ")
       return NetworkImage(
         "https://image.winudf.com/v2/image/dm4udHVvaXRyZWFwcC5uZXdzX2ljb25fMTUxMjQ1MTUyMl8wNjc/icon.png?w=170&fakeurl=1",
+      );
+    else
+      return NetworkImage(
+        "https://scontent.fvca1-1.fna.fbcdn.net/v/t31.0-8/p960x960/26170708_1569204013199886_9008855621358191382_o.jpg?_nc_cat=1&_nc_sid=85a577&_nc_ohc=rLgfEAudOHkAX8sQ2R0&_nc_ht=scontent.fvca1-1.fna&_nc_tp=6&oh=ccce07b088e6410be8087e7b7f585b7e&oe=5F2A0D93",
       );
   }
 }

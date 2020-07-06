@@ -67,9 +67,9 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
               child: NewsWidget(
                 article: articles[i],
                 callback: () {
-                  categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
+                  CategoryEnum catEnum = mapCategoryNames.keys.firstWhere(
                       (k) => mapCategoryNames[k] == articles[i].category,
-                      orElse: () => categoryEnum.TheGioi);
+                      orElse: () => CategoryEnum.TheGioi);
 
                   getArticleContent(articles[i].id).then((value) {
                     if (value != null) {

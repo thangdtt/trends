@@ -7,7 +7,7 @@ import 'package:trends/utils/utils_class.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
 
 class SuggestArticlesWidget extends StatefulWidget {
-  final categoryEnum catEnum;
+  final CategoryEnum catEnum;
 
   SuggestArticlesWidget(this.catEnum);
 

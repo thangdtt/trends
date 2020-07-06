@@ -47,9 +47,9 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           child: NewsWidget(
             article: articles[i],
             callback: () {
-              categoryEnum catEnum = mapCategoryNames.keys.firstWhere(
+              CategoryEnum catEnum = mapCategoryNames.keys.firstWhere(
                   (k) => mapCategoryNames[k] == articles[i].category,
-                  orElse: () => categoryEnum.TheGioi);
+                  orElse: () => CategoryEnum.TheGioi);
 
               BlocProvider.of<SuggestArticleBloc>(context)
                   .add(FetchSuggestArticles(catEnum));

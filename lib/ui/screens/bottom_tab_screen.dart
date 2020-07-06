@@ -6,17 +6,19 @@ import 'package:trends/blocs/database/database_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
+import 'package:trends/push_notifications.dart';
+
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
 import 'package:trends/ui/screens/saved_screen.dart';
 import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
-import 'package:trends/utils/custom_icons.dart';
 
 class BottomTabScreen extends StatefulWidget {
   @override
   _BottomTabScreenState createState() => _BottomTabScreenState();
+  PushNotificationsManager pushNotiManager;
 }
 
 class _BottomTabScreenState extends State<BottomTabScreen>
@@ -62,6 +64,8 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    widget.pushNotiManager = new PushNotificationsManager();
+    widget.pushNotiManager.init(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 

@@ -25,7 +25,7 @@ class ThemeLoaded extends ThemeState {
   final Color titleColor;
   final Color textColor;
   final List<String> filterList;
-  final Map<categoryEnum, bool> tabFilter;
+  final Map<CategoryEnum, bool> tabFilter;
 
   ThemeLoaded({
     this.themeData,

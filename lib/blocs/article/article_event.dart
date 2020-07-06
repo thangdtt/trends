@@ -5,7 +5,7 @@ abstract class ArticleEvent extends Equatable {
 }
 
 class FetchArticles extends ArticleEvent {
-  final categoryEnum catEnum;
+  final CategoryEnum catEnum;
   FetchArticles(this.catEnum);
 
   @override
@@ -13,7 +13,7 @@ class FetchArticles extends ArticleEvent {
 }
 
 class RefreshArticles extends ArticleEvent {
-  final categoryEnum catEnum;
+  final CategoryEnum catEnum;
   const RefreshArticles(this.catEnum);
 
   @override
@@ -21,7 +21,7 @@ class RefreshArticles extends ArticleEvent {
 }
 
 class LoadMoreArticles extends ArticleEvent {
-  final categoryEnum catEnum;
+  final CategoryEnum catEnum;
   const LoadMoreArticles(this.catEnum);
 
   @override

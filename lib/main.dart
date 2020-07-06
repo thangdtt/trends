@@ -28,7 +28,6 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  PushNotificationsManager pushNotiManager;
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
@@ -38,8 +37,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    PushNotificationsManager pushNotiManager = new PushNotificationsManager();
-    pushNotiManager.init();
+
   }
 
   @override
@@ -130,7 +128,7 @@ class _MyAppState extends State<MyApp> {
           case ArticleContentWidget.routeName:
             Map<String, dynamic> arguments = settings.arguments;
             Article article = arguments['article'];
-            categoryEnum catEnum = arguments['catEnum'];
+            CategoryEnum catEnum = arguments['catEnum'];
             return MaterialPageRoute(
                 builder: (context) {
                   return ArticleContentWidget(

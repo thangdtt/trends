@@ -102,6 +102,8 @@ class _MyAppState extends State<MyApp> {
             final int musicIndex = arguments['musicIndex'];
             final AudioPlayer audioPlayer = arguments['audioPlayer'];
             final bool isPlaying = arguments['isPlaying'];
+            final int second = arguments['second'];
+            final int duration = arguments['duration'];
             return PageRouteBuilder(
                 pageBuilder: (context, animation, secondaryAnimation) =>
                     MusicPlayingScreen(
@@ -109,6 +111,8 @@ class _MyAppState extends State<MyApp> {
                       musicIndex: musicIndex,
                       musics: musics,
                       isPlaying: isPlaying,
+                      second: second,
+                      duration: duration,
                     ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {

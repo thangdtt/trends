@@ -11,7 +11,7 @@ class MusicPlayingScreen extends StatefulWidget {
   static const routeName = '/music-playing';
 
   const MusicPlayingScreen(
-      {Key key, this.musics, this.audioPlayer, this.musicIndex, this.isPlaying})
+      {Key key, this.musics, this.audioPlayer, this.musicIndex, this.isPlaying, this.second, this.duration})
       : super(key: key);
 
   @override
@@ -20,13 +20,15 @@ class MusicPlayingScreen extends StatefulWidget {
   final AudioPlayer audioPlayer;
   final int musicIndex;
   final bool isPlaying;
+  final int second;
+  final int duration;
 }
 
 class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
-  double _second = 0;
+
   int _musicIndex;
   List<Music> _musics;
-  double _totalTime = 1;
+
   AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   StreamSubscription _onPlayerCompletion;
@@ -59,17 +61,19 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       _position = _duration;
       changeMusicIndex(_musicIndex + 1);
     });
+    _position = Duration(milliseconds: widget.second);
+    _duration = Duration(milliseconds: widget.duration);
+
     _onDurationChanged = _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
-        _totalTime = event.inMilliseconds.toDouble();
+
       });
     });
     _onAudioPositionChanged =
         _audioPlayer.onAudioPositionChanged.listen((event) {
       setState(() {
         _position = event;
-        _second = event.inMilliseconds.toDouble();
       });
     });
     _audioPlayer.onPlayerStateChanged;
@@ -147,68 +151,71 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
             SafeArea(
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 20 * aspectWidth,
-                        right: 20 * aspectWidth,
-                        top: 20 * aspectHeight),
-                    child: Row(
-                      children: <Widget>[
-                        CustomIconButton(
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          iconSize: 25 * aspectWidth,
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {
-                            final Map<String, Object> mapArguments =
-                                <String, Object>{
-                              'musicIndex': _musicIndex,
-                              'isPlaying': _isPlaying
-                            };
-                            Navigator.of(context).pop(mapArguments);
-                          },
-                        ),
-                        SizedBox(
-                          width: 10 * aspectWidth,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                _musics[_musicIndex].name,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w800),
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 20 * aspectWidth,
+                          right: 20 * aspectWidth,),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: CustomIconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: Colors.white,
                               ),
-                              Text(
-                                _musics[_musicIndex].composer,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                              iconSize: 25 * aspectWidth,
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                final Map<String, Object> mapArguments =
+                                    <String, Object>{
+                                  'musicIndex': _musicIndex,
+                                  'isPlaying': _isPlaying
+                                };
+                                Navigator.of(context).pop(mapArguments);
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 10 * aspectWidth,
-                        ),
-                        CustomIconButton(
-                          icon: Icon(
-                            Icons.alarm,
-                            color: Colors.white,
+                          SizedBox(
+                            width: 10 * aspectWidth,
                           ),
-                          iconSize: 25 * aspectWidth,
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                        ),
-                      ],
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  _musics[_musicIndex].name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                                Text(
+                                  _musics[_musicIndex].composer,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10 * aspectWidth,
+                          ),
+                          CustomIconButton(
+                            icon: Icon(
+                              Icons.alarm,
+                              color: Colors.white,
+                            ),
+                            iconSize: 25 * aspectWidth,
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -233,154 +240,179 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                   SizedBox(
                     height: 20 * aspectHeight,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 40 * aspectWidth, right: 40 * aspectWidth),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        IconButton(
-                          iconSize: 30 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.settings,
-                            color: Colors.white,
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 40 * aspectWidth, right: 40 * aspectWidth),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 30 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 30 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.file_download,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 30 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.file_download,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 30 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.share,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 30 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.share,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 30 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 30 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.favorite_border,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: 20 * aspectWidth, right: 20 * aspectWidth),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            _position != null
+                                ? _formatDuration(_position)
+                                : '00:00',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Expanded(
+                            child: Slider(
+                              value: (_position != null &&
+                                      _duration != null &&
+                                      _position.inMilliseconds > 0 &&
+                                      _position.inMilliseconds <
+                                          _duration.inMilliseconds)
+                                  ? _position.inMilliseconds /
+                                      _duration.inMilliseconds
+                                  : 0.0,
+                              onChanged: (double value) async {
+                                final double position =
+                                    value * _duration.inMilliseconds;
+                                _audioPlayer.seek(
+                                    Duration(milliseconds: position.round()));
+                              },
+                            ),
+                          ),
+                          Text(
+                            _duration != null
+                                ? _formatDuration(_duration)
+                                : '00:00',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
                         left: 20 * aspectWidth, right: 20 * aspectWidth),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          _position != null
-                              ? _formatDuration(_position)
-                              : '00:00',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Expanded(
-                          child: Slider(
-                            value: (_position != null &&
-                                    _duration != null &&
-                                    _position.inMilliseconds > 0 &&
-                                    _position.inMilliseconds <
-                                        _duration.inMilliseconds)
-                                ? _position.inMilliseconds /
-                                    _duration.inMilliseconds
-                                : 0.0,
-                            onChanged: (double value) async {
-                              final double position =
-                                  value * _duration.inMilliseconds;
-                              _audioPlayer.seek(
-                                  Duration(milliseconds: position.round()));
-                            },
+                    child: Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 35 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.import_export,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        Text(
-                          _duration != null
-                              ? _formatDuration(_duration)
-                              : '00:00',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 20 * aspectWidth, right: 20 * aspectWidth),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        IconButton(
-                          iconSize: 35 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.import_export,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 35 * aspectWidth,
+                              onPressed: () {
+                                changeMusicIndex(_musicIndex - 1);
+                              },
+                              icon: Icon(
+                                Icons.skip_previous,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 35 * aspectWidth,
-                          onPressed: () {
-                            changeMusicIndex(_musicIndex - 1);
-                          },
-                          icon: Icon(
-                            Icons.skip_previous,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 70 * aspectWidth,
+                              onPressed: () {
+                                if (_isPlaying) {
+                                  _audioPlayer.pause();
+                                } else {
+                                  _audioPlayer.resume();
+                                }
+                              },
+                              alignment: Alignment.center,
+                              icon: Icon(
+                                _isPlaying
+                                    ? Icons.pause_circle_filled
+                                    : Icons.play_circle_filled,
+                                size: 70 * aspectWidth,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 70 * aspectWidth,
-                          onPressed: () {
-                            if (_isPlaying) {
-                              _audioPlayer.pause();
-                            } else {
-                              _audioPlayer.resume();
-                            }
-                          },
-                          icon: Icon(
-                            _isPlaying
-                                ? Icons.pause_circle_filled
-                                : Icons.play_circle_filled,
-                            size: 70 * aspectWidth,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 35 * aspectWidth,
+                              onPressed: () {
+                                changeMusicIndex(_musicIndex + 1);
+                              },
+                              icon: Icon(
+                                Icons.skip_next,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 35 * aspectWidth,
-                          onPressed: () {
-                            changeMusicIndex(_musicIndex + 1);
-                          },
-                          icon: Icon(
-                            Icons.skip_next,
-                            color: Colors.white,
+                          Flexible(
+                            child: IconButton(
+                              iconSize: 35 * aspectWidth,
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.repeat,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          iconSize: 35 * aspectWidth,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.repeat,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(

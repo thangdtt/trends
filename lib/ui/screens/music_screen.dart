@@ -122,12 +122,19 @@ class _MusicScreenState extends State<MusicScreen>
               bottom: 0,
               child: GestureDetector(
                 onTap: () async {
+                  int duration = await  audioPlayer.getDuration();
+                  int second = await  audioPlayer.getCurrentPosition();
                   final Map<String, Object> mapArguments = <String, Object>{
                     'musics': _currentMusics,
                     'audioPlayer': audioPlayer,
                     'musicIndex': _currentIndex,
-                    'isPlaying': _isPlaying
+                    'isPlaying': _isPlaying,
+                    'second': second,
+                    'duration': duration,
                   };
+
+
+
                   final Map<String, dynamic> mapResult =
                       await Navigator.of(context).pushNamed(
                           MusicPlayingScreen.routeName,

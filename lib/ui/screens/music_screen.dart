@@ -8,6 +8,7 @@ import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/screens/music_playing_screen.dart';
 import 'package:trends/ui/widgets/music/music_playing.dart';
 import 'package:trends/ui/widgets/music/music_tab.dart';
+import 'package:trends/utils/player.dart';
 
 class MusicScreen extends StatefulWidget {
   @override
@@ -18,7 +19,6 @@ class _MusicScreenState extends State<MusicScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List<String> categories = <String>['vn', 'us-uk'];
-  AudioPlayer audioPlayer = AudioPlayer();
   bool _isPlaying = false;
   List<Music> _currentMusics;
   Music _currentMusic;

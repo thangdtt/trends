@@ -21,7 +21,7 @@ class ArticleContentTopBar extends StatefulWidget {
 }
 
 class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
-  //AudioPlayer audioPlayer = AudioPlayer();
+  //AudioPlayer speechPlayer = AudioPlayer();
 
   bool isBookMarked = false;
   SavedArticleBloc _savedArticleBloc;
@@ -32,7 +32,6 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
 
   @override
   void dispose() {
-    audioPlayer.release();
     super.dispose();
   }
 
@@ -54,7 +53,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
       print(e);
     }
 
-    audioPlayer.onPlayerCompletion.listen((event) {
+    speechPlayer.onPlayerCompletion.listen((event) {
       setState(() {
         isPlaying = false;
       });
@@ -119,12 +118,12 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
               } else if (link != "" && isOpened) {
                 try {
                   if (isPlaying) {
-                    audioPlayer.pause();
+                    speechPlayer.pause();
                     setState(() {
                       isPlaying = false;
                     });
                   } else {
-                    audioPlayer.resume();
+                    speechPlayer.resume();
                     setState(() {
                       isPlaying = true;
                     });
@@ -232,7 +231,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
         final response = await http.get(url);
         if (response.statusCode != 404) break;
       }
-      int result = await audioPlayer.play(url, isLocal: false);
+      int result = await speechPlayer.play(url, isLocal: false);
       if (result == 1) {
         setState(() {
           isOpened = true;

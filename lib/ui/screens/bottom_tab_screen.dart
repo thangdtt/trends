@@ -15,6 +15,7 @@ import 'package:trends/ui/screens/saved_screen.dart';
 import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
+import 'package:trends/utils/player.dart';
 
 class BottomTabScreen extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
 
   @override
   void dispose() {
+    audioPlayer.dispose();
     _pageController.dispose();
     super.dispose();
   }

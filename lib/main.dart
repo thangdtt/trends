@@ -16,6 +16,7 @@ import 'package:trends/ui/screens/music_playing_screen.dart';
 import 'package:trends/ui/screens/read_history_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article/article_content.dart';
+import 'package:trends/utils/player.dart';
 import 'package:trends/utils/utils_class.dart';
 
 import 'blocs/article/article_bloc.dart';
@@ -32,11 +33,23 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void dispose() {
+    audioPlayer.release();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) audioPlayer.release();
   }
 
   @override

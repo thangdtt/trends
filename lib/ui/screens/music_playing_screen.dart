@@ -12,6 +12,7 @@ import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
+import 'package:trends/utils/player.dart';
 
 class MusicPlayingScreen extends StatefulWidget {
   static const routeName = '/music-playing';
@@ -226,13 +227,16 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           width: 10 * aspectWidth,
                         ),
                         CustomIconButton(
+                          tooltip: "Hẹn giờ tắt nhạc",
                           icon: Icon(
                             Icons.alarm,
                             color: Colors.white,
                           ),
                           iconSize: 25 * aspectWidth,
                           padding: EdgeInsets.all(0),
-                          onPressed: () {},
+                          onPressed: () {
+                            audioPlayer.release();
+                          },
                         ),
                       ],
                     ),
@@ -274,6 +278,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Tải nhạc",
                           iconSize: 30 * aspectWidth,
                           onPressed: () {
                             _downloadMusic(_musics[_musicIndex].link,
@@ -285,6 +290,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Chia sẻ nhạc",
                           iconSize: 30 * aspectWidth,
                           onPressed: () {
                             Share.share(
@@ -298,6 +304,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Yêu thích",
                           iconSize: 30 * aspectWidth,
                           onPressed: () {
                             setState(() {

@@ -58,15 +58,10 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab> {
             ),
             direction: DismissDirection.endToStart,
             child: Container(
-              padding: EdgeInsets.fromLTRB(4,0,4,0),
+              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
               child: MusicWidget(
-                music: musics[i], 
+                music: musics[i],
                 
-                callback: () async {
-                  // if (widget.onPressPlay != null) {
-                  //   widget.onPressPlay(_currentMusics, i);
-                  // }
-                },
               ),
             ),
           ),
@@ -75,5 +70,4 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab> {
       itemCount: musics.length,
     );
   }
-
 }

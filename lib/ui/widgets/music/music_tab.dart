@@ -107,7 +107,7 @@ class _MusicTabState extends State<MusicTab>
       children: <Widget>[
         SmartRefresher(
           enablePullDown: true,
-          enablePullUp: true,
+          enablePullUp: false,
           header: ClassicHeader(),
           footer: CustomFooter(
             loadStyle: LoadStyle.ShowWhenLoading,

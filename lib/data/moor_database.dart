@@ -34,6 +34,7 @@ class MusicToSaveTable extends Table {
 
   IntColumn get id => integer()();
   TextColumn get name => text()();
+  TextColumn get singer => text()();
   TextColumn get country => text().nullable()();
   TextColumn get link => text()();
   TextColumn get image => text().nullable()();
@@ -83,22 +84,21 @@ class AppDatabase extends _$AppDatabase {
 
   Future deleteSaveArticle(SavedArticleData data) =>
       delete(articleToSaveTable).delete(data);
+
+  //MUSIC
+  Future<List<SavedMusicData>> getAllSaveMusic() => (select(musicToSaveTable)
+        ..orderBy([(music) => OrderingTerm(expression: music.addTime)]))
+      .get();
+
+  Future<SavedMusicData> getOneSaveMusic(int id) =>
+      (select(musicToSaveTable)..where((t) => t._id.equals(id))).getSingle();
+
+  Future insertSaveMusic(SavedMusicData data) =>
+      into(musicToSaveTable).insertOnConflictUpdate(data);
+
+  Future updateSaveMusic(SavedMusicData data) =>
+      update(musicToSaveTable).replace(data);
+
+  Future deleteSaveMusic(SavedMusicData data) =>
+      delete(musicToSaveTable).delete(data);
 }
-
-// @UseMoor(tables: [ArticleToSaveTable, MusicToSaveTable])
-// class AppDatabase extends _$AppDatabase {
-//   AppDatabase()
-//       : super(FlutterQueryExecutor.inDatabaseFolder(
-//             path: 'db.sqlite', logStatements: true));
-
-//   @override
-//   int get schemaVersion => 1;
-
-//   Future<List<ArticleToSaveTableData>> getAllSaveArticles() => select(savedArticleTable).get();
-
-//   Future inserSaveArticle(ArticleToSaveTableData data) => into(savedArticleTable).insert(data);
-
-//   Future updateSaveArticle(ArticleToSaveTableData data) => update(savedArticleTable).replace(data);
-
-//   Future deleteSaveArticle(ArticleToSaveTableData data) => delete(savedArticleTable).delete(data);
-// }

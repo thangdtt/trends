@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
+import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
@@ -38,7 +39,8 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   void initState() {
     super.initState();
     themeBloc = BlocProvider.of<ThemeBloc>(context);
-    BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
+    BlocProvider.of<SavedArticleBloc>(context).add(GetAllSaveArticle());
+    BlocProvider.of<SavedMusicBloc>(context).add(GetAllSaveMusic());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
   }

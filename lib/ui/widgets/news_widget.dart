@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/data/models/article.dart';
@@ -242,7 +242,7 @@ class NewsWidget extends StatelessWidget {
   }
 
   _bookmarkArticle(Article item, BuildContext context) {
-    BlocProvider.of<DatabaseBloc>(context).add(AddSaveArticle(item));
+    BlocProvider.of<SavedArticleBloc>(context).add(AddSaveArticle(item));
   }
 
   RelativeRect buttonMenuPosition(BuildContext c) {

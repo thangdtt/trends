@@ -6,7 +6,7 @@ import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +24,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   //AudioPlayer audioPlayer = AudioPlayer();
 
   bool isBookMarked = false;
-  DatabaseBloc dbBloc;
+  SavedArticleBloc _savedArticleBloc;
   bool isOpened = false;
   bool isPlaying = false;
   bool isGettingSpeech = false;
@@ -39,10 +39,10 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   @override
   void initState() {
     super.initState();
-    dbBloc = BlocProvider.of<DatabaseBloc>(context);
+    _savedArticleBloc = BlocProvider.of<SavedArticleBloc>(context);
 
     try {
-      for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
+      for (var item in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
         if (widget.article.id == item.id) {
           setState(() {
             isBookMarked = true;
@@ -179,7 +179,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   void _bookMarkArticle() async {
     bool existed = false;
     try {
-      for (var item in (dbBloc.state as DatabaseLoaded).savedArticles) {
+      for (var item in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
         if (widget.article.id == item.id) {
           existed = true;
           break;
@@ -191,10 +191,10 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
 
     if (existed) {
       isBookMarked = false;
-      dbBloc.add(DeleteSaveArticle(widget.article));
+      _savedArticleBloc.add(DeleteSaveArticle(widget.article));
     } else {
       isBookMarked = true;
-      dbBloc.add(AddSaveArticle(widget.article));
+      _savedArticleBloc.add(AddSaveArticle(widget.article));
     }
   }
 

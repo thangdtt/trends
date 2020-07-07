@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/ui/widgets/saved_article_tab.dart';
-import 'package:trends/ui/widgets/love_music_tab.dart';
+import 'package:trends/ui/widgets/favorite_music_tab.dart';
 import 'package:trends/utils/custom_icons.dart';
 
 class SavedScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen>
     with SingleTickerProviderStateMixin {
-  DatabaseBloc dbBloc;
+  SavedArticleBloc _savedArticleBloc;
   TabController _tabController;
 
   @override
@@ -29,12 +29,12 @@ class _SavedScreenState extends State<SavedScreen>
 
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
-    dbBloc = BlocProvider.of<DatabaseBloc>(context);
+    _savedArticleBloc = BlocProvider.of<SavedArticleBloc>(context);
     //articleBloc.add(GetSavedArticles());
   }
 
   void _handleTabSelection() {
-    if (_tabController.index == 1) dbBloc.add(GetAllSaveArticle());
+    if (_tabController.index == 1) _savedArticleBloc.add(GetAllSaveArticle());
   }
 
   @override
@@ -109,7 +109,7 @@ class _SavedScreenState extends State<SavedScreen>
         body: TabBarView(
           children: [
             SavedArticleTab(),
-            LovedMusicTab(),
+            FavoriteMusicTab(),
           ],
           controller: _tabController,
         ),

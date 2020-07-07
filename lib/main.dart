@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
+import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
@@ -55,14 +56,17 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SearcharticleBloc>(
           create: (BuildContext context) => SearcharticleBloc(),
         ),
-        BlocProvider<DatabaseBloc>(
-          create: (BuildContext context) => DatabaseBloc(),
+        BlocProvider<SavedArticleBloc>(
+          create: (BuildContext context) => SavedArticleBloc(),
         ),
         BlocProvider<SuggestArticleBloc>(
           create: (BuildContext context) => SuggestArticleBloc(),
         ),
         BlocProvider<HistoryBloc>(
           create: (BuildContext context) => HistoryBloc(),
+        ),
+        BlocProvider<SavedMusicBloc>(
+          create: (BuildContext context) => SavedMusicBloc(),
         ),
       ],
       child: RefreshConfiguration(

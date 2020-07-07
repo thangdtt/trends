@@ -214,7 +214,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             ),
                           ),
                           Text(
-                            "Lọc",
+                            "Chuyên mục",
                             style: TextStyle(
                                 fontSize: 20 * screenWidth / 360,
                                 fontWeight: FontWeight.normal),

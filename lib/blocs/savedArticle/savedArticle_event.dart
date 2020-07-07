@@ -1,16 +1,16 @@
-part of 'database_bloc.dart';
+part of 'savedArticle_bloc.dart';
 
-abstract class DatabaseEvent extends Equatable {
-  const DatabaseEvent();
+abstract class SavedArticleEvent extends Equatable {
+  const SavedArticleEvent();
 }
 
-class GetAllSaveArticle extends DatabaseEvent {
+class GetAllSaveArticle extends SavedArticleEvent {
 
   @override
   List<Object> get props => [];
 }
 
-class AddSaveArticle extends DatabaseEvent {
+class AddSaveArticle extends SavedArticleEvent {
   final Article article;
   AddSaveArticle(this.article);
 
@@ -18,7 +18,7 @@ class AddSaveArticle extends DatabaseEvent {
   List<Object> get props => [article];
 }
 
-class DeleteSaveArticle extends DatabaseEvent {
+class DeleteSaveArticle extends SavedArticleEvent {
   final Article article;
   DeleteSaveArticle(this.article);
 

@@ -31,7 +31,7 @@ class _NewsScreenState extends State<NewsScreen>
     super.initState();
     numberOfCategory = 0;
     for (var item in widget.tabFilter.values) {
-      if (!item) numberOfCategory++;
+      if (item) numberOfCategory++;
     }
     _tabController = new TabController(length: numberOfCategory, vsync: this);
     _tabController.addListener(_handleTabSelection);
@@ -48,23 +48,21 @@ class _NewsScreenState extends State<NewsScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          child: AppBar(
-            bottom: TabBar(
-              labelColor: Theme.of(context).textSelectionColor,
-              controller: _tabController,
-              isScrollable: true,
-              tabs: _buildTabs(),
-            ),
+    return Scaffold(
+      appBar: PreferredSize(
+        child: AppBar(
+          bottom: TabBar(
+            labelColor: Theme.of(context).textSelectionColor,
+            controller: _tabController,
+            isScrollable: true,
+            tabs: _buildTabs(),
           ),
-          preferredSize: Size.fromHeight(50.0),
         ),
-        body: TabBarView(
-          children: _buildTabContent(numberOfCategory),
-          controller: _tabController,
-        ),
+        preferredSize: Size.fromHeight(50.0),
+      ),
+      body: TabBarView(
+        children: _buildTabContent(numberOfCategory),
+        controller: _tabController,
       ),
     );
   }
@@ -75,7 +73,7 @@ class _NewsScreenState extends State<NewsScreen>
   List<Widget> _buildTabs() {
     List<Widget> list = new List();
     for (var key in widget.tabFilter.keys) {
-      if (widget.tabFilter[key] == false)
+      if (widget.tabFilter[key] == true)
         list.add(Tab(
           child: Text(
             mapCategoryNames[key],
@@ -92,7 +90,7 @@ class _NewsScreenState extends State<NewsScreen>
   List<Widget> _buildTabContent(int max) {
     List<Widget> list = new List();
     for (var key in widget.tabFilter.keys) {
-      if (widget.tabFilter[key] == false)
+      if (widget.tabFilter[key] == true)
         list.add(NewsTab(
           catEnum: key,
         ));

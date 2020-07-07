@@ -49,7 +49,7 @@ class _ContentPageThemeAdjusterState extends State<ContentPageThemeAdjuster> {
         ),
         border: Border.all(width: 0, color: borderColor),
       ),
-      height: 100 * screenHeight / 360,
+      height: 120 * screenHeight / 360,
       width: screenWidth,
       child: Column(
         children: <Widget>[

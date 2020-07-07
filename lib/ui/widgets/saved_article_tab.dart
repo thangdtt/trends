@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/ui/widgets/news_widget.dart';
 import 'package:trends/data/saveArticle_repository.dart';
 import 'package:trends/utils/utils_class.dart';
@@ -15,26 +15,25 @@ class SavedArticleTab extends StatefulWidget {
 }
 
 class _SavedArticleTabState extends State<SavedArticleTab> {
-  DatabaseBloc dbBloc;
+  SavedArticleBloc _savedArticleBloc;
 
   @override
   void initState() {
     super.initState();
-    dbBloc = BlocProvider.of<DatabaseBloc>(context);
-    //dbBloc.add(GetAllSaveArticle());
+    _savedArticleBloc = BlocProvider.of<SavedArticleBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: BlocBuilder<DatabaseBloc, DatabaseState>(
-        bloc: dbBloc,
+      child: BlocBuilder<SavedArticleBloc, SavedArticleState>(
+        bloc: _savedArticleBloc,
         builder: (context, state) {
-          if (state is DatabaseInitial) {
+          if (state is SavedArticleInitial) {
             return Container();
-          } else if (state is DatabaseLoading) {
+          } else if (state is SavedArticleLoading) {
             return Center(child: Text("Đang tải"));
-          } else if (state is DatabaseLoaded) {
+          } else if (state is SavedArticleLoaded) {
             if (state.savedArticles.isEmpty)
               return Center(child: Text("Không có bài viết được lưu!"));
             else
@@ -53,7 +52,7 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
           child: Dismissible(
             key: UniqueKey(),
             onDismissed: (direction) {
-              dbBloc.add(DeleteSaveArticle(articles[i]));
+              _savedArticleBloc.add(DeleteSaveArticle(articles[i]));
             },
             background: Container(
               color: Colors.red[400],
@@ -63,7 +62,7 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
             ),
             direction: DismissDirection.endToStart,
             child: Container(
-              padding: EdgeInsets.fromLTRB(4,0,4,0),
+              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
               child: NewsWidget(
                 article: articles[i],
                 callback: () {
@@ -75,11 +74,12 @@ class _SavedArticleTabState extends State<SavedArticleTab> {
                     if (value != null) {
                       BlocProvider.of<SuggestArticleBloc>(context)
                           .add(FetchSuggestArticles(catEnum));
-                      Navigator.of(context)
-                          .pushNamed(ArticleContentWidget.routeName, arguments: {
-                        'article': value,
-                        'catEnum': catEnum,
-                      });
+                      Navigator.of(context).pushNamed(
+                          ArticleContentWidget.routeName,
+                          arguments: {
+                            'article': value,
+                            'catEnum': catEnum,
+                          });
                     } else
                       Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text('Vui lòng kết nối internet'),

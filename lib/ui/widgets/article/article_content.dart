@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/ui/global/theme/app_theme.dart';
-import 'package:trends/ui/widgets/article_cotent_bars.dart';
-import 'package:trends/ui/widgets/sugguest_articles_widget.dart';
+import 'package:trends/ui/widgets/article/article_cotent_bars.dart';
+import 'package:trends/ui/widgets/article/sugguest_articles_widget.dart';
 import 'package:trends/utils/utils_class.dart';
 
 import 'content_page_theme_adjust.dart';
@@ -44,9 +44,9 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(children: [
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(children: [
           GestureDetector(
             onTap: () {
               setState(() {

@@ -6,20 +6,20 @@ import 'package:trends/data/models/article.dart';
 import 'package:trends/data/moor_database.dart';
 import 'package:trends/utils/global_repo.dart';
 
-part 'database_event.dart';
-part 'database_state.dart';
+part 'savedArticle_event.dart';
+part 'savedArticle_state.dart';
 
-class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
+class SavedArticleBloc extends Bloc<SavedArticleEvent, SavedArticleState> {
   @override
-  DatabaseState get initialState => DatabaseInitial();
+  SavedArticleState get initialState => SavedArticleInitial();
   List<Article> saveArticles = [];
 
   @override
-  Stream<DatabaseState> mapEventToState(
-    DatabaseEvent event,
+  Stream<SavedArticleState> mapEventToState(
+    SavedArticleEvent event,
   ) async* {
     if (event is GetAllSaveArticle) {
-      yield DatabaseLoading();
+      yield SavedArticleLoading();
       try {
         List<SavedArticleData> _list = await databaseRepo.getAllSaveArticles();
 
@@ -40,13 +40,13 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           }
         }
 
-        yield DatabaseLoaded(saveArticles.reversed.toList());
+        yield SavedArticleLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
-        yield DatabaseError("get saved article error");
+        yield SavedArticleError("get saved article error");
       }
     } else if (event is AddSaveArticle) {
-      yield DatabaseLoading();
+      yield SavedArticleLoading();
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
@@ -86,16 +86,16 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           }
         } catch (e) {
           print(e);
-          yield DatabaseLoaded(saveArticles.reversed.toList());
+          yield SavedArticleLoaded(saveArticles.reversed.toList());
         }
 
-        yield DatabaseLoaded(saveArticles.reversed.toList());
+        yield SavedArticleLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
-        yield DatabaseError("add saved article error");
+        yield SavedArticleError("add saved article error");
       }
     } else if (event is DeleteSaveArticle) {
-      yield DatabaseLoading();
+      yield SavedArticleLoading();
       try {
         SavedArticleData saveArticle;
         saveArticle = new SavedArticleData(
@@ -115,10 +115,10 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
           saveArticles.removeWhere((element) => element.id == event.article.id);
         }
 
-        yield DatabaseLoaded(saveArticles.reversed.toList());
+        yield SavedArticleLoaded(saveArticles.reversed.toList());
       } catch (e) {
         print(e);
-        yield DatabaseError("delete saved article error");
+        yield SavedArticleError("delete saved article error");
       }
     }
   }

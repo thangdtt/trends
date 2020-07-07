@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
+import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
@@ -14,6 +15,7 @@ import 'package:trends/ui/screens/saved_screen.dart';
 import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
+import 'package:trends/utils/player.dart';
 
 class BottomTabScreen extends StatefulWidget {
   @override
@@ -38,13 +40,15 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   void initState() {
     super.initState();
     themeBloc = BlocProvider.of<ThemeBloc>(context);
-    BlocProvider.of<DatabaseBloc>(context).add(GetAllSaveArticle());
+    BlocProvider.of<SavedArticleBloc>(context).add(GetAllSaveArticle());
+    BlocProvider.of<SavedMusicBloc>(context).add(GetAllSaveMusic());
     bottomBarItems = _buildBottomBarItem(icons, tabDescriptions);
     _pageController = PageController();
   }
 
   @override
   void dispose() {
+    audioPlayer.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -69,79 +73,77 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(23 * screenHeight / 360),
-          child: AppBar(
-            iconTheme: Theme.of(context).iconTheme,
-            title: Text(
-              "Trends",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Pacifico',
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(23 * screenHeight / 360),
+        child: AppBar(
+          iconTheme: Theme.of(context).iconTheme,
+          title: Text(
+            "Trends",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Pacifico',
+              color: Theme.of(context).textTheme.bodyText2.color,
+            ),
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Platform.isIOS ? CupertinoIcons.search : Icons.search,
                 color: Theme.of(context).textTheme.bodyText2.color,
               ),
-            ),
-            backgroundColor: Theme.of(context).primaryColor,
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Platform.isIOS ? CupertinoIcons.search : Icons.search,
-                  color: Theme.of(context).textTheme.bodyText2.color,
-                ),
-                onPressed: () {
-                  showSearch(context: context, delegate: DataSearch());
-                },
-              ),
-            ],
-          ),
-        ),
-        drawer: Container(
-          width: screenWidth * 4 / 5,
-          child: MainDrawer(),
-        ),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (page) {
-            setState(() {
-              _currentIndex = page;
-            });
-          },
-          children: <Widget>[
-            BlocBuilder<ThemeBloc, ThemeState>(
-              bloc: themeBloc,
-              builder: (BuildContext context, ThemeState state) {
-                if (state is ThemeLoaded) {
-                  return NewsScreen(
-                    key: GlobalKey(),
-                    tabFilter: state.tabFilter,
-                  );
-                } else {
-                  return Container();
-                }
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
               },
             ),
-            MusicScreen(),
-            SavedScreen(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) {
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          currentIndex: _currentIndex,
-          backgroundColor: Theme.of(context).primaryColor,
-          selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
-          unselectedItemColor: (themeBloc.state as ThemeLoaded).isDarkMode
-              ? Colors.white60
-              : Colors.black38,
-          items: bottomBarItems,
-        ),
+      ),
+      drawer: Container(
+        width: screenWidth * 4 / 5,
+        child: MainDrawer(),
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (page) {
+          setState(() {
+            _currentIndex = page;
+          });
+        },
+        children: <Widget>[
+          BlocBuilder<ThemeBloc, ThemeState>(
+            bloc: themeBloc,
+            builder: (BuildContext context, ThemeState state) {
+              if (state is ThemeLoaded) {
+                return NewsScreen(
+                  key: GlobalKey(),
+                  tabFilter: state.tabFilter,
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+          MusicScreen(),
+          SavedScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          _pageController.animateToPage(index,
+              duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        currentIndex: _currentIndex,
+        backgroundColor: Theme.of(context).primaryColor,
+        selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
+        unselectedItemColor: (themeBloc.state as ThemeLoaded).isDarkMode
+            ? Colors.white60
+            : Colors.black38,
+        items: bottomBarItems,
       ),
     );
   }

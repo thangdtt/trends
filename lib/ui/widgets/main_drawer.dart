@@ -45,17 +45,16 @@ class _MainDrawerState extends State<MainDrawer> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (BuildContext context, ThemeState state) {
-        if (state is ThemeLoaded) {
-          currentFilter = state.tabFilter;
-        }
-        if (currentFilter == null) {
-          return Container();
-        }
-        return Drawer(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+    return SafeArea(
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (BuildContext context, ThemeState state) {
+          if (state is ThemeLoaded) {
+            currentFilter = state.tabFilter;
+          }
+          if (currentFilter == null) {
+            return Container();
+          }
+          return Drawer(
             child: Container(
               child: SingleChildScrollView(
                 child: Column(
@@ -74,65 +73,74 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    Divider(endIndent: 0,indent: 0,height: 1,thickness: 0.5,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                child: Icon(
-                                  CustomIcons.moon,
-                                  size: 20 * screenWidth / 360,
-                                ),
-                              ),
-                              Text(
-                                "Chế độ tối",
-                                style: TextStyle(
-                                  fontFamily: 'RobotoCondensed',
-                                  fontSize: 20 * screenWidth / 360,
-                                ),
-                              ),
-                            ],
-                          ),
-                          _buildToggleButton('isDarkMode'),
-                        ],
-                      ),
+                    Divider(
+                      endIndent: 0,
+                      indent: 0,
+                      height: 1,
+                      thickness: 0.5,
                     ),
-                    Divider(endIndent: 0,indent: 0,height: 1,thickness: 0.5,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                child: Icon(
-                                  Icons.library_books,
-                                  size: 20 * screenWidth / 360,
-                                ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                              child: Icon(
+                                CustomIcons.moon,
+                                size: 20 * screenWidth / 360,
                               ),
-                              Text(
-                                "Chế độ đọc nhanh",
-                                style: TextStyle(
-                                  fontFamily: 'RobotoCondensed',
-                                  fontSize: 20 * screenWidth / 360,
-                                ),
+                            ),
+                            Text(
+                              "Chế độ tối",
+                              style: TextStyle(
+                                fontFamily: 'RobotoCondensed',
+                                fontSize: 20 * screenWidth / 360,
                               ),
-                            ],
-                          ),
-                          _buildToggleButton('isFastReadingMode'),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                        _buildToggleButton('isDarkMode'),
+                      ],
                     ),
-                    Divider(endIndent: 0,indent: 0,height: 1,thickness: 0.5,),
+                    Divider(
+                      endIndent: 0,
+                      indent: 0,
+                      height: 1,
+                      thickness: 0.5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                              child: Icon(
+                                Icons.library_books,
+                                size: 20 * screenWidth / 360,
+                              ),
+                            ),
+                            Text(
+                              "Chế độ đọc nhanh",
+                              style: TextStyle(
+                                fontFamily: 'RobotoCondensed',
+                                fontSize: 20 * screenWidth / 360,
+                              ),
+                            ),
+                          ],
+                        ),
+                        _buildToggleButton('isFastReadingMode'),
+                      ],
+                    ),
+                    Divider(
+                      endIndent: 0,
+                      indent: 0,
+                      height: 1,
+                      thickness: 0.5,
+                    ),
                     GestureDetector(
                       onTap: () {
                         BlocProvider.of<HistoryBloc>(context)
@@ -146,8 +154,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         child: Row(
                           children: <Widget>[
                             Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
                               child: Icon(
                                 Icons.history,
                                 size: 20 * screenWidth / 360,
@@ -165,7 +172,12 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    Divider(endIndent: 0,indent: 0,height: 1,thickness: 0.5,),
+                    Divider(
+                      endIndent: 0,
+                      indent: 0,
+                      height: 1,
+                      thickness: 0.5,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 0.0, vertical: 10),
@@ -201,7 +213,12 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    Divider(endIndent: 0,indent: 0,height: 1,thickness: 0.5,),
+                    Divider(
+                      endIndent: 0,
+                      indent: 0,
+                      height: 1,
+                      thickness: 0.5,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: ExpansionTile(
@@ -214,7 +231,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             ),
                           ),
                           Text(
-                            "Lọc",
+                            "Chuyên mục",
                             style: TextStyle(
                                 fontSize: 20 * screenWidth / 360,
                                 fontWeight: FontWeight.normal),
@@ -227,9 +244,9 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -370,39 +387,6 @@ class _MainDrawerState extends State<MainDrawer> {
                 }),
           );
   }
-
-  // Future<bool> _willPopHandler() {
-  //   if (filterChange) {
-  //     return showDialog(
-  //         context: context,
-  //         builder: (BuildContext context) {
-  //           return AlertDialog(
-  //             title: Text("Khởi động lại app ?"),
-  //             content: Text("Lọc chuyên mục yêu cầu khởi động lại app"),
-  //             actions: <Widget>[
-  //               FlatButton(
-  //                   child: Text('Không'),
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       for (var key in currentFilter.keys)
-  //                         currentFilter[key] = currentFilter[key];
-  //                       filterChange = false;
-  //                       PrefUtils.setFilterPref(tabFilterToList(currentFilter));
-  //                     });
-  //                     Navigator.of(context).pop(false);
-  //                   }),
-  //               FlatButton(
-  //                   child: Text('Có'),
-  //                   onPressed: () {
-  //                     Phoenix.rebirth(context);
-  //                     Navigator.of(context).pop(true);
-  //                   }),
-  //             ],
-  //           );
-  //         });
-  //   }
-  //   Navigator.of(context).pop(true);
-  // }
 
   TextEditingController apiController = new TextEditingController();
 

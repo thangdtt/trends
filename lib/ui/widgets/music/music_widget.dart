@@ -115,7 +115,7 @@ class MusicWidget extends StatelessWidget {
                                 ),
                                 SizedBox(height: 3),
                                 Text(
-                                  music.composer,
+                                  music.singer,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 3,
                                   style: TextStyle(

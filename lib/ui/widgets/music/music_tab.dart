@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,7 +106,7 @@ class _MusicTabState extends State<MusicTab>
       children: <Widget>[
         SmartRefresher(
           enablePullDown: true,
-          enablePullUp: true,
+          enablePullUp: false,
           header: ClassicHeader(),
           footer: CustomFooter(
             loadStyle: LoadStyle.ShowWhenLoading,

@@ -2,28 +2,28 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:trends/blocs/database/database_bloc.dart';
+import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
+import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
-import 'package:trends/push_notifications.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/screens/bottom_tab_screen.dart';
 import 'package:trends/ui/screens/music_playing_screen.dart';
 import 'package:trends/ui/screens/read_history_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
-import 'package:trends/ui/widgets/article_content.dart';
+import 'package:trends/ui/widgets/article/article_content.dart';
+import 'package:trends/utils/player.dart';
 import 'package:trends/utils/utils_class.dart';
 
 import 'blocs/article/article_bloc.dart';
 
 void main() {
   runApp(
-    Phoenix(child: MyApp()),
+    MyApp(),
   );
 }
 
@@ -33,11 +33,23 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void dispose() {
+    audioPlayer.release();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) audioPlayer.release();
   }
 
   @override
@@ -57,14 +69,17 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SearcharticleBloc>(
           create: (BuildContext context) => SearcharticleBloc(),
         ),
-        BlocProvider<DatabaseBloc>(
-          create: (BuildContext context) => DatabaseBloc(),
+        BlocProvider<SavedArticleBloc>(
+          create: (BuildContext context) => SavedArticleBloc(),
         ),
         BlocProvider<SuggestArticleBloc>(
           create: (BuildContext context) => SuggestArticleBloc(),
         ),
         BlocProvider<HistoryBloc>(
           create: (BuildContext context) => HistoryBloc(),
+        ),
+        BlocProvider<SavedMusicBloc>(
+          create: (BuildContext context) => SavedMusicBloc(),
         ),
       ],
       child: RefreshConfiguration(
@@ -150,12 +165,6 @@ class _MyAppState extends State<MyApp> {
             },
             settings: RouteSettings(name: name));
       },
-//      routes: {
-//        //'/': (ctx) => BottomTabScreen(),
-//        ArticleContentWidget.routeName: (ctx) => ArticleContentWidget(),
-//        ReadHistoryScreen.routeName: (ctx) => ReadHistoryScreen(),
-//        MusicPlayingScreen.routeName: (ctx) => MusicPlayingScreen(),
-//      },
     );
   }
 }

@@ -1,3 +1,4 @@
 import 'package:audioplayers/audioplayers.dart';
 
-AudioPlayer audioPlayer = AudioPlayer();
+AudioPlayer speechPlayer = AudioPlayer(playerId: 'news');
+AudioPlayer audioPlayer = AudioPlayer(playerId: 'music');

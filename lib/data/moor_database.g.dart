@@ -641,6 +641,7 @@ class $ArticleToSaveTableTable extends ArticleToSaveTable
 class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
   final int id;
   final String name;
+  final String singer;
   final String country;
   final String link;
   final String image;
@@ -651,6 +652,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
   SavedMusicData(
       {@required this.id,
       @required this.name,
+      @required this.singer,
       this.country,
       @required this.link,
       this.image,
@@ -668,6 +670,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     return SavedMusicData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       name: stringType.mapFromDatabaseResponse(data['${effectivePrefix}name']),
+      singer:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}singer']),
       country:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}country']),
       link: stringType.mapFromDatabaseResponse(data['${effectivePrefix}link']),
@@ -691,6 +695,9 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     }
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
+    }
+    if (!nullToAbsent || singer != null) {
+      map['singer'] = Variable<String>(singer);
     }
     if (!nullToAbsent || country != null) {
       map['country'] = Variable<String>(country);
@@ -720,6 +727,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     return MusicToSaveTableCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      singer:
+          singer == null && nullToAbsent ? const Value.absent() : Value(singer),
       country: country == null && nullToAbsent
           ? const Value.absent()
           : Value(country),
@@ -746,6 +755,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     return SavedMusicData(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      singer: serializer.fromJson<String>(json['singer']),
       country: serializer.fromJson<String>(json['country']),
       link: serializer.fromJson<String>(json['link']),
       image: serializer.fromJson<String>(json['image']),
@@ -761,6 +771,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
+      'singer': serializer.toJson<String>(singer),
       'country': serializer.toJson<String>(country),
       'link': serializer.toJson<String>(link),
       'image': serializer.toJson<String>(image),
@@ -774,6 +785,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
   SavedMusicData copyWith(
           {int id,
           String name,
+          String singer,
           String country,
           String link,
           String image,
@@ -784,6 +796,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       SavedMusicData(
         id: id ?? this.id,
         name: name ?? this.name,
+        singer: singer ?? this.singer,
         country: country ?? this.country,
         link: link ?? this.link,
         image: image ?? this.image,
@@ -797,6 +810,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     return (StringBuffer('SavedMusicData(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('singer: $singer, ')
           ..write('country: $country, ')
           ..write('link: $link, ')
           ..write('image: $image, ')
@@ -814,23 +828,26 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       $mrjc(
           name.hashCode,
           $mrjc(
-              country.hashCode,
+              singer.hashCode,
               $mrjc(
-                  link.hashCode,
+                  country.hashCode,
                   $mrjc(
-                      image.hashCode,
+                      link.hashCode,
                       $mrjc(
-                          composer.hashCode,
+                          image.hashCode,
                           $mrjc(
-                              album.hashCode,
-                              $mrjc(releaseYear.hashCode,
-                                  addTime.hashCode)))))))));
+                              composer.hashCode,
+                              $mrjc(
+                                  album.hashCode,
+                                  $mrjc(releaseYear.hashCode,
+                                      addTime.hashCode))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is SavedMusicData &&
           other.id == this.id &&
           other.name == this.name &&
+          other.singer == this.singer &&
           other.country == this.country &&
           other.link == this.link &&
           other.image == this.image &&
@@ -843,6 +860,7 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
 class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   final Value<int> id;
   final Value<String> name;
+  final Value<String> singer;
   final Value<String> country;
   final Value<String> link;
   final Value<String> image;
@@ -853,6 +871,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   const MusicToSaveTableCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.singer = const Value.absent(),
     this.country = const Value.absent(),
     this.link = const Value.absent(),
     this.image = const Value.absent(),
@@ -864,6 +883,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   MusicToSaveTableCompanion.insert({
     this.id = const Value.absent(),
     @required String name,
+    @required String singer,
     this.country = const Value.absent(),
     @required String link,
     this.image = const Value.absent(),
@@ -872,10 +892,12 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     this.releaseYear = const Value.absent(),
     this.addTime = const Value.absent(),
   })  : name = Value(name),
+        singer = Value(singer),
         link = Value(link);
   static Insertable<SavedMusicData> custom({
     Expression<int> id,
     Expression<String> name,
+    Expression<String> singer,
     Expression<String> country,
     Expression<String> link,
     Expression<String> image,
@@ -887,6 +909,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (singer != null) 'singer': singer,
       if (country != null) 'country': country,
       if (link != null) 'link': link,
       if (image != null) 'image': image,
@@ -900,6 +923,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   MusicToSaveTableCompanion copyWith(
       {Value<int> id,
       Value<String> name,
+      Value<String> singer,
       Value<String> country,
       Value<String> link,
       Value<String> image,
@@ -910,6 +934,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     return MusicToSaveTableCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      singer: singer ?? this.singer,
       country: country ?? this.country,
       link: link ?? this.link,
       image: image ?? this.image,
@@ -928,6 +953,9 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (singer.present) {
+      map['singer'] = Variable<String>(singer.value);
     }
     if (country.present) {
       map['country'] = Variable<String>(country.value);
@@ -958,6 +986,7 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     return (StringBuffer('MusicToSaveTableCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('singer: $singer, ')
           ..write('country: $country, ')
           ..write('link: $link, ')
           ..write('image: $image, ')
@@ -994,6 +1023,18 @@ class $MusicToSaveTableTable extends MusicToSaveTable
   GeneratedTextColumn _constructName() {
     return GeneratedTextColumn(
       'name',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _singerMeta = const VerificationMeta('singer');
+  GeneratedTextColumn _singer;
+  @override
+  GeneratedTextColumn get singer => _singer ??= _constructSinger();
+  GeneratedTextColumn _constructSinger() {
+    return GeneratedTextColumn(
+      'singer',
       $tableName,
       false,
     );
@@ -1086,8 +1127,18 @@ class $MusicToSaveTableTable extends MusicToSaveTable
   }
 
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, country, link, image, composer, album, releaseYear, addTime];
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        singer,
+        country,
+        link,
+        image,
+        composer,
+        album,
+        releaseYear,
+        addTime
+      ];
   @override
   $MusicToSaveTableTable get asDslTable => this;
   @override
@@ -1107,6 +1158,12 @@ class $MusicToSaveTableTable extends MusicToSaveTable
           _nameMeta, name.isAcceptableOrUnknown(data['name'], _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('singer')) {
+      context.handle(_singerMeta,
+          singer.isAcceptableOrUnknown(data['singer'], _singerMeta));
+    } else if (isInserting) {
+      context.missing(_singerMeta);
     }
     if (data.containsKey('country')) {
       context.handle(_countryMeta,

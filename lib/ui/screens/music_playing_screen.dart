@@ -2,10 +2,17 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
 import 'package:trends/data/models/music.dart';
-import 'package:trends/ui/widgets/custom_icon_button.dart';
+import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
+import 'package:trends/utils/player.dart';
 
 class MusicPlayingScreen extends StatefulWidget {
   static const routeName = '/music-playing';
@@ -29,12 +36,17 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   double _totalTime = 1;
   AudioPlayer _audioPlayer;
   bool _isPlaying = false;
+  bool _isFavorite = false;
   StreamSubscription _onPlayerCompletion;
   StreamSubscription _onDurationChanged;
   StreamSubscription _onAudioPositionChanged;
   StreamSubscription _onPlayerStateChanged;
   Duration _duration;
   Duration _position;
+  SavedMusicBloc _savedMusicBloc;
+  bool _isDownloading = false;
+  double _downloadPercentage = 0.0;
+  String _downloadMessage = "";
 
   @override
   void dispose() {
@@ -48,11 +60,26 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   @override
   void initState() {
     super.initState();
+    _savedMusicBloc = BlocProvider.of<SavedMusicBloc>(context);
+
     _musics = widget.musics;
 
     _audioPlayer = widget.audioPlayer;
 
     _musicIndex = widget.musicIndex;
+
+    try {
+      for (var item in (_savedMusicBloc.state as SavedMusicLoaded).musics) {
+        if (_musics[_musicIndex].id == item.id) {
+          setState(() {
+            _isFavorite = true;
+          });
+          break;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
 
     _isPlaying = widget.isPlaying;
     _onPlayerCompletion = _audioPlayer.onPlayerCompletion.listen((event) {
@@ -200,13 +227,16 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           width: 10 * aspectWidth,
                         ),
                         CustomIconButton(
+                          tooltip: "Hẹn giờ tắt nhạc",
                           icon: Icon(
                             Icons.alarm,
                             color: Colors.white,
                           ),
                           iconSize: 25 * aspectWidth,
                           padding: EdgeInsets.all(0),
-                          onPressed: () {},
+                          onPressed: () {
+                            audioPlayer.release();
+                          },
                         ),
                       ],
                     ),
@@ -248,26 +278,43 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Tải nhạc",
                           iconSize: 30 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () {
+                            _downloadMusic(_musics[_musicIndex].link,
+                                _musics[_musicIndex].name);
+                          },
                           icon: Icon(
                             Icons.file_download,
                             color: Colors.white,
                           ),
                         ),
                         IconButton(
+                          tooltip: "Chia sẻ nhạc",
                           iconSize: 30 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () {
+                            Share.share(
+                                "${_musics[_musicIndex].name} - ${_musics[_musicIndex].singer}\nlink: ${_musics[_musicIndex].link}",
+                                subject:
+                                    "${_musics[_musicIndex].name} - ${_musics[_musicIndex].singer}");
+                          },
                           icon: Icon(
                             Icons.share,
                             color: Colors.white,
                           ),
                         ),
                         IconButton(
+                          tooltip: "Yêu thích",
                           iconSize: 30 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              _favoriteHandler();
+                            });
+                          },
                           icon: Icon(
-                            Icons.favorite_border,
+                            _isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
                             color: Colors.white,
                           ),
                         ),
@@ -385,7 +432,22 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                   ),
                   SizedBox(
                     height: 20 * aspectHeight,
-                  )
+                  ),
+                  if (_isDownloading)
+                    Text(
+                      _downloadMessage,
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 12 * aspectWidth),
+                    ),
+                  if (_isDownloading)
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 50 * aspectWidth,
+                          vertical: 5 * aspectWidth),
+                      child: LinearProgressIndicator(
+                        value: _downloadPercentage / 100,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -393,5 +455,55 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
         ),
       ),
     );
+  }
+
+  void _favoriteHandler() async {
+    bool existed = false;
+    try {
+      for (var item in (_savedMusicBloc.state as SavedMusicLoaded).musics) {
+        if (_musics[_musicIndex].id == item.id) {
+          existed = true;
+          break;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    if (existed) {
+      _isFavorite = false;
+      _savedMusicBloc.add(DeleteSaveMusic(widget.musics[_musicIndex]));
+    } else {
+      _isFavorite = true;
+      _savedMusicBloc.add(AddSaveMusic(widget.musics[_musicIndex]));
+    }
+  }
+
+  Future<void> _downloadMusic(String link, String fileName) async {
+    Dio dio = new Dio();
+    try {
+      setState(() {
+        _isDownloading = true;
+      });
+      var dir = await getExternalStorageDirectory();
+      await dio.download(
+        link,
+        "${dir.path}/$fileName.mp3",
+        onReceiveProgress: (count, total) {
+          var percentage = count / total * 100;
+          setState(() {
+            _downloadPercentage = percentage;
+            _downloadMessage = "Đang tải ${percentage.floor()}%";
+          });
+          if (count >= total) {
+            _isDownloading = false;
+            _downloadMessage = "";
+            _downloadPercentage = 0;
+          }
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }

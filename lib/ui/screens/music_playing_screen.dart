@@ -43,6 +43,9 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   Duration _duration;
   Duration _position;
   SavedMusicBloc _savedMusicBloc;
+  bool _isDownloading = false;
+  double _downloadPercentage = 0.0;
+  String _downloadMessage = "";
 
   @override
   void dispose() {
@@ -273,7 +276,8 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 30 * aspectWidth,
                           onPressed: () {
-                             _downloadMusic(_musics[_musicIndex].link, _musics[_musicIndex].name);
+                            _downloadMusic(_musics[_musicIndex].link,
+                                _musics[_musicIndex].name);
                           },
                           icon: Icon(
                             Icons.file_download,
@@ -421,7 +425,22 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                   ),
                   SizedBox(
                     height: 20 * aspectHeight,
-                  )
+                  ),
+                  if (_isDownloading)
+                    Text(
+                      _downloadMessage,
+                      style: TextStyle(
+                          color: Colors.white, fontSize: 12 * aspectWidth),
+                    ),
+                  if (_isDownloading)
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 50 * aspectWidth,
+                          vertical: 5 * aspectWidth),
+                      child: LinearProgressIndicator(
+                        value: _downloadPercentage / 100,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -456,11 +475,26 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   Future<void> _downloadMusic(String link, String fileName) async {
     Dio dio = new Dio();
     try {
-      var dir = await getApplicationDocumentsDirectory();
-      print(dir.parent.parent.parent.parent.path);
-      // await dio.download(link, "${dir.path}/$fileName.mp3",onReceiveProgress: (count, total) {
-      //   print("Current: $count, Total: $total\n");
-      // },);
+      setState(() {
+        _isDownloading = true;
+      });
+      var dir = await getExternalStorageDirectory();
+      await dio.download(
+        link,
+        "${dir.path}/$fileName.mp3",
+        onReceiveProgress: (count, total) {
+          var percentage = count / total * 100;
+          setState(() {
+            _downloadPercentage = percentage;
+            _downloadMessage = "Đang tải ${percentage.floor()}%";
+          });
+          if (count >= total) {
+            _isDownloading = false;
+            _downloadMessage = "";
+            _downloadPercentage = 0;
+          }
+        },
+      );
     } catch (e) {
       print(e);
     }

@@ -6,12 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
+import 'package:trends/ui/widgets/quality_choice.dart';
+import 'package:trends/ui/widgets/slide_popup_dialog.dart';
 
 class MusicPlayingScreen extends StatefulWidget {
   static const routeName = '/music-playing';
 
   const MusicPlayingScreen(
-      {Key key, this.musics, this.audioPlayer, this.musicIndex, this.isPlaying, this.second, this.duration})
+      {Key key,
+      this.musics,
+      this.audioPlayer,
+      this.musicIndex,
+      this.isPlaying,
+      this.second,
+      this.duration})
       : super(key: key);
 
   @override
@@ -25,10 +33,9 @@ class MusicPlayingScreen extends StatefulWidget {
 }
 
 class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
-
   int _musicIndex;
   List<Music> _musics;
-
+  String quality;
   AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   StreamSubscription _onPlayerCompletion;
@@ -55,7 +62,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _audioPlayer = widget.audioPlayer;
 
     _musicIndex = widget.musicIndex;
-
+    quality = _musics[_musicIndex].qualities[0];
     _isPlaying = widget.isPlaying;
     _onPlayerCompletion = _audioPlayer.onPlayerCompletion.listen((event) {
       _position = _duration;
@@ -67,7 +74,6 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _onDurationChanged = _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
-
       });
     });
     _onAudioPositionChanged =
@@ -154,8 +160,9 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                   Flexible(
                     child: Padding(
                       padding: EdgeInsets.only(
-                          left: 20 * aspectWidth,
-                          right: 20 * aspectWidth,),
+                        left: 20 * aspectWidth,
+                        right: 20 * aspectWidth,
+                      ),
                       child: Row(
                         children: <Widget>[
                           Flexible(
@@ -250,7 +257,19 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           Flexible(
                             child: IconButton(
                               iconSize: 30 * aspectWidth,
-                              onPressed: () {},
+                              onPressed: () {
+                                showSlideDialog(
+                                    context: context,
+                                    child: QualityChoice(
+                                      initValue: quality,
+                                      music: _musics[_musicIndex],
+                                      onChangedValue: (String value){
+                                        quality = value;
+
+                                      },
+                                    )
+                                );
+                              },
                               icon: Icon(
                                 Icons.settings,
                                 color: Colors.white,

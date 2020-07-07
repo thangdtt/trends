@@ -48,23 +48,21 @@ class _NewsScreenState extends State<NewsScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          child: AppBar(
-            bottom: TabBar(
-              labelColor: Theme.of(context).textSelectionColor,
-              controller: _tabController,
-              isScrollable: true,
-              tabs: _buildTabs(),
-            ),
+    return Scaffold(
+      appBar: PreferredSize(
+        child: AppBar(
+          bottom: TabBar(
+            labelColor: Theme.of(context).textSelectionColor,
+            controller: _tabController,
+            isScrollable: true,
+            tabs: _buildTabs(),
           ),
-          preferredSize: Size.fromHeight(50.0),
         ),
-        body: TabBarView(
-          children: _buildTabContent(numberOfCategory),
-          controller: _tabController,
-        ),
+        preferredSize: Size.fromHeight(50.0),
+      ),
+      body: TabBarView(
+        children: _buildTabContent(numberOfCategory),
+        controller: _tabController,
       ),
     );
   }

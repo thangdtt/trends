@@ -44,9 +44,9 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(children: [
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(children: [
           GestureDetector(
             onTap: () {
               setState(() {

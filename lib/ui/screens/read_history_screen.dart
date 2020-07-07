@@ -25,9 +25,9 @@ class _ReadHistoryScreenState extends State<ReadHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: BlocBuilder<HistoryBloc, HistoryState>(
+    return Scaffold(
+      body: SafeArea(
+        child: BlocBuilder<HistoryBloc, HistoryState>(
           bloc: historyBloc,
           builder: (context, state) {
             if (state is HistoryInitial) {
@@ -59,7 +59,7 @@ class _ReadHistoryScreenState extends State<ReadHistoryScreen> {
               shrinkWrap: true,
               itemBuilder: (ctx, i) {
                 return Container(
-                  padding: EdgeInsets.fromLTRB(4,0,4,0),
+                  padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                   child: NewsWidget(
                     article: articles[i],
                     callback: () {

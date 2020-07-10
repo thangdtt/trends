@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/history/history_bloc.dart';
-import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
+import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/suggestArticle/suggestArticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
@@ -165,6 +165,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             },
             settings: RouteSettings(name: name));
       },
+      // supportedLocales: [
+      //   Locale('en', 'US'),
+      //   Locale('vi', 'VN'),
+      // ],
+      // localizationsDelegates: [
+      //   AppLocalizations.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // localeResolutionCallback: (locale, supportedLocales) {
+      //   for (var supportedLocale in supportedLocales) {
+      //     if (supportedLocale.languageCode == locale.languageCode &&
+      //         supportedLocale.countryCode == locale.countryCode)
+      //       return supportedLocale;
+      //   }
+      //   return supportedLocales.first;
+      // },
     );
   }
 }

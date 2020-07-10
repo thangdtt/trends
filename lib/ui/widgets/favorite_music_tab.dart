@@ -1,43 +1,141 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
+import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/data/models/music.dart';
+import 'package:trends/ui/screens/music_playing_screen.dart';
 import 'package:trends/ui/widgets/music/music_widget.dart';
+import 'package:trends/utils/player.dart';
+
+import 'music/music_playing.dart';
 
 class FavoriteMusicTab extends StatefulWidget {
   @override
   _FavoriteMusicTabState createState() => _FavoriteMusicTabState();
 }
 
-class _FavoriteMusicTabState extends State<FavoriteMusicTab> {
+class _FavoriteMusicTabState extends State<FavoriteMusicTab>
+    with AutomaticKeepAliveClientMixin {
   SavedMusicBloc _savedMusicBloc;
+  bool _isPlaying = false;
+  List<Music> _currentMusics;
+  Music _currentMusic;
+  int _currentIndex = 0;
+  StreamSubscription onPlayerStateChanged;
 
   @override
   void initState() {
     super.initState();
     _savedMusicBloc = BlocProvider.of<SavedMusicBloc>(context);
+    if (audioPlayerSave.state == AudioPlayerState.PLAYING) _isPlaying = true;
+    onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((event) {
+      if (event == AudioPlayerState.COMPLETED) {
+        changeMusicIndex(_currentIndex + 1);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    onPlayerStateChanged?.cancel();
+    super.dispose();
+  }
+
+  Future<void> changeMusicIndex(int index) async {
+    _currentIndex = index;
+    if (_currentIndex > _currentMusics.length - 1) {
+      _currentIndex = 0;
+    } else if (_currentIndex < 0) {
+      _currentIndex = _currentMusics.length - 1;
+    }
+    _currentMusic = _currentMusics[_currentIndex];
+    await audioPlayerSave.play(_currentMusic.link);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: BlocBuilder<SavedMusicBloc, SavedMusicState>(
-        bloc: _savedMusicBloc,
-        builder: (context, state) {
-          if (state is SavedMusicInitial) {
-            return Container();
-          } else if (state is SavedMusicLoading) {
-            return Center(child: Text("Đang tải"));
-          } else if (state is SavedMusicLoaded) {
-            if (state.musics.isEmpty)
-              return Center(child: Text("Không có bài hát được lưu!"));
-            else
-              return buildLoadedInput(state.musics, context);
-          } else
-            return Center(child: Text("Xảy ra lỗi"));
-        },
-      ),
+    super.build(context);
+    return Stack(
+      children: <Widget>[
+        Container(
+          child: BlocBuilder<SavedMusicBloc, SavedMusicState>(
+            bloc: _savedMusicBloc,
+            builder: (context, state) {
+              if (state is SavedMusicInitial) {
+                return Container();
+              } else if (state is SavedMusicLoading) {
+                return Center(child: Text("Đang tải"));
+              } else if (state is SavedMusicLoaded) {
+                if (state.musics.isEmpty)
+                  return Center(child: Text("Không có bài hát được lưu!"));
+                else
+                  return buildLoadedInput(state.musics, context);
+              } else
+                return Center(child: Text("Xảy ra lỗi"));
+            },
+          ),
+        ),
+        if (_currentMusic != null)
+          Positioned(
+            bottom: 0,
+            child: GestureDetector(
+              onTap: () async {
+                final Map<String, Object> mapArguments = <String, Object>{
+                  'musics': _currentMusics,
+                  'audioPlayer': audioPlayerSave,
+                  'musicIndex': _currentIndex,
+                  'isPlaying': _isPlaying
+                };
+                final Map<String, dynamic> mapResult =
+                    await Navigator.of(context).pushNamed(
+                        MusicPlayingScreen.routeName,
+                        arguments: mapArguments) as Map<String, dynamic>;
+                if (mapResult != null) {
+                  setState(() {
+                    _currentIndex = mapResult['musicIndex'];
+                    _currentMusic = _currentMusics[_currentIndex];
+                    _isPlaying = mapResult['isPlaying'];
+                  });
+                }
+              },
+              child: MusicPlaying(
+                isPlaying: _isPlaying,
+                music: _currentMusic,
+                nextCallBack: () {
+                  isShuffle
+                      ? changeMusicIndex(
+                          _currentIndex + 1 + new Random().nextInt(5))
+                      : changeMusicIndex(_currentIndex + 1);
+                },
+                playCallBack: () async {
+                  if (!_isPlaying) {
+                    audioPlayer.stop();
+                    await audioPlayerSave.play(_currentMusic.link);
+                    _isPlaying = true;
+                    setState(() {});
+                  } else {
+                    await audioPlayerSave.pause();
+                    _isPlaying = false;
+                    setState(() {});
+                  }
+                },
+                previousCallBack: () {
+                  isShuffle
+                      ? changeMusicIndex(
+                          _currentIndex - 1 - new Random().nextInt(5))
+                      : changeMusicIndex(_currentIndex + 1);
+                },
+              ),
+            ),
+          )
+        else
+          const SizedBox()
+      ],
     );
   }
 
@@ -60,9 +158,16 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab> {
             child: Container(
               padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
               child: MusicWidget(
-                music: musics[i],
-                
-              ),
+                  music: musics[i],
+                  callback: () async {
+                    _currentIndex = i;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[i];
+                    _isPlaying = true;
+                    audioPlayer.stop();
+                    audioPlayerSave.play(_currentMusic.link);
+                    setState(() {});
+                  }),
             ),
           ),
         );
@@ -70,4 +175,7 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab> {
       itemCount: musics.length,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

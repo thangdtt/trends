@@ -38,20 +38,22 @@ class _MusicPlayingState extends State<MusicPlaying>
 
   @override
   Widget build(BuildContext context) {
-
     final double screenWidth = MediaQuery.of(context).size.width;
     final double aspectWidth = screenWidth / 360;
     return Container(
-      height: 102*aspectWidth,
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(width: 0.1, color: Colors.grey)),
+        color: Theme.of(context).backgroundColor,
+      ),
+      height: 102 * aspectWidth,
       width: screenWidth,
-      color: Colors.white,
       child: Row(
         children: <Widget>[
           ClipRRect(
             borderRadius: BorderRadius.circular(300.0),
             child: Container(
-              height: 50*aspectWidth,
-              width: 50*aspectWidth,
+              height: 50 * aspectWidth,
+              width: 50 * aspectWidth,
               child: Align(
                 alignment: Alignment.center,
                 widthFactor: 0.4,
@@ -78,7 +80,7 @@ class _MusicPlayingState extends State<MusicPlaying>
                   ),
                 ),
                 Text(
-                  widget.music.composer,
+                  widget.music.singer,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15 * screenWidth / 360,
@@ -101,7 +103,7 @@ class _MusicPlayingState extends State<MusicPlaying>
             },
           ),
           IconButton(
-            icon: Icon(widget.isPlaying ? Icons.pause  : Icons.play_arrow),
+            icon: Icon(widget.isPlaying ? Icons.pause : Icons.play_arrow),
             onPressed: () {
               if (widget.playCallBack != null) {
                 widget.playCallBack();

@@ -48,9 +48,11 @@ final appThemeData = {
       headline6: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal),
       bodyText2: TextStyle(fontSize: 19, fontFamily: 'Hind'),
     ),
+    splashColor: Colors.teal,
   ),
   AppTheme.Dark: ThemeData(
     fontFamily: 'Pacifico-Regular',
+    splashColor: Colors.amber,
     iconTheme: IconThemeData(color: Colors.amber),
     accentColor: Colors.amberAccent,
     bottomAppBarColor: Color.fromRGBO(10, 10, 10, 1),

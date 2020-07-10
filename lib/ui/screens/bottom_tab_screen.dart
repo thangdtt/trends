@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
-import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
+import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 

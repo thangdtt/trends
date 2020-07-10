@@ -1,4 +1,4 @@
-part of 'savedMusicbloc_bloc.dart';
+part of 'saved_music_bloc.dart';
 
 abstract class SavedMusicEvent extends Equatable {
   const SavedMusicEvent();

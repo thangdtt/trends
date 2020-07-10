@@ -32,6 +32,7 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
 
   @override
   void dispose() {
+    speechPlayer.release();
     super.dispose();
   }
 

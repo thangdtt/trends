@@ -69,7 +69,6 @@ class _MusicTabState extends State<MusicTab>
 
   Widget buildInitialInput() {
     return Container(
-      color: Colors.green,
     );
   }
 

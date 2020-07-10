@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
+import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/music_widget.dart';
 

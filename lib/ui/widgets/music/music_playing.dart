@@ -78,7 +78,7 @@ class _MusicPlayingState extends State<MusicPlaying>
                   ),
                 ),
                 Text(
-                  widget.music.composer,
+                  widget.music.singer,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15 * screenWidth / 360,

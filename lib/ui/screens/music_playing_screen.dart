@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trends/blocs/savedMusic/savedMusicbloc_bloc.dart';
+import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
@@ -213,7 +213,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                                     fontWeight: FontWeight.w800),
                               ),
                               Text(
-                                _musics[_musicIndex].composer,
+                                _musics[_musicIndex].singer,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Colors.white,
@@ -235,7 +235,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           iconSize: 25 * aspectWidth,
                           padding: EdgeInsets.all(0),
                           onPressed: () {
-                            audioPlayer.release();
+                            buildDialog();
                           },
                         ),
                       ],
@@ -505,5 +505,55 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<String> buildDialog() async {
+    Duration changeValue;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: autoTurnMusicOff
+                ? Text("Cách giờ tắt nhạc ${turnfOffTime.inMinutes} phút")
+                : Text("Hẹn giờ tắt nhạc"),
+            content: Container(
+              height: MediaQuery.of(context).size.height / 5,
+              child: CupertinoTimerPicker(
+                mode: CupertinoTimerPickerMode.hm,
+                initialTimerDuration: turnfOffTime,
+                onTimerDurationChanged: (value) {
+                  changeValue = value;
+                },
+              ),
+            ),
+            actions: <Widget>[
+              RaisedButton(
+                elevation: 5,
+                child: Text("Huỷ hẹn giờ"),
+                onPressed: () {
+                  cancelTimer();
+                  Navigator.of(context).pop();
+                },
+              ),
+              RaisedButton(
+                elevation: 5,
+                child: Text("Đóng"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              RaisedButton(
+                elevation: 5,
+                child: Text("OK"),
+                onPressed: () {
+                  if (autoTurnMusicOff) cancelTimer();
+                  turnfOffTime = changeValue;
+                  startTimer();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 }

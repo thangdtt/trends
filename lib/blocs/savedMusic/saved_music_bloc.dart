@@ -6,8 +6,8 @@ import 'package:trends/data/models/music.dart';
 import 'package:trends/data/moor_database.dart';
 import 'package:trends/utils/global_repo.dart';
 
-part 'savedMusicbloc_event.dart';
-part 'savedMusicbloc_state.dart';
+part 'saved_music_event.dart';
+part 'saved_music_state.dart';
 
 class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
   List<Music> saveMusics = [];

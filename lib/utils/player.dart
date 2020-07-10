@@ -4,8 +4,11 @@ import 'package:audioplayers/audioplayers.dart';
 
 AudioPlayer speechPlayer = AudioPlayer(playerId: 'news');
 AudioPlayer audioPlayer = AudioPlayer(playerId: 'music');
+AudioPlayer audioPlayerSave = AudioPlayer(playerId: 'save');
 Duration turnfOffTime = Duration(seconds: 0);
 bool autoTurnMusicOff = false;
+
+bool isShuffle = false;
 
 Timer timer;
 
@@ -19,13 +22,15 @@ void _handleTimeOut(timer) {
     if (turnfOffTime.inSeconds > 0)
       turnfOffTime = turnfOffTime - Duration(seconds: 1);
     else {
-      audioPlayer.stop();
+      audioPlayer.pause();
       autoTurnMusicOff = false;
       turnfOffTime = Duration(seconds: 0);
       timer.cancel();
     }
   } catch (e) {
     print(e.toString());
+    autoTurnMusicOff = false;
+      turnfOffTime = Duration(seconds: 0);
   }
 }
 

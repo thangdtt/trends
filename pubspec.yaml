@@ -92,6 +92,9 @@ flutter:
     - family:  HeartIcon
       fonts: 
         - asset: assets/icons/Heart.ttf
+    - family:  Shuffle
+      fonts: 
+        - asset: assets/icons/Shuffle.ttf
     - family:  Pacifico
       fonts:
         - asset: assets/fonts/Pacifico-Regular.ttf

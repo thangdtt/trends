@@ -13,7 +13,7 @@ class SavedScreen extends StatefulWidget {
 }
 
 class _SavedScreenState extends State<SavedScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   SavedArticleBloc _savedArticleBloc;
   TabController _tabController;
 
@@ -34,11 +34,12 @@ class _SavedScreenState extends State<SavedScreen>
   }
 
   void _handleTabSelection() {
-    if (_tabController.index == 1) _savedArticleBloc.add(GetAllSaveArticle());
+    //if (_tabController.index == 1) _savedArticleBloc.add(GetAllSaveArticle());
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return IconTheme(
@@ -116,4 +117,7 @@ class _SavedScreenState extends State<SavedScreen>
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive =>true;
 }

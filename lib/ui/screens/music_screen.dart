@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,10 @@ class _MusicScreenState extends State<MusicScreen>
       if (event == AudioPlayerState.COMPLETED) {
         changeMusicIndex(_currentIndex + 1);
       }
+      if (event == AudioPlayerState.STOPPED) {
+        _isPlaying = false;
+        setState(() {});
+      }
     });
   }
 
@@ -53,7 +58,6 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
     audioPlayer.dispose();
     onPlayerStateChanged?.cancel();
@@ -94,6 +98,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusics = musics;
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
+                    audioPlayerSave.stop();
                     audioPlayer.play(_currentMusic.link);
                     setState(() {});
                   },
@@ -109,6 +114,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusics = musics;
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
+                    audioPlayerSave.stop();
                     audioPlayer.play(_currentMusic.link);
                     setState(() {});
                   },
@@ -144,10 +150,14 @@ class _MusicScreenState extends State<MusicScreen>
                   isPlaying: _isPlaying,
                   music: _currentMusic,
                   nextCallBack: () {
-                    changeMusicIndex(_currentIndex + 1);
+                    isShuffle
+                        ? changeMusicIndex(
+                            _currentIndex + 1 + new Random().nextInt(5))
+                        : changeMusicIndex(_currentIndex + 1);
                   },
                   playCallBack: () async {
                     if (!_isPlaying) {
+                      audioPlayerSave.stop();
                       await audioPlayer.play(_currentMusic.link);
                       _isPlaying = true;
                       setState(() {});
@@ -158,7 +168,10 @@ class _MusicScreenState extends State<MusicScreen>
                     }
                   },
                   previousCallBack: () {
-                    changeMusicIndex(_currentIndex + 1);
+                    isShuffle
+                        ? changeMusicIndex(
+                            _currentIndex - 1 - new Random().nextInt(5))
+                        : changeMusicIndex(_currentIndex - 1);
                   },
                 ),
               ),

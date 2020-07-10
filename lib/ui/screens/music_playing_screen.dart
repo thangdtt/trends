@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -12,6 +13,7 @@ import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/data/models/music.dart';
 import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
+import 'package:trends/utils/custom_icons.dart';
 import 'package:trends/utils/player.dart';
 
 class MusicPlayingScreen extends StatefulWidget {
@@ -47,10 +49,12 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   bool _isDownloading = false;
   double _downloadPercentage = 0.0;
   String _downloadMessage = "";
+  bool _isShuffle = false;
 
   @override
   void dispose() {
     super.dispose();
+    _isShuffle = isShuffle;
     _onPlayerCompletion?.cancel();
     _onDurationChanged?.cancel();
     _onAudioPositionChanged?.cancel();
@@ -375,17 +379,26 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         IconButton(
-                          iconSize: 35 * aspectWidth,
-                          onPressed: () {},
+                          iconSize: 28 * aspectWidth,
+                          onPressed: () {
+                            _isShuffle = !_isShuffle;
+                            isShuffle = !isShuffle;
+                            setState(() {});
+                          },
                           icon: Icon(
-                            Icons.import_export,
-                            color: Colors.white,
+                            CustomIcons.shuffle,
+                            color: isShuffle
+                                ? Theme.of(context).splashColor
+                                : Colors.white,
                           ),
                         ),
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            changeMusicIndex(_musicIndex - 1);
+                            isShuffle
+                                ? changeMusicIndex(
+                                    _musicIndex - 1 - new Random().nextInt(5))
+                                : changeMusicIndex(_musicIndex - 1);
                           },
                           icon: Icon(
                             Icons.skip_previous,
@@ -412,7 +425,10 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            changeMusicIndex(_musicIndex + 1);
+                            isShuffle
+                                ? changeMusicIndex(
+                                    _musicIndex + 1 + new Random().nextInt(5))
+                                : changeMusicIndex(_musicIndex + 1);
                           },
                           icon: Icon(
                             Icons.skip_next,

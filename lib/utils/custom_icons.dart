@@ -29,7 +29,10 @@ class CustomIcons {
   static const _kFontPkg1 = null;
 
   static const _kFontFam = 'HeartIcon';
-  static const _kFontPkg  = null;
+  static const _kFontPkg = null;
+
+  static const _kFontFam3 = 'Shuffle';
+  static const _kFontPkg3 = null;
 
   static const IconData newspaper =
       IconData(0xf1ea, fontFamily: _kFontFam2, fontPackage: _kFontPkg2);
@@ -377,4 +380,6 @@ class CustomIcons {
       IconData(0xe8aa, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData heart_empty =
       IconData(0xe8ab, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData shuffle =
+      IconData(0xe8ac, fontFamily: _kFontFam3, fontPackage: _kFontPkg3);
 }

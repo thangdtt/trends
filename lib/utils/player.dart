@@ -7,7 +7,9 @@ AudioPlayer audioPlayer = AudioPlayer(playerId: 'music');
 AudioPlayer audioPlayerSave = AudioPlayer(playerId: 'save');
 Duration turnfOffTime = Duration(seconds: 0);
 bool autoTurnMusicOff = false;
-
+bool isRepeatOne = false;
+int random;
+int currentMusicIndex = 0;
 bool isShuffle = false;
 
 Timer timer;

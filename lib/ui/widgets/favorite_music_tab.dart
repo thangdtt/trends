@@ -34,7 +34,14 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
     if (audioPlayerSave.state == AudioPlayerState.PLAYING) _isPlaying = true;
     onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((event) {
       if (event == AudioPlayerState.COMPLETED) {
-        changeMusicIndex(_currentIndex + 1);
+        if (isRepeatOne)
+          changeMusicIndex(_currentIndex);
+        else
+          changeMusicIndex(_currentIndex + 1);
+      }
+      if (event == AudioPlayerState.STOPPED) {
+        _isPlaying = false;
+        setState(() {});
       }
     });
   }

@@ -50,11 +50,11 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   double _downloadPercentage = 0.0;
   String _downloadMessage = "";
   bool _isShuffle = false;
+  bool _isRepeatOne = false;
 
   @override
   void dispose() {
     super.dispose();
-    _isShuffle = isShuffle;
     _onPlayerCompletion?.cancel();
     _onDurationChanged?.cancel();
     _onAudioPositionChanged?.cancel();
@@ -73,14 +73,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _musicIndex = widget.musicIndex;
 
     try {
-      for (var item in (_savedMusicBloc.state as SavedMusicLoaded).musics) {
-        if (_musics[_musicIndex].id == item.id) {
-          setState(() {
-            _isFavorite = true;
-          });
-          break;
-        }
-      }
+      checkFavoriteState();
     } catch (e) {
       print(e);
     }
@@ -88,7 +81,12 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _isPlaying = widget.isPlaying;
     _onPlayerCompletion = _audioPlayer.onPlayerCompletion.listen((event) {
       _position = _duration;
-      changeMusicIndex(_musicIndex + 1);
+      if (!isRepeatOne) {
+        isShuffle
+            ? changeMusicIndex(_musicIndex + 1 + random)
+            : changeMusicIndex(_musicIndex + 1);
+        checkFavoriteState();
+      }
     });
     _onDurationChanged = _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
@@ -119,6 +117,9 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
           _isPlaying = false;
           break;
       }
+
+      _isShuffle = isShuffle;
+      _isRepeatOne = isRepeatOne;
       setState(() {});
     });
   }
@@ -388,17 +389,22 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           icon: Icon(
                             CustomIcons.shuffle,
                             color: isShuffle
-                                ? Theme.of(context).splashColor
+                                ? Theme.of(context).errorColor
                                 : Colors.white,
                           ),
                         ),
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            isShuffle
-                                ? changeMusicIndex(
-                                    _musicIndex - 1 - new Random().nextInt(5))
-                                : changeMusicIndex(_musicIndex - 1);
+                            if (isShuffle) {
+                              random = new Random().nextInt(5);
+                              currentMusicIndex -= 1 + random;
+                              changeMusicIndex(currentMusicIndex);
+                            } else {
+                              currentMusicIndex--;
+                              changeMusicIndex(currentMusicIndex);
+                            }
+                            checkFavoriteState();
                           },
                           icon: Icon(
                             Icons.skip_previous,
@@ -425,10 +431,15 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            isShuffle
-                                ? changeMusicIndex(
-                                    _musicIndex + 1 + new Random().nextInt(5))
-                                : changeMusicIndex(_musicIndex + 1);
+                            if (isShuffle) {
+                              random = new Random().nextInt(5);
+                              currentMusicIndex += 1 + random;
+                              changeMusicIndex(currentMusicIndex);
+                            } else {
+                              currentMusicIndex++;
+                              changeMusicIndex(currentMusicIndex);
+                            }
+                            checkFavoriteState();
                           },
                           icon: Icon(
                             Icons.skip_next,
@@ -437,9 +448,13 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         ),
                         IconButton(
                           iconSize: 35 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () {
+                            _isRepeatOne = !_isRepeatOne;
+                            isRepeatOne = _isRepeatOne;
+                            setState(() {});
+                          },
                           icon: Icon(
-                            Icons.repeat,
+                            isRepeatOne ? Icons.repeat_one : Icons.repeat,
                             color: Colors.white,
                           ),
                         ),
@@ -571,5 +586,22 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
             ],
           );
         });
+  }
+
+  void checkFavoriteState() {
+    try {
+      for (var item in (_savedMusicBloc.state as SavedMusicLoaded).musics) {
+        if (_musics[_musicIndex].id == item.id) {
+          setState(() {
+            _isFavorite = true;
+          });
+          return;
+        }
+      }
+      _isFavorite = false;
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 }

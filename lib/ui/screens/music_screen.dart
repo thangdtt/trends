@@ -29,11 +29,26 @@ class _MusicScreenState extends State<MusicScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 7, vsync: this);
     _tabController.addListener(_handleTabSelection);
     onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((event) {
       if (event == AudioPlayerState.COMPLETED) {
-        changeMusicIndex(_currentIndex + 1);
+        random = new Random().nextInt(5);
+        if (isShuffle) {
+          if (isRepeatOne) {
+            changeMusicIndex(currentMusicIndex);
+          } else {
+            currentMusicIndex += 1 + random;
+            changeMusicIndex(currentMusicIndex);
+          }
+        } else {
+          if (isRepeatOne) {
+            changeMusicIndex(currentMusicIndex);
+          } else {
+            currentMusicIndex++;
+            changeMusicIndex(currentMusicIndex);
+          }
+        }
       }
       if (event == AudioPlayerState.STOPPED) {
         _isPlaying = false;
@@ -45,8 +60,10 @@ class _MusicScreenState extends State<MusicScreen>
   Future<void> changeMusicIndex(int index) async {
     _currentIndex = index;
     if (_currentIndex > _currentMusics.length - 1) {
+      currentMusicIndex = 0;
       _currentIndex = 0;
     } else if (_currentIndex < 0) {
+      currentMusicIndex = _currentMusics.length - 1;
       _currentIndex = _currentMusics.length - 1;
     }
     _currentMusic = _currentMusics[_currentIndex];
@@ -74,10 +91,25 @@ class _MusicScreenState extends State<MusicScreen>
             isScrollable: true,
             tabs: [
               Tab(
-                child: Text("Việt nam"),
+                child: Text("Việt Nam"),
               ),
               Tab(
                 child: Text("US-UK"),
+              ),
+              Tab(
+                child: Text("Nhạc Hoa"),
+              ),
+              Tab(
+                child: Text("Nhạc Hàn"),
+              ),
+              Tab(
+                child: Text("Nhạc Nhật"),
+              ),
+              Tab(
+                child: Text("Nhạc Pháp"),
+              ),
+              Tab(
+                child: Text("Nước khác"),
               ),
             ],
           ),
@@ -95,6 +127,7 @@ class _MusicScreenState extends State<MusicScreen>
                 child: MusicTab(
                   onPressPlay: (List<Music> musics, int index) async {
                     _currentIndex = index;
+                    currentMusicIndex = _currentIndex;
                     _currentMusics = musics;
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
@@ -107,6 +140,86 @@ class _MusicScreenState extends State<MusicScreen>
               BlocProvider(
                 create: (BuildContext context) {
                   return MusicBloc('us-uk');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    _isPlaying = true;
+                    audioPlayerSave.stop();
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('cn');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    _isPlaying = true;
+                    audioPlayerSave.stop();
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('kr');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    _isPlaying = true;
+                    audioPlayerSave.stop();
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('jp');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    _isPlaying = true;
+                    audioPlayerSave.stop();
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('fr');
+                },
+                child: MusicTab(
+                  onPressPlay: (List<Music> musics, int index) async {
+                    _currentIndex = index;
+                    _currentMusics = musics;
+                    _currentMusic = _currentMusics[index];
+                    _isPlaying = true;
+                    audioPlayerSave.stop();
+                    audioPlayer.play(_currentMusic.link);
+                    setState(() {});
+                  },
+                ),
+              ),
+              BlocProvider(
+                create: (BuildContext context) {
+                  return MusicBloc('other');
                 },
                 child: MusicTab(
                   onPressPlay: (List<Music> musics, int index) async {
@@ -150,10 +263,14 @@ class _MusicScreenState extends State<MusicScreen>
                   isPlaying: _isPlaying,
                   music: _currentMusic,
                   nextCallBack: () {
-                    isShuffle
-                        ? changeMusicIndex(
-                            _currentIndex + 1 + new Random().nextInt(5))
-                        : changeMusicIndex(_currentIndex + 1);
+                    if (isShuffle) {
+                      random = new Random().nextInt(5);
+                      currentMusicIndex += 1 + random;
+                      changeMusicIndex(currentMusicIndex);
+                    } else {
+                      currentMusicIndex++;
+                      changeMusicIndex(currentMusicIndex);
+                    }
                   },
                   playCallBack: () async {
                     if (!_isPlaying) {
@@ -168,10 +285,14 @@ class _MusicScreenState extends State<MusicScreen>
                     }
                   },
                   previousCallBack: () {
-                    isShuffle
-                        ? changeMusicIndex(
-                            _currentIndex - 1 - new Random().nextInt(5))
-                        : changeMusicIndex(_currentIndex - 1);
+                    if (isShuffle) {
+                      random = new Random().nextInt(5);
+                      currentMusicIndex -= 1 + random;
+                      changeMusicIndex(currentMusicIndex);
+                    } else {
+                      currentMusicIndex--;
+                      changeMusicIndex(currentMusicIndex);
+                    }
                   },
                 ),
               ),

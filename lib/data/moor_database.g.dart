@@ -648,6 +648,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
   final String composer;
   final String album;
   final String releaseYear;
+  final String qualities;
+  final String qualityLink;
   final DateTime addTime;
   SavedMusicData(
       {@required this.id,
@@ -659,6 +661,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       this.composer,
       this.album,
       this.releaseYear,
+      this.qualities,
+      this.qualityLink,
       this.addTime});
   factory SavedMusicData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
@@ -683,6 +687,10 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}album']),
       releaseYear: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}release_year']),
+      qualities: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}qualities']),
+      qualityLink: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}quality_link']),
       addTime: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}add_time']),
     );
@@ -717,6 +725,12 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
     if (!nullToAbsent || releaseYear != null) {
       map['release_year'] = Variable<String>(releaseYear);
     }
+    if (!nullToAbsent || qualities != null) {
+      map['qualities'] = Variable<String>(qualities);
+    }
+    if (!nullToAbsent || qualityLink != null) {
+      map['quality_link'] = Variable<String>(qualityLink);
+    }
     if (!nullToAbsent || addTime != null) {
       map['add_time'] = Variable<DateTime>(addTime);
     }
@@ -743,6 +757,12 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       releaseYear: releaseYear == null && nullToAbsent
           ? const Value.absent()
           : Value(releaseYear),
+      qualities: qualities == null && nullToAbsent
+          ? const Value.absent()
+          : Value(qualities),
+      qualityLink: qualityLink == null && nullToAbsent
+          ? const Value.absent()
+          : Value(qualityLink),
       addTime: addTime == null && nullToAbsent
           ? const Value.absent()
           : Value(addTime),
@@ -762,6 +782,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       composer: serializer.fromJson<String>(json['composer']),
       album: serializer.fromJson<String>(json['album']),
       releaseYear: serializer.fromJson<String>(json['releaseYear']),
+      qualities: serializer.fromJson<String>(json['qualities']),
+      qualityLink: serializer.fromJson<String>(json['qualityLink']),
       addTime: serializer.fromJson<DateTime>(json['addTime']),
     );
   }
@@ -778,6 +800,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
       'composer': serializer.toJson<String>(composer),
       'album': serializer.toJson<String>(album),
       'releaseYear': serializer.toJson<String>(releaseYear),
+      'qualities': serializer.toJson<String>(qualities),
+      'qualityLink': serializer.toJson<String>(qualityLink),
       'addTime': serializer.toJson<DateTime>(addTime),
     };
   }
@@ -792,6 +816,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           String composer,
           String album,
           String releaseYear,
+          String qualities,
+          String qualityLink,
           DateTime addTime}) =>
       SavedMusicData(
         id: id ?? this.id,
@@ -803,6 +829,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
         composer: composer ?? this.composer,
         album: album ?? this.album,
         releaseYear: releaseYear ?? this.releaseYear,
+        qualities: qualities ?? this.qualities,
+        qualityLink: qualityLink ?? this.qualityLink,
         addTime: addTime ?? this.addTime,
       );
   @override
@@ -817,6 +845,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           ..write('composer: $composer, ')
           ..write('album: $album, ')
           ..write('releaseYear: $releaseYear, ')
+          ..write('qualities: $qualities, ')
+          ..write('qualityLink: $qualityLink, ')
           ..write('addTime: $addTime')
           ..write(')'))
         .toString();
@@ -839,8 +869,12 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
                               composer.hashCode,
                               $mrjc(
                                   album.hashCode,
-                                  $mrjc(releaseYear.hashCode,
-                                      addTime.hashCode))))))))));
+                                  $mrjc(
+                                      releaseYear.hashCode,
+                                      $mrjc(
+                                          qualities.hashCode,
+                                          $mrjc(qualityLink.hashCode,
+                                              addTime.hashCode))))))))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -854,6 +888,8 @@ class SavedMusicData extends DataClass implements Insertable<SavedMusicData> {
           other.composer == this.composer &&
           other.album == this.album &&
           other.releaseYear == this.releaseYear &&
+          other.qualities == this.qualities &&
+          other.qualityLink == this.qualityLink &&
           other.addTime == this.addTime);
 }
 
@@ -867,6 +903,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
   final Value<String> composer;
   final Value<String> album;
   final Value<String> releaseYear;
+  final Value<String> qualities;
+  final Value<String> qualityLink;
   final Value<DateTime> addTime;
   const MusicToSaveTableCompanion({
     this.id = const Value.absent(),
@@ -878,6 +916,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     this.composer = const Value.absent(),
     this.album = const Value.absent(),
     this.releaseYear = const Value.absent(),
+    this.qualities = const Value.absent(),
+    this.qualityLink = const Value.absent(),
     this.addTime = const Value.absent(),
   });
   MusicToSaveTableCompanion.insert({
@@ -890,6 +930,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     this.composer = const Value.absent(),
     this.album = const Value.absent(),
     this.releaseYear = const Value.absent(),
+    this.qualities = const Value.absent(),
+    this.qualityLink = const Value.absent(),
     this.addTime = const Value.absent(),
   })  : name = Value(name),
         singer = Value(singer),
@@ -904,6 +946,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     Expression<String> composer,
     Expression<String> album,
     Expression<String> releaseYear,
+    Expression<String> qualities,
+    Expression<String> qualityLink,
     Expression<DateTime> addTime,
   }) {
     return RawValuesInsertable({
@@ -916,6 +960,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       if (composer != null) 'composer': composer,
       if (album != null) 'album': album,
       if (releaseYear != null) 'release_year': releaseYear,
+      if (qualities != null) 'qualities': qualities,
+      if (qualityLink != null) 'quality_link': qualityLink,
       if (addTime != null) 'add_time': addTime,
     });
   }
@@ -930,6 +976,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       Value<String> composer,
       Value<String> album,
       Value<String> releaseYear,
+      Value<String> qualities,
+      Value<String> qualityLink,
       Value<DateTime> addTime}) {
     return MusicToSaveTableCompanion(
       id: id ?? this.id,
@@ -941,6 +989,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
       composer: composer ?? this.composer,
       album: album ?? this.album,
       releaseYear: releaseYear ?? this.releaseYear,
+      qualities: qualities ?? this.qualities,
+      qualityLink: qualityLink ?? this.qualityLink,
       addTime: addTime ?? this.addTime,
     );
   }
@@ -975,6 +1025,12 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
     if (releaseYear.present) {
       map['release_year'] = Variable<String>(releaseYear.value);
     }
+    if (qualities.present) {
+      map['qualities'] = Variable<String>(qualities.value);
+    }
+    if (qualityLink.present) {
+      map['quality_link'] = Variable<String>(qualityLink.value);
+    }
     if (addTime.present) {
       map['add_time'] = Variable<DateTime>(addTime.value);
     }
@@ -993,6 +1049,8 @@ class MusicToSaveTableCompanion extends UpdateCompanion<SavedMusicData> {
           ..write('composer: $composer, ')
           ..write('album: $album, ')
           ..write('releaseYear: $releaseYear, ')
+          ..write('qualities: $qualities, ')
+          ..write('qualityLink: $qualityLink, ')
           ..write('addTime: $addTime')
           ..write(')'))
         .toString();
@@ -1114,6 +1172,32 @@ class $MusicToSaveTableTable extends MusicToSaveTable
     );
   }
 
+  final VerificationMeta _qualitiesMeta = const VerificationMeta('qualities');
+  GeneratedTextColumn _qualities;
+  @override
+  GeneratedTextColumn get qualities => _qualities ??= _constructQualities();
+  GeneratedTextColumn _constructQualities() {
+    return GeneratedTextColumn(
+      'qualities',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _qualityLinkMeta =
+      const VerificationMeta('qualityLink');
+  GeneratedTextColumn _qualityLink;
+  @override
+  GeneratedTextColumn get qualityLink =>
+      _qualityLink ??= _constructQualityLink();
+  GeneratedTextColumn _constructQualityLink() {
+    return GeneratedTextColumn(
+      'quality_link',
+      $tableName,
+      true,
+    );
+  }
+
   final VerificationMeta _addTimeMeta = const VerificationMeta('addTime');
   GeneratedDateTimeColumn _addTime;
   @override
@@ -1137,6 +1221,8 @@ class $MusicToSaveTableTable extends MusicToSaveTable
         composer,
         album,
         releaseYear,
+        qualities,
+        qualityLink,
         addTime
       ];
   @override
@@ -1192,6 +1278,16 @@ class $MusicToSaveTableTable extends MusicToSaveTable
           _releaseYearMeta,
           releaseYear.isAcceptableOrUnknown(
               data['release_year'], _releaseYearMeta));
+    }
+    if (data.containsKey('qualities')) {
+      context.handle(_qualitiesMeta,
+          qualities.isAcceptableOrUnknown(data['qualities'], _qualitiesMeta));
+    }
+    if (data.containsKey('quality_link')) {
+      context.handle(
+          _qualityLinkMeta,
+          qualityLink.isAcceptableOrUnknown(
+              data['quality_link'], _qualityLinkMeta));
     }
     if (data.containsKey('add_time')) {
       context.handle(_addTimeMeta,

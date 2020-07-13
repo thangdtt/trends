@@ -36,7 +36,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
-    audioPlayer.release();
+    audioPlayerMain.dispose();
+    audioPlayerSave.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -49,7 +50,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) audioPlayer.release();
+    if (state == AppLifecycleState.detached) {
+      audioPlayerMain.dispose();
+      audioPlayerSave.dispose();
+    }
   }
 
   @override

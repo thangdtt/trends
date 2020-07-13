@@ -48,7 +48,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
 
   @override
   void dispose() {
-    audioPlayer.dispose();
+    audioPlayerMain.dispose();
     _pageController.dispose();
     super.dispose();
   }

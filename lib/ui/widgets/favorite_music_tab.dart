@@ -32,12 +32,24 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
     super.initState();
     _savedMusicBloc = BlocProvider.of<SavedMusicBloc>(context);
     if (audioPlayerSave.state == AudioPlayerState.PLAYING) _isPlaying = true;
-    onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((event) {
+    onPlayerStateChanged = audioPlayerSave.onPlayerStateChanged.listen((event) {
       if (event == AudioPlayerState.COMPLETED) {
-        if (isRepeatOne)
-          changeMusicIndex(_currentIndex);
-        else
-          changeMusicIndex(_currentIndex + 1);
+        random = new Random().nextInt(5);
+        if (isShuffle) {
+          if (isRepeatOne) {
+            changeMusicIndex(currentMusicIndex);
+          } else {
+            currentMusicIndex += 1 + random;
+            changeMusicIndex(currentMusicIndex);
+          }
+        } else {
+          if (isRepeatOne) {
+            changeMusicIndex(currentMusicIndex);
+          } else {
+            currentMusicIndex++;
+            changeMusicIndex(currentMusicIndex);
+          }
+        }
       }
       if (event == AudioPlayerState.STOPPED) {
         _isPlaying = false;
@@ -55,8 +67,10 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
   Future<void> changeMusicIndex(int index) async {
     _currentIndex = index;
     if (_currentIndex > _currentMusics.length - 1) {
+      currentMusicIndex = 0;
       _currentIndex = 0;
     } else if (_currentIndex < 0) {
+      currentMusicIndex = _currentMusics.length - 1;
       _currentIndex = _currentMusics.length - 1;
     }
     _currentMusic = _currentMusics[_currentIndex];
@@ -114,14 +128,18 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
                 isPlaying: _isPlaying,
                 music: _currentMusic,
                 nextCallBack: () {
-                  isShuffle
-                      ? changeMusicIndex(
-                          _currentIndex + 1 + new Random().nextInt(5))
-                      : changeMusicIndex(_currentIndex + 1);
+                  if (isShuffle) {
+                    random = new Random().nextInt(5);
+                    currentMusicIndex += 1 + random;
+                    changeMusicIndex(currentMusicIndex);
+                  } else {
+                    currentMusicIndex++;
+                    changeMusicIndex(currentMusicIndex);
+                  }
                 },
                 playCallBack: () async {
                   if (!_isPlaying) {
-                    audioPlayer.stop();
+                    audioPlayerMain.stop();
                     await audioPlayerSave.play(_currentMusic.link);
                     _isPlaying = true;
                     setState(() {});
@@ -132,10 +150,14 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
                   }
                 },
                 previousCallBack: () {
-                  isShuffle
-                      ? changeMusicIndex(
-                          _currentIndex - 1 - new Random().nextInt(5))
-                      : changeMusicIndex(_currentIndex + 1);
+                  if (isShuffle) {
+                    random = new Random().nextInt(5);
+                    currentMusicIndex -= 1 + random;
+                    changeMusicIndex(currentMusicIndex);
+                  } else {
+                    currentMusicIndex--;
+                    changeMusicIndex(currentMusicIndex);
+                  }
                 },
               ),
             ),
@@ -171,7 +193,7 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
                     _currentMusics = musics;
                     _currentMusic = _currentMusics[i];
                     _isPlaying = true;
-                    audioPlayer.stop();
+                    audioPlayerMain.stop();
                     audioPlayerSave.play(_currentMusic.link);
                     setState(() {});
                   }),

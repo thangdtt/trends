@@ -26,6 +26,8 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
         if (_list != null) {
           saveMusics = [];
           for (var item in _list) {
+            List<String> _qualities = item.qualities.split('~');
+            List<String> _qualityLink = item.qualityLink.split('~');
             saveMusics.add(new Music(
               album: item.album,
               composer: item.composer,
@@ -36,6 +38,8 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
               name: item.name,
               releaseYear: item.releaseYear,
               singer: item.singer,
+              qualities: _qualities,
+              qualityLink: _qualityLink,
             ));
           }
         }
@@ -49,6 +53,18 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
       yield SavedMusicLoading();
       try {
         SavedMusicData saveMusic;
+        String _saveQualities = "", _saveQualityLink = "";
+        event.music.qualities.forEach((element) {
+          _saveQualities += element + '~';
+        });
+        event.music.qualityLink.forEach((element) {
+          _saveQualityLink += element + '~';
+        });
+
+        //delete last "~" character
+        _saveQualities = _saveQualities.substring(0, _saveQualities.length - 1);
+        _saveQualityLink = _saveQualityLink.substring(0, _saveQualityLink.length - 1);
+        
         saveMusic = new SavedMusicData(
             id: event.music.id,
             link: event.music.link,
@@ -59,6 +75,8 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
             country: event.music.country,
             image: event.music.image,
             releaseYear: event.music.releaseYear,
+            qualities: _saveQualities,
+            qualityLink: _saveQualityLink,
             addTime: DateTime.now());
 
         try {
@@ -69,6 +87,8 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
           if (_list != null) {
             saveMusics = [];
             for (var item in _list) {
+              List<String> _qualities = item.qualities.split('~');
+              List<String> _qualityLink = item.qualityLink.split('~');
               saveMusics.add(new Music(
                 album: item.album,
                 composer: item.composer,
@@ -79,6 +99,8 @@ class SavedMusicBloc extends Bloc<SavedMusicEvent, SavedMusicState> {
                 name: item.name,
                 releaseYear: item.releaseYear,
                 singer: item.singer,
+                qualities: _qualities,
+                qualityLink: _qualityLink,
               ));
             }
           }

@@ -31,7 +31,7 @@ class _MusicScreenState extends State<MusicScreen>
     super.initState();
     _tabController = new TabController(length: 7, vsync: this);
     _tabController.addListener(_handleTabSelection);
-    onPlayerStateChanged = audioPlayer.onPlayerStateChanged.listen((event) {
+    onPlayerStateChanged = audioPlayerMain.onPlayerStateChanged.listen((event) {
       if (event == AudioPlayerState.COMPLETED) {
         random = new Random().nextInt(5);
         if (isShuffle) {
@@ -67,7 +67,7 @@ class _MusicScreenState extends State<MusicScreen>
       _currentIndex = _currentMusics.length - 1;
     }
     _currentMusic = _currentMusics[_currentIndex];
-    await audioPlayer.play(_currentMusic.link);
+    await audioPlayerMain.play(_currentMusic.link);
     setState(() {});
   }
 
@@ -76,7 +76,6 @@ class _MusicScreenState extends State<MusicScreen>
   @override
   void dispose() {
     _tabController.dispose();
-    audioPlayer.dispose();
     onPlayerStateChanged?.cancel();
     super.dispose();
   }
@@ -132,7 +131,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -148,7 +147,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -164,7 +163,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -180,7 +179,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -196,7 +195,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -212,7 +211,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -228,7 +227,7 @@ class _MusicScreenState extends State<MusicScreen>
                     _currentMusic = _currentMusics[index];
                     _isPlaying = true;
                     audioPlayerSave.stop();
-                    audioPlayer.play(_currentMusic.link);
+                    audioPlayerMain.play(_currentMusic.link);
                     setState(() {});
                   },
                 ),
@@ -243,9 +242,9 @@ class _MusicScreenState extends State<MusicScreen>
                 onTap: () async {
                   final Map<String, Object> mapArguments = <String, Object>{
                     'musics': _currentMusics,
-                    'audioPlayer': audioPlayer,
+                    'audioPlayer': audioPlayerMain,
                     'musicIndex': _currentIndex,
-                    'isPlaying': _isPlaying
+                    'isPlaying': _isPlaying,
                   };
                   final Map<String, dynamic> mapResult =
                       await Navigator.of(context).pushNamed(
@@ -275,11 +274,11 @@ class _MusicScreenState extends State<MusicScreen>
                   playCallBack: () async {
                     if (!_isPlaying) {
                       audioPlayerSave.stop();
-                      await audioPlayer.play(_currentMusic.link);
+                      await audioPlayerMain.play(_currentMusic.link);
                       _isPlaying = true;
                       setState(() {});
                     } else {
-                      await audioPlayer.pause();
+                      await audioPlayerMain.pause();
                       _isPlaying = false;
                       setState(() {});
                     }

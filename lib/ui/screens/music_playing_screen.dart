@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/data/models/music.dart';
+import 'package:trends/ui/widgets/custom_popup_menu_item.dart';
 import 'package:trends/ui/widgets/music/custom_icon_button.dart';
 import 'package:trends/ui/widgets/music/animation_rotation_widget.dart';
 import 'package:trends/utils/custom_icons.dart';
@@ -51,6 +52,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   String _downloadMessage = "";
   bool _isShuffle = false;
   bool _isRepeatOne = false;
+  int _currentQualityIndex;
 
   @override
   void dispose() {
@@ -72,11 +74,9 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
 
     _musicIndex = widget.musicIndex;
 
-    try {
-      checkFavoriteState();
-    } catch (e) {
-      print(e);
-    }
+    loadQuality();
+
+    checkFavoriteState();
 
     _isPlaying = widget.isPlaying;
     _onPlayerCompletion = _audioPlayer.onPlayerCompletion.listen((event) {
@@ -125,16 +125,22 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
   }
 
   Future<void> changeMusicIndex(int index) async {
-    _musicIndex = index;
-    if (_musicIndex > _musics.length - 1) {
-      _musicIndex = 0;
-    } else if (_musicIndex < 0) {
-      _musicIndex = _musics.length - 1;
+    try {
+      _musicIndex = index;
+      if (_musicIndex > _musics.length - 1) {
+        currentMusicIndex = 0;
+        _musicIndex = 0;
+      } else if (_musicIndex < 0) {
+        currentMusicIndex = _musics.length - 1;
+        _musicIndex = _musics.length - 1;
+      }
+      setState(() {
+        _position = null;
+      });
+      await _audioPlayer.play(_musics[_musicIndex].link);
+    } catch (e) {
+      print(e);
     }
-    setState(() {
-      _position = null;
-    });
-    await _audioPlayer.play(_musics[_musicIndex].link);
   }
 
   String _formatDuration(Duration duration) {
@@ -276,7 +282,54 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                       children: <Widget>[
                         IconButton(
                           iconSize: 30 * aspectWidth,
-                          onPressed: () {},
+                          onPressed: () async {
+                            String currentQuality =
+                                currentQualityIndex == 0 ? "128" : "320";
+                            final String value = await showCustomMenu(
+                              useRootNavigator: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                              items: _musics[_musicIndex]
+                                  .qualities
+                                  .map((e) => CustomPopupMenuItem(
+                                        value: e,
+                                        child: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              e.toString() + " Kbps",
+                                              style: TextStyle(
+                                                  color: currentQuality ==
+                                                          e.toString()
+                                                      ? Theme.of(context)
+                                                          .errorColor
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1
+                                                          .color),
+                                            )),
+                                      ))
+                                  .toList(),
+                              context: context,
+                              elevation: 5,
+                              position: new RelativeRect.fromLTRB(
+                                  aspectWidth * 50,
+                                  390 * aspectHeight,
+                                  100,
+                                  0.0),
+                            );
+
+                            if (value != null) {
+                              if (value == "128") {
+                                currentQualityIndex = 0;
+                              } else {
+                                currentQualityIndex = 1;
+                              }
+                              if (currentQualityIndex != _currentQualityIndex) {
+                                changeQuality();
+                              }
+                            }
+                          },
                           icon: Icon(
                             Icons.settings,
                             color: Colors.white,
@@ -396,15 +449,19 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            if (isShuffle) {
-                              random = new Random().nextInt(5);
-                              currentMusicIndex -= 1 + random;
-                              changeMusicIndex(currentMusicIndex);
-                            } else {
-                              currentMusicIndex--;
-                              changeMusicIndex(currentMusicIndex);
+                            try {
+                              if (isShuffle) {
+                                random = new Random().nextInt(5);
+                                currentMusicIndex -= 1 + random;
+                                changeMusicIndex(currentMusicIndex);
+                              } else {
+                                currentMusicIndex--;
+                                changeMusicIndex(currentMusicIndex);
+                              }
+                              checkFavoriteState();
+                            } catch (e) {
+                              print(e);
                             }
-                            checkFavoriteState();
                           },
                           icon: Icon(
                             Icons.skip_previous,
@@ -431,15 +488,21 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            if (isShuffle) {
-                              random = new Random().nextInt(5);
-                              currentMusicIndex += 1 + random;
-                              changeMusicIndex(currentMusicIndex);
-                            } else {
-                              currentMusicIndex++;
-                              changeMusicIndex(currentMusicIndex);
+                            print(_musics);
+                            print("\n $currentMusicIndex\n");
+                            try {
+                              if (isShuffle) {
+                                random = new Random().nextInt(5);
+                                currentMusicIndex += 1 + random;
+                                changeMusicIndex(currentMusicIndex);
+                              } else {
+                                currentMusicIndex++;
+                                changeMusicIndex(currentMusicIndex);
+                              }
+                              checkFavoriteState();
+                            } catch (e) {
+                              print(e);
                             }
-                            checkFavoriteState();
                           },
                           icon: Icon(
                             Icons.skip_next,
@@ -600,6 +663,45 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       }
       _isFavorite = false;
       setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void changeQuality() async {
+    try {
+      setState(() {
+        _currentQualityIndex = currentQualityIndex;
+      });
+      for (var item in _musics) {
+        if (item.qualityLink.length == 2) {
+          item.link = item.qualityLink[currentQualityIndex];
+        }
+      }
+
+      print(_musics[_musicIndex].qualityLink[currentQualityIndex]);
+      Duration _stopDuration = _position;
+      _audioPlayer.stop();
+      await _audioPlayer.play(_musics[_musicIndex].link).then((value) {
+        _audioPlayer.seek(_stopDuration);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void loadQuality() async {
+    try {
+      if (_currentQualityIndex != currentQualityIndex) {
+        for (var item in _musics) {
+          if (item.qualityLink.elementAt(currentQualityIndex) != null) {
+            item.link = item.qualityLink[currentQualityIndex];
+          }
+        }
+        setState(() {
+          _currentQualityIndex = currentQualityIndex;
+        });
+      }
     } catch (e) {
       print(e);
     }

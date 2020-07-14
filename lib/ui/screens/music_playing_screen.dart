@@ -195,7 +195,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         CustomIconButton(
                           icon: Icon(
                             Icons.close,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                           iconSize: 25 * aspectWidth,
                           padding: EdgeInsets.all(0),
@@ -219,7 +219,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                                 _musics[_musicIndex].name,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromRGBO(240, 240, 240, 1),
                                     fontSize: 20,
                                     fontWeight: FontWeight.w800),
                               ),
@@ -227,7 +227,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                                 _musics[_musicIndex].singer,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromRGBO(240, 240, 240, 1),
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500),
                               ),
@@ -241,7 +241,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           tooltip: "Hẹn giờ tắt nhạc",
                           icon: Icon(
                             Icons.alarm,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                           iconSize: 25 * aspectWidth,
                           padding: EdgeInsets.all(0),
@@ -332,7 +332,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             Icons.settings,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -344,7 +344,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             Icons.file_download,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -358,7 +358,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             Icons.share,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -373,7 +373,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                             _isFavorite
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                       ],
@@ -390,7 +390,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                               : '00:00',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Color.fromRGBO(240, 240, 240, 1),
                               fontSize: 15,
                               fontWeight: FontWeight.w500),
                         ),
@@ -418,7 +418,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                               : '00:00',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: Colors.white,
+                              color: Color.fromRGBO(240, 240, 240, 1),
                               fontSize: 15,
                               fontWeight: FontWeight.w500),
                         ),
@@ -443,7 +443,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                             CustomIcons.shuffle,
                             color: isShuffle
                                 ? Theme.of(context).errorColor
-                                : Colors.white,
+                                : Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -465,7 +465,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             Icons.skip_previous,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -482,7 +482,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                                 ? Icons.pause_circle_filled
                                 : Icons.play_circle_filled,
                             size: 70 * aspectWidth,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -506,7 +506,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             Icons.skip_next,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                         IconButton(
@@ -518,7 +518,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           },
                           icon: Icon(
                             isRepeatOne ? Icons.repeat_one : Icons.repeat,
-                            color: Colors.white,
+                            color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                         ),
                       ],
@@ -531,7 +531,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                     Text(
                       _downloadMessage,
                       style: TextStyle(
-                          color: Colors.white, fontSize: 12 * aspectWidth),
+                          color: Color.fromRGBO(240, 240, 240, 1), fontSize: 12 * aspectWidth),
                     ),
                   if (_isDownloading)
                     Container(

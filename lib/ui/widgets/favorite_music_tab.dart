@@ -81,85 +81,84 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Stack(
+    return Column(
       children: <Widget>[
-        Container(
-          child: BlocBuilder<SavedMusicBloc, SavedMusicState>(
-            bloc: _savedMusicBloc,
-            builder: (context, state) {
-              if (state is SavedMusicInitial) {
-                return Container();
-              } else if (state is SavedMusicLoading) {
-                return Center(child: Text("Đang tải"));
-              } else if (state is SavedMusicLoaded) {
-                if (state.musics.isEmpty)
-                  return Center(child: Text("Không có bài hát được lưu!"));
-                else
-                  return buildLoadedInput(state.musics, context);
-              } else
-                return Center(child: Text("Xảy ra lỗi"));
-            },
+        Expanded(
+                  child: Container(
+            child: BlocBuilder<SavedMusicBloc, SavedMusicState>(
+              bloc: _savedMusicBloc,
+              builder: (context, state) {
+                if (state is SavedMusicInitial) {
+                  return Container();
+                } else if (state is SavedMusicLoading) {
+                  return Center(child: Text("Đang tải"));
+                } else if (state is SavedMusicLoaded) {
+                  if (state.musics.isEmpty)
+                    return Center(child: Text("Không có bài hát được lưu!"));
+                  else
+                    return buildLoadedInput(state.musics, context);
+                } else
+                  return Center(child: Text("Xảy ra lỗi"));
+              },
+            ),
           ),
         ),
         if (_currentMusic != null)
-          Positioned(
-            bottom: 0,
-            child: GestureDetector(
-              onTap: () async {
-                final Map<String, Object> mapArguments = <String, Object>{
-                  'musics': _currentMusics,
-                  'audioPlayer': audioPlayerSave,
-                  'musicIndex': _currentIndex,
-                  'isPlaying': _isPlaying
-                };
-                final Map<String, dynamic> mapResult =
-                    await Navigator.of(context).pushNamed(
-                        MusicPlayingScreen.routeName,
-                        arguments: mapArguments) as Map<String, dynamic>;
-                if (mapResult != null) {
-                  setState(() {
-                    _currentIndex = mapResult['musicIndex'];
-                    _currentMusic = _currentMusics[_currentIndex];
-                    _isPlaying = mapResult['isPlaying'];
-                  });
+          GestureDetector(
+            onTap: () async {
+              final Map<String, Object> mapArguments = <String, Object>{
+                'musics': _currentMusics,
+                'audioPlayer': audioPlayerSave,
+                'musicIndex': _currentIndex,
+                'isPlaying': _isPlaying
+              };
+              final Map<String, dynamic> mapResult =
+                  await Navigator.of(context).pushNamed(
+                      MusicPlayingScreen.routeName,
+                      arguments: mapArguments) as Map<String, dynamic>;
+              if (mapResult != null) {
+                setState(() {
+                  _currentIndex = mapResult['musicIndex'];
+                  _currentMusic = _currentMusics[_currentIndex];
+                  _isPlaying = mapResult['isPlaying'];
+                });
+              }
+            },
+            child: MusicPlaying(
+              isPlaying: _isPlaying,
+              music: _currentMusic,
+              nextCallBack: () {
+                if (isShuffle) {
+                  random = new Random().nextInt(5);
+                  currentMusicIndex += 1 + random;
+                  changeMusicIndex(currentMusicIndex);
+                } else {
+                  currentMusicIndex++;
+                  changeMusicIndex(currentMusicIndex);
                 }
               },
-              child: MusicPlaying(
-                isPlaying: _isPlaying,
-                music: _currentMusic,
-                nextCallBack: () {
-                  if (isShuffle) {
-                    random = new Random().nextInt(5);
-                    currentMusicIndex += 1 + random;
-                    changeMusicIndex(currentMusicIndex);
-                  } else {
-                    currentMusicIndex++;
-                    changeMusicIndex(currentMusicIndex);
-                  }
-                },
-                playCallBack: () async {
-                  if (!_isPlaying) {
-                    audioPlayerMain.stop();
-                    await audioPlayerSave.play(_currentMusic.link);
-                    _isPlaying = true;
-                    setState(() {});
-                  } else {
-                    await audioPlayerSave.pause();
-                    _isPlaying = false;
-                    setState(() {});
-                  }
-                },
-                previousCallBack: () {
-                  if (isShuffle) {
-                    random = new Random().nextInt(5);
-                    currentMusicIndex -= 1 + random;
-                    changeMusicIndex(currentMusicIndex);
-                  } else {
-                    currentMusicIndex--;
-                    changeMusicIndex(currentMusicIndex);
-                  }
-                },
-              ),
+              playCallBack: () async {
+                if (!_isPlaying) {
+                  audioPlayerMain.stop();
+                  await audioPlayerSave.play(_currentMusic.link);
+                  _isPlaying = true;
+                  setState(() {});
+                } else {
+                  await audioPlayerSave.pause();
+                  _isPlaying = false;
+                  setState(() {});
+                }
+              },
+              previousCallBack: () {
+                if (isShuffle) {
+                  random = new Random().nextInt(5);
+                  currentMusicIndex -= 1 + random;
+                  changeMusicIndex(currentMusicIndex);
+                } else {
+                  currentMusicIndex--;
+                  changeMusicIndex(currentMusicIndex);
+                }
+              },
             ),
           )
         else

@@ -18,6 +18,7 @@ import 'package:trends/ui/widgets/main_drawer.dart';
 import 'package:trends/utils/player.dart';
 
 class BottomTabScreen extends StatefulWidget {
+  static const routeName = '/home';
   @override
   _BottomTabScreenState createState() => _BottomTabScreenState();
   PushNotificationsManager pushNotiManager;
@@ -69,7 +70,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
   Widget build(BuildContext context) {
     super.build(context);
     widget.pushNotiManager = new PushNotificationsManager();
-    widget.pushNotiManager.init(context);
+    widget.pushNotiManager.init(context, notificationChangePage);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -79,7 +80,7 @@ class _BottomTabScreenState extends State<BottomTabScreen>
         child: AppBar(
           iconTheme: Theme.of(context).iconTheme,
           title: Text(
-            "Trends",
+            "Newsic",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Pacifico',
@@ -146,6 +147,10 @@ class _BottomTabScreenState extends State<BottomTabScreen>
         items: bottomBarItems,
       ),
     );
+  }
+
+  Function notificationChangePage(int page) {
+    _pageController.jumpToPage(page);
   }
 
   @override

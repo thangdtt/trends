@@ -19,7 +19,7 @@ class PushNotificationsManager {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   bool _initialized = false;
 
-  Future<void> init(BuildContext context) async {
+  Future<void> init(BuildContext context, Function callback) async {
     Map<String, String> _getNotificationAndNavigate(
         Map<dynamic, dynamic> message, BuildContext context) {
       Map<String, String> notification = {
@@ -43,6 +43,7 @@ class PushNotificationsManager {
         _firebaseMessaging
             .requestNotificationPermissions(IosNotificationSettings());
       }
+      _firebaseMessaging.subscribeToTopic("topic1");
 
       _firebaseMessaging.configure(
         //Called in foreground
@@ -63,6 +64,8 @@ class PushNotificationsManager {
 
           switch (data['screen']) {
             case "Article":
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              callback(0);
               await SavedArticleRepository.getSavedArticle(
                       int.parse(data['articleId']))
                   .then((value) {
@@ -78,6 +81,9 @@ class PushNotificationsManager {
               });
               break;
             case "Music":
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              callback(1);
+            
               break;
             default:
               break;
@@ -93,7 +99,7 @@ class PushNotificationsManager {
       //   /// [...]
       // }
 
-      // // For testing purposes print the Firebase Messaging token
+      // For testing purposes print the Firebase Messaging token
       // String token = await _firebaseMessaging.getToken();
       // print("FirebaseMessaging token: $token");
 

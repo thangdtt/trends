@@ -99,9 +99,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             return MaterialApp(
               home: SplashScreen(),
             );
-          else if (state is ThemeLoaded)
+          else if (state is ThemeLoaded) {
+            var suggestBloc = BlocProvider.of<SuggestArticleBloc>(context);
+            for (var item in CategoryEnum.values) {
+              suggestBloc.add(FetchSuggestArticles(item));
+            }
+
             return _buildWithTheme(context, state.themeData);
-          else
+          } else
             return Container();
         }),
       ),

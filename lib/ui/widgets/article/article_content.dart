@@ -102,10 +102,11 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                           child: Container(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                             child: Text(
-                              article.time,
+                              article.category,
                               style: TextStyle(
                                       fontSize: 16,
-                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                      //fontStyle: FontStyle.italic,
                                       color: setTimeAndCaptionColor())
                                   .copyWith(
                                 fontSize: 7 * screenHeight / 360 +
@@ -139,6 +140,22 @@ class _ArticleContentWidgetState extends State<ArticleContentWidget> {
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(
+                        article.time,
+                        style: TextStyle(
+                                fontSize: 16,
+                                fontStyle: FontStyle.italic,
+                                color: setTimeAndCaptionColor())
+                            .copyWith(
+                          fontSize: 7 * screenHeight / 360 +
+                              (themeBloc.state as ThemeLoaded)
+                                      .pageFontSizeFactor *
+                                  3,
                         ),
                       ),
                     ),

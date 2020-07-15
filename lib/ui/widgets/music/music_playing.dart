@@ -45,10 +45,11 @@ class _MusicPlayingState extends State<MusicPlaying>
         border: Border(top: BorderSide(width: 0.1, color: Colors.grey)),
         color: Theme.of(context).backgroundColor,
       ),
-      height: 102 * aspectWidth,
+      height: 65 * aspectWidth,
       width: screenWidth,
       child: Row(
         children: <Widget>[
+          SizedBox(width: 6 * aspectWidth),
           ClipRRect(
             borderRadius: BorderRadius.circular(300.0),
             child: Container(
@@ -92,7 +93,7 @@ class _MusicPlayingState extends State<MusicPlaying>
             ),
           ),
           SizedBox(
-            width: 10 * aspectWidth,
+            width: 5 * aspectWidth,
           ),
           IconButton(
             icon: Icon(Icons.skip_previous),

@@ -116,188 +116,192 @@ class _MusicScreenState extends State<MusicScreen>
         preferredSize: Size.fromHeight(50.0),
       ),
       body: Stack(
+        fit: StackFit.expand,
         children: <Widget>[
-          TabBarView(
-            children: [
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('vn');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    currentMusicIndex = _currentIndex;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('vn');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          currentMusicIndex = _currentIndex;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('us-uk');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('cn');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('kr');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('jp');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('fr');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (BuildContext context) {
+                        return MusicBloc('other');
+                      },
+                      child: MusicTab(
+                        onPressPlay: (List<Music> musics, int index) async {
+                          _currentIndex = index;
+                          _currentMusics = musics;
+                          _currentMusic = _currentMusics[index];
+                          _isPlaying = true;
+                          audioPlayerSave.stop();
+                          audioPlayerMain.play(_currentMusic.link);
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ],
+                  controller: _tabController,
                 ),
               ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('us-uk');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
+              if (_currentMusic != null)
+                GestureDetector(
+                  onTap: () async {
+                    final Map<String, Object> mapArguments = <String, Object>{
+                      'musics': _currentMusics,
+                      'audioPlayer': audioPlayerMain,
+                      'musicIndex': _currentIndex,
+                      'isPlaying': _isPlaying,
+                    };
+                    final Map<String, dynamic> mapResult =
+                        await Navigator.of(context).pushNamed(
+                            MusicPlayingScreen.routeName,
+                            arguments: mapArguments) as Map<String, dynamic>;
+                    if (mapResult != null) {
+                      setState(() {
+                        _currentIndex = mapResult['musicIndex'];
+                        _currentMusic = _currentMusics[_currentIndex];
+                        _isPlaying = mapResult['isPlaying'];
+                      });
+                    }
                   },
-                ),
-              ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('cn');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
-                ),
-              ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('kr');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
-                ),
-              ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('jp');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
-                ),
-              ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('fr');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
-                ),
-              ),
-              BlocProvider(
-                create: (BuildContext context) {
-                  return MusicBloc('other');
-                },
-                child: MusicTab(
-                  onPressPlay: (List<Music> musics, int index) async {
-                    _currentIndex = index;
-                    _currentMusics = musics;
-                    _currentMusic = _currentMusics[index];
-                    _isPlaying = true;
-                    audioPlayerSave.stop();
-                    audioPlayerMain.play(_currentMusic.link);
-                    setState(() {});
-                  },
-                ),
-              ),
+                  child: MusicPlaying(
+                    isPlaying: _isPlaying,
+                    music: _currentMusic,
+                    nextCallBack: () {
+                      if (isShuffle) {
+                        random = new Random().nextInt(5);
+                        currentMusicIndex += 1 + random;
+                        changeMusicIndex(currentMusicIndex);
+                      } else {
+                        currentMusicIndex++;
+                        changeMusicIndex(currentMusicIndex);
+                      }
+                    },
+                    playCallBack: () async {
+                      if (!_isPlaying) {
+                        audioPlayerSave.stop();
+                        await audioPlayerMain.play(_currentMusic.link);
+                        _isPlaying = true;
+                        setState(() {});
+                      } else {
+                        await audioPlayerMain.pause();
+                        _isPlaying = false;
+                        setState(() {});
+                      }
+                    },
+                    previousCallBack: () {
+                      if (isShuffle) {
+                        random = new Random().nextInt(5);
+                        currentMusicIndex -= 1 + random;
+                        changeMusicIndex(currentMusicIndex);
+                      } else {
+                        currentMusicIndex--;
+                        changeMusicIndex(currentMusicIndex);
+                      }
+                    },
+                  ),
+                )
+              else
+                const SizedBox()
             ],
-            controller: _tabController,
           ),
-          if (_currentMusic != null)
-            Positioned(
-              bottom: 0,
-              child: GestureDetector(
-                onTap: () async {
-                  final Map<String, Object> mapArguments = <String, Object>{
-                    'musics': _currentMusics,
-                    'audioPlayer': audioPlayerMain,
-                    'musicIndex': _currentIndex,
-                    'isPlaying': _isPlaying,
-                  };
-                  final Map<String, dynamic> mapResult =
-                      await Navigator.of(context).pushNamed(
-                          MusicPlayingScreen.routeName,
-                          arguments: mapArguments) as Map<String, dynamic>;
-                  if (mapResult != null) {
-                    setState(() {
-                      _currentIndex = mapResult['musicIndex'];
-                      _currentMusic = _currentMusics[_currentIndex];
-                      _isPlaying = mapResult['isPlaying'];
-                    });
-                  }
-                },
-                child: MusicPlaying(
-                  isPlaying: _isPlaying,
-                  music: _currentMusic,
-                  nextCallBack: () {
-                    if (isShuffle) {
-                      random = new Random().nextInt(5);
-                      currentMusicIndex += 1 + random;
-                      changeMusicIndex(currentMusicIndex);
-                    } else {
-                      currentMusicIndex++;
-                      changeMusicIndex(currentMusicIndex);
-                    }
-                  },
-                  playCallBack: () async {
-                    if (!_isPlaying) {
-                      audioPlayerSave.stop();
-                      await audioPlayerMain.play(_currentMusic.link);
-                      _isPlaying = true;
-                      setState(() {});
-                    } else {
-                      await audioPlayerMain.pause();
-                      _isPlaying = false;
-                      setState(() {});
-                    }
-                  },
-                  previousCallBack: () {
-                    if (isShuffle) {
-                      random = new Random().nextInt(5);
-                      currentMusicIndex -= 1 + random;
-                      changeMusicIndex(currentMusicIndex);
-                    } else {
-                      currentMusicIndex--;
-                      changeMusicIndex(currentMusicIndex);
-                    }
-                  },
-                ),
-              ),
-            )
-          else
-            const SizedBox()
         ],
       ),
     );

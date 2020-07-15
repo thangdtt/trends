@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/global/theme/app_theme.dart';
 import 'package:trends/utils/pref_utils.dart';
 import 'package:trends/utils/utils_class.dart';

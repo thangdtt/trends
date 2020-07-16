@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -128,50 +130,75 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             final int musicIndex = arguments['musicIndex'];
             final AudioPlayer audioPlayer = arguments['audioPlayer'];
             final bool isPlaying = arguments['isPlaying'];
-            return PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    MusicPlayingScreen(
+            if (Platform.isAndroid) {
+              return PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      MusicPlayingScreen(
+                        audioPlayer: audioPlayer,
+                        musicIndex: musicIndex,
+                        musics: musics,
+                        isPlaying: isPlaying,
+                      ),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var tween = Tween(begin: begin, end: end);
+                    var offsetAnimation = animation.drive(tween);
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  settings: RouteSettings(name: name, arguments: arguments));
+            } else {
+              return MaterialPageRoute(
+                  builder: (context) {
+                    return MusicPlayingScreen(
                       audioPlayer: audioPlayer,
                       musicIndex: musicIndex,
                       musics: musics,
                       isPlaying: isPlaying,
-                    ),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  var begin = Offset(0.0, 1.0);
-                  var end = Offset.zero;
-                  var tween = Tween(begin: begin, end: end);
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-                settings: RouteSettings(name: name, arguments: arguments));
+                    );
+                  },
+                  settings: RouteSettings(name: name, arguments: arguments));
+            }
             break;
           case ArticleContentWidget.routeName:
             Map<String, dynamic> arguments = settings.arguments;
             Article article = arguments['article'];
             CategoryEnum catEnum = arguments['catEnum'];
-            return PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) {
-                  return ArticleContentWidget(
-                    article: article,
-                    catEnum: catEnum,
-                  );
-                },
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  var begin = Offset(0.0, 1.0);
-                  var end = Offset.zero;
-                  var tween = Tween(begin: begin, end: end);
-                  var offsetAnimation = animation.drive(tween);
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-                settings: RouteSettings(name: name, arguments: arguments));
+            if (Platform.isAndroid) {
+              return PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return ArticleContentWidget(
+                      article: article,
+                      catEnum: catEnum,
+                    );
+                  },
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var tween = Tween(begin: begin, end: end);
+                    var offsetAnimation = animation.drive(tween);
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  settings: RouteSettings(name: name, arguments: arguments));
+            } else {
+              return MaterialPageRoute(
+                  builder: (context) {
+                    return ArticleContentWidget(
+                      article: article,
+                      catEnum: catEnum,
+                    );
+                  },
+                  settings: RouteSettings(name: name, arguments: arguments));
+            }
+            break;
           case ReadHistoryScreen.routeName:
             return MaterialPageRoute(
                 builder: (context) {

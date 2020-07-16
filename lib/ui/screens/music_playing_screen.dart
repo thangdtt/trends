@@ -22,7 +22,12 @@ class MusicPlayingScreen extends StatefulWidget {
   static const routeName = '/music-playing';
 
   const MusicPlayingScreen(
-      {Key key, this.musics, this.audioPlayer, this.musicIndex, this.isPlaying})
+      {Key key,
+      this.musics,
+      this.audioPlayer,
+      this.musicIndex,
+      this.isPlaying,
+      this.songDuration})
       : super(key: key);
 
   @override
@@ -31,6 +36,7 @@ class MusicPlayingScreen extends StatefulWidget {
   final AudioPlayer audioPlayer;
   final int musicIndex;
   final bool isPlaying;
+  final Duration songDuration;
 }
 
 class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
@@ -74,6 +80,8 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _audioPlayer = widget.audioPlayer;
 
     _musicIndex = widget.musicIndex;
+
+    _duration = widget.songDuration;
 
     loadQuality();
 
@@ -124,6 +132,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       setState(() {});
     });
   }
+
   Future<void> changeMusicIndex(int index) async {
     try {
       _musicIndex = index;

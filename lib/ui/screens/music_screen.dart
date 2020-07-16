@@ -102,7 +102,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Việt Nam",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -111,7 +111,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "US-UK",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -120,7 +120,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Nhạc Hoa",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -129,7 +129,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Nhạc Hàn",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -138,7 +138,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Nhạc Nhật",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -147,7 +147,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Nhạc Pháp",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),
@@ -156,7 +156,7 @@ class _MusicScreenState extends State<MusicScreen>
                           "Nước khác",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textSelectionColor,
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
                       ),

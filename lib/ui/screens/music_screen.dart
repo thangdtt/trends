@@ -82,37 +82,92 @@ class _MusicScreenState extends State<MusicScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
-        child: AppBar(
-          bottom: TabBar(
-            controller: _tabController,
-            isScrollable: true,
-            tabs: [
-              Tab(
-                child: Text("Việt Nam"),
-              ),
-              Tab(
-                child: Text("US-UK"),
-              ),
-              Tab(
-                child: Text("Nhạc Hoa"),
-              ),
-              Tab(
-                child: Text("Nhạc Hàn"),
-              ),
-              Tab(
-                child: Text("Nhạc Nhật"),
-              ),
-              Tab(
-                child: Text("Nhạc Pháp"),
-              ),
-              Tab(
-                child: Text("Nước khác"),
-              ),
-            ],
+        child: AppBar(actions: <Widget>[
+          Container(
+            width: screenWidth,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  width: screenWidth,
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabs: [
+                      Tab(
+                        child: Text(
+                          "Việt Nam",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "US-UK",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Nhạc Hoa",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Nhạc Hàn",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Nhạc Nhật",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Nhạc Pháp",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                      Tab(
+                        child: Text(
+                          "Nước khác",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textSelectionColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(child: Container()),
+              ],
+            ),
           ),
-        ),
+        ]),
         preferredSize: Size.fromHeight(50.0),
       ),
       body: Stack(

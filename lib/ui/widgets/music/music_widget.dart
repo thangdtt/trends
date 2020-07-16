@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/data/models/music.dart';
@@ -27,16 +26,16 @@ class MusicWidget extends StatelessWidget {
       onTap: callback,
       child: Container(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: 2 * screenWidth / 360, vertical: 1),
+          padding: EdgeInsets.fromLTRB(
+              4 * screenWidth / 360, 4, 4 * screenWidth / 360, 0),
           child: Container(
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.all(Radius.circular(3)),
-              border: Border.all(color: Colors.black54, width: 0.5),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.black45, width: 0.3),
             ),
             width: width == 0 ? screenWidth : width,
-            height: 130 * screenHeight / 780,
+            height: 125 * screenHeight / 780,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -67,8 +66,8 @@ class MusicWidget extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(3),
-                                    bottomLeft: Radius.circular(3)),
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)),
                               )
                             : BoxDecoration(
                                 image: DecorationImage(
@@ -77,8 +76,8 @@ class MusicWidget extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                                 borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(3),
-                                    bottomLeft: Radius.circular(3)),
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)),
                               )),
                     //+ DateTime.now to make all tag different from each others
                     tag: tag == ''
@@ -96,59 +95,75 @@ class MusicWidget extends StatelessWidget {
                     children: <Widget>[
                       Expanded(flex: 2, child: SizedBox(height: 5)),
                       Expanded(
-                        flex: 33,
+                        flex: 35,
                         child: Container(
                           margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                           height: 100 * screenHeight / 780,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  music.name,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontSize: 15 * screenWidth / 360,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none,
+                                Container(
+                                  child: Text(
+                                    music.name,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      color: Colors.teal,
+                                      fontSize: 15 * screenWidth / 360,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 3),
-                                Text(
-                                  music.singer,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
-                                  style: TextStyle(
-                                    fontSize: 13 * screenWidth / 360,
-                                    decoration: TextDecoration.none,
+                                FittedBox(
+                                                                  child: Text(
+                                    "Ca sĩ: ${music.singer}",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      fontSize: 13 * screenWidth / 360,
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
                                 ),
+                                SizedBox(height: 3),
+                                if (music.album.isNotEmpty)
+                                  Text(
+                                    "Album: ${music.album.replaceAll('(Single)', '').replaceAll('[Single]', '')}",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                      fontSize: 13 * screenWidth / 360,
+                                      decoration: TextDecoration.none,
+                                    ),
+                                  ),
                               ]),
                         ),
                       ),
-                      Expanded(
-                        flex: 10,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                width: 140 * screenWidth / 360,
-                                child: Text(
-                                  time??'',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 11 * screenWidth / 360,
-                                    color: Colors.teal,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Expanded(
+                      //   flex: 8,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: <Widget>[
+                      //       Expanded(
+                      //         flex: 3,
+                      //         child: Container(
+                      //           width: 140 * screenWidth / 360,
+                      //           child: Text(
+                      //             time ?? '',
+                      //             overflow: TextOverflow.ellipsis,
+                      //             style: TextStyle(
+                      //               fontSize: 11 * screenWidth / 360,
+                      //               color: Colors.teal,
+                      //               decoration: TextDecoration.none,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

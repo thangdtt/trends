@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
-import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
 
 import 'package:trends/push_notifications.dart';
@@ -12,7 +9,6 @@ import 'package:trends/push_notifications.dart';
 import 'package:trends/ui/screens/music_screen.dart';
 import 'package:trends/ui/screens/news_screen.dart';
 import 'package:trends/ui/screens/saved_screen.dart';
-import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trends/ui/widgets/main_drawer.dart';
 import 'package:trends/utils/player.dart';
@@ -79,26 +75,18 @@ class _BottomTabScreenState extends State<BottomTabScreen>
         preferredSize: Size.fromHeight(23 * screenHeight / 360),
         child: AppBar(
           iconTheme: Theme.of(context).iconTheme,
-          title: Text(
-            "Newsic",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontFamily: 'Pacifico',
-              color: Theme.of(context).textTheme.bodyText2.color,
+          title: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.fromLTRB(0, 0, 35*screenWidth/360, 0),
+            child: Text(
+              "Newsic",
+              style: TextStyle(
+                fontFamily: 'Pacifico',
+                color: Theme.of(context).textTheme.bodyText2.color,
+              ),
             ),
           ),
           backgroundColor: Theme.of(context).primaryColor,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Platform.isIOS ? CupertinoIcons.search : Icons.search,
-                color: Theme.of(context).textTheme.bodyText2.color,
-              ),
-              onPressed: () {
-                showSearch(context: context, delegate: DataSearch());
-              },
-            ),
-          ],
         ),
       ),
       drawer: Container(
@@ -155,44 +143,4 @@ class _BottomTabScreenState extends State<BottomTabScreen>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class DataSearch extends SearchDelegate<String> {
-  @override
-  String get searchFieldLabel => '';
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            query = "";
-          }),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow,
-          progress: transitionAnimation,
-        ),
-        onPressed: () {
-          close(context, null);
-        });
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    BlocProvider.of<SearcharticleBloc>(context)
-        .add(StartToSearchArticle(query));
-    return SearchResultScreen();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Container();
-  }
 }

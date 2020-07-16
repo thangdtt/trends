@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trends/blocs/article/article_bloc.dart';
+import 'package:trends/blocs/searchArticle/searcharticle_bloc.dart';
+import 'package:trends/ui/screens/search_result_screen.dart';
 import 'package:trends/ui/widgets/news_tab.dart';
 import 'package:trends/utils/utils_class.dart';
 
@@ -48,15 +53,39 @@ class _NewsScreenState extends State<NewsScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          bottom: TabBar(
-            labelColor: Theme.of(context).textSelectionColor,
-            controller: _tabController,
-            isScrollable: true,
-            tabs: _buildTabs(),
-          ),
+          actions: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  width: screenWidth * 35 / 40,
+                  child: TabBar(
+                    labelColor: Theme.of(context).textSelectionColor,
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabs: _buildTabs(),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(left: BorderSide(color: Colors.grey,width: 0.2))),
+                  width: screenWidth * 5 / 40,
+                  child: IconButton(
+                    icon: Icon(
+                      Platform.isIOS ? CupertinoIcons.search : Icons.search,
+                      color: Theme.of(context).textTheme.bodyText2.color,
+                    ),
+                    onPressed: () {
+                      showSearch(context: context, delegate: DataSearch());
+                    },
+                  ),
+                )
+              ],
+            )
+          ],
         ),
         preferredSize: Size.fromHeight(50.0),
       ),
@@ -96,5 +125,45 @@ class _NewsScreenState extends State<NewsScreen>
         ));
     }
     return list;
+  }
+}
+
+class DataSearch extends SearchDelegate<String> {
+  @override
+  String get searchFieldLabel => '';
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          }),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow,
+          progress: transitionAnimation,
+        ),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    BlocProvider.of<SearcharticleBloc>(context)
+        .add(StartToSearchArticle(query));
+    return SearchResultScreen();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container();
   }
 }

@@ -153,11 +153,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             Map<String, dynamic> arguments = settings.arguments;
             Article article = arguments['article'];
             CategoryEnum catEnum = arguments['catEnum'];
-            return MaterialPageRoute(
-                builder: (context) {
+            return PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) {
                   return ArticleContentWidget(
                     article: article,
                     catEnum: catEnum,
+                  );
+                },
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  var begin = Offset(0.0, 1.0);
+                  var end = Offset.zero;
+                  var tween = Tween(begin: begin, end: end);
+                  var offsetAnimation = animation.drive(tween);
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
                   );
                 },
                 settings: RouteSettings(name: name, arguments: arguments));

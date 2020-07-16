@@ -19,7 +19,7 @@ class MusicScreen extends StatefulWidget {
 class _MusicScreenState extends State<MusicScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  List<String> categories = <String>['vn', 'us-uk'];
+//  List<String> categories = <String>['vn', 'us-uk'];
   bool _isPlaying = false;
   List<Music> _currentMusics;
   Music _currentMusic;

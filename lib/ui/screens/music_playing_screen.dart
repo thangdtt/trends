@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -123,7 +124,6 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       setState(() {});
     });
   }
-
   Future<void> changeMusicIndex(int index) async {
     try {
       _musicIndex = index;
@@ -488,7 +488,6 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                         IconButton(
                           iconSize: 35 * aspectWidth,
                           onPressed: () {
-                            print(_musics);
                             print("\n $currentMusicIndex\n");
                             try {
                               if (isShuffle) {
@@ -531,7 +530,8 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                     Text(
                       _downloadMessage,
                       style: TextStyle(
-                          color: Color.fromRGBO(240, 240, 240, 1), fontSize: 12 * aspectWidth),
+                          color: Color.fromRGBO(240, 240, 240, 1),
+                          fontSize: 12 * aspectWidth),
                     ),
                   if (_isDownloading)
                     Container(
@@ -579,7 +579,12 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       setState(() {
         _isDownloading = true;
       });
-      var dir = await getExternalStorageDirectory();
+
+      Directory dir;
+      if (Platform.isAndroid) {
+        dir = await getExternalStorageDirectory();
+      } else
+        dir = await getApplicationDocumentsDirectory();
       await dio.download(
         link,
         "${dir.path}/$fileName.mp3",
@@ -682,9 +687,8 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
       print(_musics[_musicIndex].qualityLink[currentQualityIndex]);
       Duration _stopDuration = _position;
       _audioPlayer.stop();
-      await _audioPlayer.play(_musics[_musicIndex].link).then((value) {
-        _audioPlayer.seek(_stopDuration);
-      });
+      await _audioPlayer.play(_musics[_musicIndex].link,
+          position: _stopDuration);
     } catch (e) {
       print(e);
     }

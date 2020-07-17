@@ -84,7 +84,7 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
     return Column(
       children: <Widget>[
         Expanded(
-                  child: Container(
+          child: Container(
             child: BlocBuilder<SavedMusicBloc, SavedMusicState>(
               bloc: _savedMusicBloc,
               builder: (context, state) {
@@ -106,15 +106,19 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
         if (_currentMusic != null)
           GestureDetector(
             onTap: () async {
+              int _du = await audioPlayerSave.getDuration();
+              int _pos = await audioPlayerSave.getCurrentPosition();
               final Map<String, Object> mapArguments = <String, Object>{
                 'musics': _currentMusics,
                 'audioPlayer': audioPlayerSave,
                 'musicIndex': _currentIndex,
-                'isPlaying': _isPlaying
+                'isPlaying': _isPlaying,
+                'songDuration': Duration(milliseconds: _du),
+                'currentPlayTime': Duration(milliseconds: _pos),
               };
-              final Map<String, dynamic> mapResult =
-                  await Navigator.of(context).pushNamed(
-                      MusicPlayingScreen.routeName,
+
+              final Map<String, dynamic> mapResult = await Navigator.of(context)
+                  .pushNamed(MusicPlayingScreen.routeName,
                       arguments: mapArguments) as Map<String, dynamic>;
               if (mapResult != null) {
                 setState(() {
@@ -140,8 +144,10 @@ class _FavoriteMusicTabState extends State<FavoriteMusicTab>
               playCallBack: () async {
                 if (!_isPlaying) {
                   audioPlayerMain.stop();
-                  await audioPlayerSave.play(_currentMusic.link);
+//                  await audioPlayerSave.play(_currentMusic.link);
+                  await audioPlayerSave.resume();
                   _isPlaying = true;
+
                   setState(() {});
                 } else {
                   await audioPlayerSave.pause();

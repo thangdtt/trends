@@ -131,6 +131,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             final AudioPlayer audioPlayer = arguments['audioPlayer'];
             final bool isPlaying = arguments['isPlaying'];
             final Duration songDuration = arguments['songDuration'];
+            final Duration currentPlayTime = arguments['currentPlayTime'];
+
             if (Platform.isAndroid) {
               return PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) =>
@@ -140,6 +142,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                         musics: musics,
                         isPlaying: isPlaying,
                         songDuration: songDuration,
+                        currentPlayTime: currentPlayTime,
                       ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
@@ -162,6 +165,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       musics: musics,
                       isPlaying: isPlaying,
                       songDuration: songDuration,
+                      currentPlayTime: currentPlayTime,
                     );
                   },
                   settings: RouteSettings(name: name, arguments: arguments));

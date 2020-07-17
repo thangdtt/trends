@@ -299,12 +299,14 @@ class _MusicScreenState extends State<MusicScreen>
                 GestureDetector(
                   onTap: () async {
                     int _du = await audioPlayerMain.getDuration();
+                    int _pos = await audioPlayerMain.getCurrentPosition();
                     final Map<String, Object> mapArguments = <String, Object>{
                       'musics': _currentMusics,
                       'audioPlayer': audioPlayerMain,
                       'musicIndex': _currentIndex,
                       'isPlaying': _isPlaying,
                       'songDuration': Duration(milliseconds: _du),
+                      'currentPlayTime' : Duration(milliseconds: _pos),
                     };
 
                     final Map<String, dynamic> mapResult =
@@ -335,7 +337,8 @@ class _MusicScreenState extends State<MusicScreen>
                     playCallBack: () async {
                       if (!_isPlaying) {
                         audioPlayerSave.stop();
-                        await audioPlayerMain.play(_currentMusic.link);
+//                        await audioPlayerMain.play(_currentMusic.link);
+                        await audioPlayerMain.resume();
                         _isPlaying = true;
                         setState(() {});
                       } else {

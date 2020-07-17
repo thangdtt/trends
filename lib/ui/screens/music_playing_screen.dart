@@ -27,7 +27,8 @@ class MusicPlayingScreen extends StatefulWidget {
       this.audioPlayer,
       this.musicIndex,
       this.isPlaying,
-      this.songDuration})
+      this.songDuration,
+      this.currentPlayTime})
       : super(key: key);
 
   @override
@@ -37,6 +38,7 @@ class MusicPlayingScreen extends StatefulWidget {
   final int musicIndex;
   final bool isPlaying;
   final Duration songDuration;
+  final Duration currentPlayTime;
 }
 
 class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
@@ -82,7 +84,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _musicIndex = widget.musicIndex;
 
     _duration = widget.songDuration;
-
+    _position = widget.currentPlayTime;
     loadQuality();
 
     checkFavoriteState();
@@ -110,6 +112,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
         _second = event.inMilliseconds.toDouble();
       });
     });
+
     _audioPlayer.onPlayerStateChanged;
     _onPlayerStateChanged = _audioPlayer.onPlayerStateChanged.listen((event) {
       switch (event) {
@@ -482,6 +485,7 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                           onPressed: () {
                             if (_isPlaying) {
                               _audioPlayer.pause();
+
                             } else {
                               _audioPlayer.resume();
                             }

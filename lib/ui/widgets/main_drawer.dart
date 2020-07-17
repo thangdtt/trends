@@ -234,6 +234,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             "Chuyên mục",
                             style: TextStyle(
                                 fontSize: 20 * screenWidth / 360,
+                                color: Theme.of(context).textTheme.bodyText2.color,
                                 fontWeight: FontWeight.normal),
                           ),
                         ]),
@@ -382,6 +383,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       filterChange = true;
                       currentFilter[category] = newValue;
                       PrefUtils.setFilterPref(tabFilterToList(currentFilter));
+                      BlocProvider.of<ThemeBloc>(context).add(ThemeChanged());
                     });
                   }
                 }),

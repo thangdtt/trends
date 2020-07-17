@@ -42,7 +42,8 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     _savedArticleBloc = BlocProvider.of<SavedArticleBloc>(context);
 
     try {
-      for (var item in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
+      for (var item
+          in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
         if (widget.article.id == item.id) {
           setState(() {
             isBookMarked = true;
@@ -179,7 +180,8 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   void _bookMarkArticle() async {
     bool existed = false;
     try {
-      for (var item in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
+      for (var item
+          in (_savedArticleBloc.state as SavedArticleLoaded).savedArticles) {
         if (widget.article.id == item.id) {
           existed = true;
           break;
@@ -221,13 +223,40 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     }
   }
 
+//  Future<String> _getSpeechZalo(String payload) async {
+//    setState(() {
+//      isGettingSpeech = true;
+//    });
+//
+//    final String url = "https://api.zalo.ai/v1/tts/synthesize";
+//    final apiKey = "dKn67JTRBBZgwRfdKe4Y6VJfEiQ3Fk2Q";
+//    final _headers = {'apiKey': apiKey};
+//
+//    try {
+//      if (payload.length > 1999) payload = payload.substring(0, 1998);
+//      final body = {'input': payload, 'speaker_id': '1', 'speed': '1'};
+//      final response = await http.post(url, headers: _headers, body: body);
+//      final _json = json.decode(response.body);
+//      link = _json['data']['url'];
+//      return link;
+//    } catch (e) {
+//      print(e.toString());
+//      Scaffold.of(context).showSnackBar(SnackBar(
+//          content: Text('API KEY hết hạn'), duration: (Duration(seconds: 1))));
+//      return link;
+//    }
+//  }
+
   play(String url) async {
     print(url);
     try {
-      if (url == null && url == "")
+      if (url == null && url == "") {
         Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('Không có nội dung'),
             duration: (Duration(seconds: 1))));
+        print("No content, url: $url\n");
+      }
+
       while (true) {
         final response = await http.get(url);
         if (response.statusCode != 404) break;
@@ -256,6 +285,8 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
   IconData _buildBookMarkIcon() {
     return Platform.isAndroid
         ? isBookMarked ? Icons.bookmark : Icons.bookmark_border
-        : isBookMarked ? CupertinoIcons.bookmark_solid : CupertinoIcons.bookmark;
+        : isBookMarked
+            ? CupertinoIcons.bookmark_solid
+            : CupertinoIcons.bookmark;
   }
 }

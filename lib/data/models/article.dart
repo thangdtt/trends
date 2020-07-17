@@ -31,7 +31,10 @@ class Article extends Equatable {
   }) {
     if (content != null) {
       for (var item in content) {
-        if (item.type == "image") firstImage = item.info;
+        if (item.type == "image") {
+          firstImage = item.info;
+          break;
+        }
       }
     }
   }

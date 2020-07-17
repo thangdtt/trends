@@ -10,7 +10,7 @@ import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/data/models/article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:trends/utils/pref_utils.dart';
+import 'package:trends/utils/remote_config_service.dart';
 
 class ArticleContentTopBar extends StatefulWidget {
   final Article article;
@@ -206,9 +206,11 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
     });
 
     final String url = "https://api.fpt.ai/hmi/tts/v5";
-    final apiKey = await PrefUtils.getFptApiPref();
+    var remoteConfigService = await RemoteConfigService.getInstance();
+    final apiKey = remoteConfigService.fptApiKey;
+    //final apiKey = await PrefUtils.getFptApiPref();
     print("Api: $apiKey\n");
-    final _headers = {'api-key': apiKey, 'speed': '', 'voice': 'linhsan'};
+    final _headers = {'api-key': apiKey, 'speed': '', 'voice': 'lannhi'};
     try {
       if (payload.length > 5000) payload = payload.substring(0, 4999);
       final response = await http.post(url, headers: _headers, body: payload);

@@ -12,14 +12,25 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<ThemeBloc>(context).add(LoadTheme());
+    _waitFor(Duration(milliseconds: 2000));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/Splash.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
+  }
+
+  Future _waitFor(Duration duration) async {
+    await new Future.delayed(duration);
+    BlocProvider.of<ThemeBloc>(context).add(LoadTheme());
   }
 }

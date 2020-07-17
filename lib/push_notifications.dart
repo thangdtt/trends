@@ -22,10 +22,10 @@ class PushNotificationsManager {
   Future<void> init(BuildContext context, Function callback) async {
     Map<String, String> _getNotificationAndNavigate(
         Map<dynamic, dynamic> message, BuildContext context) {
-      Map<String, String> notification = {
-        'title': message['notification']['title'],
-        'body': message['notification']['body'],
-      };
+      // Map<String, String> notification = {
+      //   'title': message['notification']['title'],
+      //   'body': message['notification']['body'],
+      // };
 
       Map<String, String> data = {
         'click_action': message['data']['click_action'],
@@ -83,7 +83,7 @@ class PushNotificationsManager {
             case "Music":
               Navigator.of(context).popUntil((route) => route.isFirst);
               callback(1);
-            
+
               break;
             default:
               break;

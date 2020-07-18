@@ -11,7 +11,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ThemeBloc>(context).add(LoadTheme());
+    //BlocProvider.of<ThemeBloc>(context).add(LoadTheme());
     _waitFor(Duration(milliseconds: 2000));
   }
 

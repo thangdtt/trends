@@ -19,6 +19,7 @@ import 'package:trends/ui/screens/read_history_screen.dart';
 import 'package:trends/ui/screens/splash_screen.dart';
 import 'package:trends/ui/widgets/article/article_content.dart';
 import 'package:trends/utils/player.dart';
+import 'package:trends/utils/remote_config_service.dart';
 import 'package:trends/utils/utils_class.dart';
 
 import 'blocs/article/article_bloc.dart';
@@ -97,6 +98,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         hideFooterWhenNotFull: false,
         enableBallisticLoad: true,
         child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
+          initializeRemoteConfigService();
           if (state is ThemeLoading || state is ThemeInitial)
             return MaterialApp(
               home: SplashScreen(),
@@ -113,6 +115,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         }),
       ),
     );
+  }
+  
+  Future initializeRemoteConfigService() async{
+    var remoteConfigService = await RemoteConfigService.getInstance();
+    remoteConfigService.init();
   }
 
   Widget _buildWithTheme(BuildContext context, ThemeData theme) {
@@ -219,24 +226,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             },
             settings: RouteSettings(name: name));
       },
-      // supportedLocales: [
-      //   Locale('en', 'US'),
-      //   Locale('vi', 'VN'),
-      // ],
-      // localizationsDelegates: [
-      //   AppLocalizations.delegate,
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
-      // localeResolutionCallback: (locale, supportedLocales) {
-      //   for (var supportedLocale in supportedLocales) {
-      //     if (supportedLocale.languageCode == locale.languageCode &&
-      //         supportedLocale.countryCode == locale.countryCode)
-      //       return supportedLocale;
-      //   }
-      //   return supportedLocales.first;
-      // },
     );
   }
 }

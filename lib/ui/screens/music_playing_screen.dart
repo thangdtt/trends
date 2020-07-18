@@ -42,10 +42,8 @@ class MusicPlayingScreen extends StatefulWidget {
 }
 
 class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
-  double _second = 0;
   int _musicIndex;
   List<Music> _musics;
-  double _totalTime = 1;
   AudioPlayer _audioPlayer;
   bool _isPlaying = false;
   bool _isFavorite = false;
@@ -102,14 +100,12 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
     _onDurationChanged = _audioPlayer.onDurationChanged.listen((event) {
       setState(() {
         _duration = event;
-        _totalTime = event.inMilliseconds.toDouble();
       });
     });
     _onAudioPositionChanged =
         _audioPlayer.onAudioPositionChanged.listen((event) {
       setState(() {
         _position = event;
-        _second = event.inMilliseconds.toDouble();
       });
     });
 
@@ -256,7 +252,6 @@ class _MusicPlayingScreenState extends State<MusicPlayingScreen> {
                             color: Color.fromRGBO(240, 240, 240, 1),
                           ),
                           iconSize: 25 * aspectWidth,
-                          padding: EdgeInsets.all(0),
                           onPressed: () {
                             buildDialog();
                           },

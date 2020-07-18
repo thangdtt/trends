@@ -111,16 +111,16 @@ class PrefUtils {
       return [];
   }
 
-  static setFptApiPref(String value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('fpt-api', value);
-  }
+  // static setFptApiPref(String value) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('fpt-api', value);
+  // }
 
-  static Future<String> getFptApiPref() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('fpt-api') != null)
-      return prefs.getString('fpt-api');
-    else
-      return "JJw44LERRempB76I1BNddOyYhzEhCyK0";
-  }
+  // static Future<String> getFptApiPref() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   if (prefs.getString('fpt-api') != null)
+  //     return prefs.getString('fpt-api');
+  //   else
+  //     return "JJw44LERRempB76I1BNddOyYhzEhCyK0";
+  // }
 }

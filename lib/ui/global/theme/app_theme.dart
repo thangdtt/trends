@@ -65,7 +65,7 @@ final appThemeData = {
     textTheme: TextTheme(
       headline1: TextStyle(fontSize: 72.0, fontStyle: FontStyle.italic),
       headline6: TextStyle(
-          fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.amber),
+          fontSize: 20.0, fontWeight: FontWeight.normal, color: Colors.amber),
       bodyText2:
           TextStyle(fontSize: 19, fontFamily: 'Hind', color: Colors.amber[300]),
     ),

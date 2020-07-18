@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trends/blocs/savedArticle/savedArticle_bloc.dart';
 import 'package:trends/blocs/savedMusic/saved_music_bloc.dart';
 import 'package:trends/blocs/theme/theme_bloc.dart';
@@ -70,75 +71,102 @@ class _BottomTabScreenState extends State<BottomTabScreen>
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(23 * screenHeight / 360),
-        child: AppBar(
-          iconTheme: Theme.of(context).iconTheme,
-          title: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.fromLTRB(0, 0, 35*screenWidth/360, 0),
-            child: Text(
-              "Newsic",
-              style: TextStyle(
-                fontFamily: 'Pacifico',
-                color: Theme.of(context).textTheme.bodyText2.color,
+    return WillPopScope(
+      onWillPop: _willPopHandler,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(23 * screenHeight / 360),
+          child: AppBar(
+            iconTheme: Theme.of(context).iconTheme,
+            title: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.fromLTRB(0, 0, 35 * screenWidth / 360, 0),
+              child: Text(
+                "Newsic",
+                style: TextStyle(
+                  fontFamily: 'Pacifico',
+                  color: Theme.of(context).textTheme.bodyText2.color,
+                ),
               ),
             ),
+            backgroundColor: Theme.of(context).primaryColor,
           ),
-          backgroundColor: Theme.of(context).primaryColor,
         ),
-      ),
-      drawer: Container(
-        width: screenWidth * 4 / 5,
-        child: MainDrawer(),
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (page) {
-          setState(() {
-            _currentIndex = page;
-          });
-        },
-        children: <Widget>[
-          BlocBuilder<ThemeBloc, ThemeState>(
-            bloc: themeBloc,
-            builder: (BuildContext context, ThemeState state) {
-              if (state is ThemeLoaded) {
-                return NewsScreen(
-                  key: GlobalKey(),
-                  tabFilter: state.tabFilter,
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
-          MusicScreen(),
-          SavedScreen(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) {
-          _pageController.animateToPage(index,
-              duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        currentIndex: _currentIndex,
-        backgroundColor: Theme.of(context).primaryColor,
-        selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
-        unselectedItemColor: (themeBloc.state as ThemeLoaded).isDarkMode
-            ? Colors.white60
-            : Colors.black38,
-        items: bottomBarItems,
+        drawer: Container(
+          width: screenWidth * 4 / 5,
+          child: MainDrawer(),
+        ),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (page) {
+            setState(() {
+              _currentIndex = page;
+            });
+          },
+          children: <Widget>[
+            BlocBuilder<ThemeBloc, ThemeState>(
+              bloc: themeBloc,
+              builder: (BuildContext context, ThemeState state) {
+                if (state is ThemeLoaded) {
+                  return NewsScreen(
+                    key: GlobalKey(),
+                    tabFilter: state.tabFilter,
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            MusicScreen(),
+            SavedScreen(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (index) {
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          currentIndex: _currentIndex,
+          backgroundColor: Theme.of(context).primaryColor,
+          selectedItemColor: Theme.of(context).textTheme.bodyText2.color,
+          unselectedItemColor: (themeBloc.state as ThemeLoaded).isDarkMode
+              ? Colors.white60
+              : Colors.black38,
+          items: bottomBarItems,
+        ),
       ),
     );
   }
 
-  Function notificationChangePage(int page) {
+  void notificationChangePage(int page) {
     _pageController.jumpToPage(page);
+  }
+
+  Future<bool> _willPopHandler() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Bạn có muốn thoát ứng dụng ?"),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text('Không'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  }),
+              FlatButton(
+                  child: Text('Có'),
+                  onPressed: () {
+                    audioPlayerMain.release();
+                    audioPlayerSave.release();
+                    SystemNavigator.pop();
+                  }),
+            ],
+          );
+        });
   }
 
   @override

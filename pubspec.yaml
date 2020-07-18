@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -39,7 +39,7 @@ dependencies:
   share: ^0.6.4+3
   firebase_messaging: ^6.0.16
   dio: ^3.0.9
-
+  firebase_remote_config: ^0.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -53,14 +53,18 @@ dev_dependencies:
     sdk: flutter
   moor_generator: ^3.2.0
   build_runner:
+  flutter_launcher_icons: ^0.7.5
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/AppLogo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -68,8 +72,7 @@ flutter:
 
   assets:
     - assets/images/NoInternet.png
-    - assets/lang/
-
+    - assets/images/Splash.png
 
     # - family: Schyler
     #   fonts:
@@ -83,19 +86,19 @@ flutter:
     #       weight: 700
 
   fonts:
-    - family:  NewspaperIcon
+    - family: NewspaperIcon
       fonts:
         - asset: assets/icons/NewspaperIcon.ttf
-    - family:  MoonIcon
+    - family: MoonIcon
       fonts:
         - asset: assets/icons/MoonIcon.ttf
-    - family:  HeartIcon
-      fonts: 
+    - family: HeartIcon
+      fonts:
         - asset: assets/icons/Heart.ttf
-    - family:  Shuffle
-      fonts: 
+    - family: Shuffle
+      fonts:
         - asset: assets/icons/Shuffle.ttf
-    - family:  Pacifico
+    - family: Pacifico
       fonts:
         - asset: assets/fonts/Pacifico-Regular.ttf
   #

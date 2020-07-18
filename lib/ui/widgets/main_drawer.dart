@@ -172,47 +172,47 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    Divider(
-                      endIndent: 0,
-                      indent: 0,
-                      height: 1,
-                      thickness: 0.5,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0.0, vertical: 10),
-                      child: GestureDetector(
-                        onTap: () => buildDialog()
-                            .then((value) => PrefUtils.setFptApiPref(value)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                  child: Icon(
-                                    Icons.insert_link,
-                                    size: 20 * screenWidth / 360,
-                                  ),
-                                ),
-                                Text(
-                                  "Đổi key FPT Api",
-                                  style: TextStyle(
-                                    fontFamily: 'RobotoCondensed',
-                                    fontSize: 20 * screenWidth / 360,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Divider(
+                    //   endIndent: 0,
+                    //   indent: 0,
+                    //   height: 1,
+                    //   thickness: 0.5,
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 0.0, vertical: 10),
+                    //   child: GestureDetector(
+                    //     onTap: () => buildDialog()
+                    //         .then((value) => PrefUtils.setFptApiPref(value)),
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: <Widget>[
+                    //         Row(
+                    //           children: <Widget>[
+                    //             Padding(
+                    //               padding:
+                    //                   const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                    //               child: Icon(
+                    //                 Icons.insert_link,
+                    //                 size: 20 * screenWidth / 360,
+                    //               ),
+                    //             ),
+                    //             Text(
+                    //               "Đổi key FPT Api",
+                    //               style: TextStyle(
+                    //                 fontFamily: 'RobotoCondensed',
+                    //                 fontSize: 20 * screenWidth / 360,
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         Expanded(
+                    //           child: SizedBox(),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     Divider(
                       endIndent: 0,
                       indent: 0,

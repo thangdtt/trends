@@ -83,7 +83,6 @@ class PushNotificationsManager {
             case "Music":
               Navigator.of(context).popUntil((route) => route.isFirst);
               callback(1);
-            
               break;
             default:
               break;

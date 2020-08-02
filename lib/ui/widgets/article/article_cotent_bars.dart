@@ -263,6 +263,10 @@ class _ArticleContentTopBarState extends State<ArticleContentTopBar> {
         final response = await http.get(url);
         if (response.statusCode != 404) break;
       }
+      
+      audioPlayerMain.pause();
+      audioPlayerSave.pause();
+
       int result = await speechPlayer.play(url, isLocal: false);
       if (result == 1) {
         setState(() {
